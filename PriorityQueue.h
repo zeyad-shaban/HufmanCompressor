@@ -1,3 +1,4 @@
+#pragma once
 #include "BinNode.h"
 #include <stdio.h>
 #include <stdlib.h>
