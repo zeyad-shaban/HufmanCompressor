@@ -1,33 +1,35 @@
-#pragma once
-#include "BinNode.h"
-#include "PriorityQueue.h"
+// tofix
 
-BinNode *generateHuffTree(PriorityQueue *freqsQ) {
-    bool underflow = false;
+// #pragma once
+// #include "BinNode.h"
+// #include "PriorityQueue.h"
 
-    while (true) {
-        Box *firstElem = freqsQ->deQueue(&underflow);
-        Box *secElem = freqsQ->deQueue(&underflow);
+// BinNode *generateHuffTree(PriorityQueue *freqsQ) {
+//     bool underflow = false;
 
-        if (underflow) return firstElem->node;
+//     while (true) {
+//         Box *firstElem = freqsQ->deQueue(&underflow);
+//         Box *secElem = freqsQ->deQueue(&underflow);
 
-        int freqTotal = firstElem->node->freqs + secElem->node->freqs;
+//         if (underflow) return firstElem->node;
 
-        char *letters = new char[strlen(firstElem->node->letters) + strlen(secElem->node->letters) + 1];
-        letters = strcpy(letters, firstElem->node->letters);
-        strcat(letters, secElem->node->letters);
+//         int freqTotal = firstElem->node->freqs + secElem->node->freqs;
 
-        BinNode *node = new BinNode(letters, freqTotal);
-        if (firstElem->node->freqs <= secElem->node->freqs) {
-            node->left = firstElem->node;
-            node->right = secElem->node;
-        } else {
-            node->left = secElem->node;
-            node->right = firstElem->node;
-        }
+//         char *letters = new char[strlen(firstElem->node->letters) + strlen(secElem->node->letters) + 1];
+//         letters = strcpy(letters, firstElem->node->letters);
+//         strcat(letters, secElem->node->letters);
 
-        delete firstElem;
-        delete secElem;
-        freqsQ->enQueue(node);
-    }
-}
+//         BinNode *node = new BinNode(letters, freqTotal);
+//         if (firstElem->node->freqs <= secElem->node->freqs) {
+//             node->left = firstElem->node;
+//             node->right = secElem->node;
+//         } else {
+//             node->left = secElem->node;
+//             node->right = firstElem->node;
+//         }
+
+//         delete firstElem; // ! TODO IMPLEMENT DECONSTRUCTOR INTEAD OF THIS
+//         delete secElem;
+//         freqsQ->enQueue(node);
+//     }
+// }
