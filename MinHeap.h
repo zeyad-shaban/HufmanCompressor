@@ -1,30 +1,11 @@
 #pragma once
 #include <sstream>
-#include <stdio.h>
 #include <string>
-
-class Node {
-  public:
-    std::string letters;
-    int freq;
-
-    Node(std::string letters = "", int freq = 0) {
-        this->letters = letters;
-        this->freq = freq;
-    }
-
-    void update(std::string letters, int freq) {
-        this->letters = letters;
-        this->freq = freq;
-    }
-};
-
+#include "Node.h"
 class MinHeap {
-  private:
+  public:
     int heapPtr = 0;
     int size;
-
-  public:
     Node *arr;
 
     MinHeap(int size) {
@@ -36,12 +17,34 @@ class MinHeap {
     int getLeft(int i) { return 2 * i + 1; }
     int getRight(int i) { return 2 * i + 2; }
 
-    void insert(std::string letters, int freq, bool *overflow = nullptr) {
+    void insertValues(std::string letters, int freq, bool *overflow = nullptr) {
         if (heapPtr >= size) {
             if (overflow) *overflow = true;
             return;
         }
         arr[heapPtr].update(letters, freq);
+
+        int i = heapPtr;
+
+        while (true) {
+            int parentI = getParent(i);
+            if (i == 0 || arr[i].freq > arr[parentI].freq) break;
+
+            Node tmpCurr = arr[i];
+            arr[i] = arr[parentI];
+            arr[parentI] = tmpCurr;
+
+            i = parentI;
+        }
+
+        heapPtr++;
+    }
+    void insertNode(Node node, bool *overflow = nullptr) {
+        if (heapPtr >= size) {
+            if (overflow) *overflow = true;
+            return;
+        }
+        arr[heapPtr] = node;
 
         int i = heapPtr;
 
@@ -86,8 +89,8 @@ class MinHeap {
         }
     }
 
-    Node extractMin() {
-        Node min = arr[0];
+    Node* extractMin() {
+        Node* min = new Node(arr[0].letters, arr[0].freq, arr[0].left, arr[0].right);
 
         arr[0] = arr[--heapPtr];
         bubbleDown(0);
