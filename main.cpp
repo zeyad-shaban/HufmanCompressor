@@ -8,7 +8,7 @@ int main() {
     bool overflow = false;
 
     int freqTable[128] = {0};
-    genFreqTable("./input.txt", freqTable);
+    genFreqTable("./data/input.txt", freqTable);
 
     for (int i = 0; i < 128; i++)
         if (freqTable[i])
