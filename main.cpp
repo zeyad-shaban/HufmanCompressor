@@ -1,4 +1,5 @@
 #include "MinHeap.h"
+#include "compress.h"
 #include "utils.h"
 #include <iostream>
 #include <stdio.h>
@@ -15,6 +16,10 @@ int main() {
             heap->insertValues(std::string(1, char(i)), freqTable[i]);
 
     Node *root = tregen(heap);
+
+    compress compressor = compress();
+    compressor.EncoderList(root, "");
+    compressor.encode("GUYS I CAME UP WITH THE PERFECT NAME FOR THIS PROJECT, 3A-Z!!!!! yes fr");
 
     delete heap;
     return 0;

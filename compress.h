@@ -1,15 +1,17 @@
 #pragma once
+#include "Node.h"
+#include "unordered_map"
 #include <iostream>
 #include <list>
 #include <stdio.h>
 #include <string>
-#include <iostream>
-#include "Node.h"
 using namespace std;
 
 class compress {
-    list<pair<char, string>> encoder[128];
+  private:
+    std::unordered_map<std::string, std::list<std::pair<std::string, std::string>>> encoder;
 
+  public:
     // this function init a hashtable for the encoder and decoder
     // decoder is a table that contains the code and the character
     // encoder is a table that contains the character and the code ( considering root->data is the char)
@@ -26,7 +28,6 @@ class compress {
         EncoderList(root->right, code + "1");
     }
 
-  private:
     void saveStringToFile(const char *filename, const char *str) {
         FILE *file = fopen(filename, "w");
         if (file != NULL) {
@@ -42,7 +43,8 @@ class compress {
         for (int i = 0; i < text.size(); i++) {
             // accessing the encoder table and getting the code of the character
             // second is the code
-            codedText += this->encoder[text[i]].front().second;
+            codedText += this->encoder[std::string(1, text[i])].front().second;
+            printf("hi");
         }
         saveStringToFile("output.com", codedText.c_str());
         return codedText;
