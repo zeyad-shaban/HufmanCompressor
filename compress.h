@@ -8,7 +8,6 @@
 using namespace std;
 
 class compress {
-
     list<pair<char, string>> encoder[128];
 
     // this function init a hashtable for the encoder and decoder
