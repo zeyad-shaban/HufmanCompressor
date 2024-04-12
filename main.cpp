@@ -5,29 +5,33 @@
 #include <stdio.h>
 using namespace std;
 int main() {
-   MinHeap *heap = new MinHeap(10);
-    bool overflow = false;
-
     int freqTable[128] = {0};
-    genFreqTable("./data/input.txt", freqTable);
+    int size = 0;
+    char *filePath = "./data/input.txt";
+    genFreqTable(filePath, freqTable, &size);
+
+    MinHeap *heap = new MinHeap(size);
+    bool overflow = false;
 
     for (int i = 0; i < 128; i++)
         if (freqTable[i])
             heap->insertValues(std::string(1, char(i)), freqTable[i]);
 
     Node *root = tregen(heap);
+    delete heap;
 
     compress c = compress();
-    string text = "life is so cool";
+    string text = "test";
+
     c.createMaps(root, "");
-    string codedtext = c.compressing(text);
+    string codedtext = c.compressing(filePath);
     string original = c.decompressing(codedtext);
-    cout << "original text: " << original << endl;
-    cout << "Coded text: " << codedtext << endl;
-   
-    c.printEncoder();  
 
-
-   // delete heap;
+    // cout << "original text: " << original << endl;
+    // cout << "Coded text: " << codedtext << endl;
+    // c.printEncoder();
+    std::cout << "the program has ended" << std::endl;
     return 0;
 }
+
+// abcdefghijklmnopqrstuvwxyz

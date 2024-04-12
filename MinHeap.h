@@ -1,7 +1,8 @@
 #pragma once
+#include "Node.h"
 #include <sstream>
 #include <string>
-#include "Node.h"
+
 class MinHeap {
   public:
     int heapPtr = 0;
@@ -39,6 +40,7 @@ class MinHeap {
 
         heapPtr++;
     }
+
     void insertNode(Node node, bool *overflow = nullptr) {
         if (heapPtr >= size) {
             if (overflow) *overflow = true;
@@ -89,8 +91,8 @@ class MinHeap {
         }
     }
 
-    Node* extractMin() {
-        Node* min = new Node(arr[0].letters, arr[0].freq, arr[0].left, arr[0].right);
+    Node *extractMin() {
+        Node *min = new Node(arr[0].letters, arr[0].freq, arr[0].left, arr[0].right);
 
         arr[0] = arr[--heapPtr];
         bubbleDown(0);

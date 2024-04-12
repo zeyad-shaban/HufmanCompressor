@@ -13,12 +13,13 @@ Node *tregen(MinHeap *heap) {
     return heap->extractMin();
 }
 
-bool genFreqTable(const char *filename, int *freqTable) {
-    FILE *file = fopen(filename, "r");
+bool genFreqTable(char *filePath, int *freqTable, int *size) {
+    FILE *file = fopen(filePath, "r");
     if (!file) return false;
 
     char ch;
     do {
+        (*size)++;
         ch = fgetc(file);
         if (ch >= 0 && ch < 128) freqTable[ch]++;
     } while (ch != EOF);
