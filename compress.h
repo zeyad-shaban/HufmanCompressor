@@ -1,35 +1,19 @@
-#pragma once
-#include "Node.h"
-#include "unordered_map"
-#include <iostream>
-#include <list>
-#include <stdio.h>
 #include <string>
+#include <stdio.h>
+#include "Node.h"
+#include <map>
+#include <iostream>
 using namespace std;
 
-class compress {
-  private:
-    std::unordered_map<std::string, std::list<std::pair<std::string, std::string>>> encoder;
 
-  public:
-    // this function init a hashtable for the encoder and decoder
-    // decoder is a table that contains the code and the character
-    // encoder is a table that contains the character and the code ( considering root->data is the char)
-    // code is initally empty as we do the recursion it will be filled with 0's or 1's
-    void EncoderList(Node *root, string code) {
-        if (root == NULL) {
-            return;
-        }
-        if (root->left == NULL && root->right == NULL) {
-            this->encoder[root->letters].push_back({root->letters, code});
-            return;
-        }
-        EncoderList(root->left, code + "0");
-        EncoderList(root->right, code + "1");
-    }
+class compress{
 
-    void saveStringToFile(const char *filename, const char *str) {
-        FILE *file = fopen(filename, "w");
+map<std::string , std::string> encoder;
+map<std::string , std::string> decoder;
+
+private:
+    void saveStringToFile(const char* filename, const char* str) {
+        FILE* file = fopen(filename, "w");
         if (file != NULL) {
             fputs(str, file);
             fclose(file);
@@ -37,16 +21,49 @@ class compress {
             printf("Failed to open the file.\n");
         }
     }
-
-    string encode(std::string text) {
-        string codedText = "";
-        for (int i = 0; i < text.size(); i++) {
-            // accessing the encoder table and getting the code of the character
-            // second is the code
-            codedText += this->encoder[std::string(1, text[i])].front().second;
-            printf("hi");
+public:
+    void createMaps(Node *root , string code){
+        if(root == NULL){
+            return;
         }
-        saveStringToFile("output.com", codedText.c_str());
+        if(root->left == NULL && root->right == NULL){
+            encoder[root->letters] = code;
+            decoder[code] = root->letters;
+            return;
+        }
+        createMaps(root->left , code + "0");
+        createMaps(root->right , code + "1");
+    }
+
+    string compressing(string text){
+        string codedText = "";
+        for(int i = 0 ; i < text.size() ; i++){
+            codedText += encoder[text.substr(i,1)];
+        }
+        saveStringToFile("code.txt", codedText.c_str());
         return codedText;
     }
+    string decompressing(string text){
+        string decodedText = "";
+        string code = "";
+        for(int i = 0 ; i < text.size() ; i++){
+            code += text[i];
+            if(decoder.find(code) != decoder.end()){
+                decodedText += decoder[code];
+                code = "";
+            }
+        }
+        saveStringToFile("original.txt", decodedText.c_str());
+        return decodedText;
+    }
+
+    //printing the encoder table
+    void printEncoder(){
+        for(auto it = encoder.begin() ; it != encoder.end() ; it++){
+            cout << it->first << " " << it->second << endl;
+        }
+    }   
+
+
 };
+

@@ -3,9 +3,9 @@
 #include "utils.h"
 #include <iostream>
 #include <stdio.h>
-
+using namespace std;
 int main() {
-    MinHeap *heap = new MinHeap(10);
+   MinHeap *heap = new MinHeap(10);
     bool overflow = false;
 
     int freqTable[128] = {0};
@@ -17,10 +17,17 @@ int main() {
 
     Node *root = tregen(heap);
 
-    compress compressor = compress();
-    compressor.EncoderList(root, "");
-    compressor.encode("GUYS I CAME UP WITH THE PERFECT NAME FOR THIS PROJECT, 3A-Z!!!!! yes fr");
+    compress c = compress();
+    string text = "life is so cool";
+    c.createMaps(root, "");
+    string codedtext = c.compressing(text);
+    string original = c.decompressing(codedtext);
+    cout << "original text: " << original << endl;
+    cout << "Coded text: " << codedtext << endl;
+   
+    c.printEncoder();  
 
-    delete heap;
+
+   // delete heap;
     return 0;
 }
