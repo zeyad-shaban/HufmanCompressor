@@ -4,10 +4,10 @@
 #include <string>
 
 class MinHeap {
-  public:
+public:
     int heapPtr = 0;
     int size;
-    Node *arr;
+    Node* arr;
 
     MinHeap(int size) {
         this->size = size;
@@ -18,7 +18,7 @@ class MinHeap {
     int getLeft(int i) { return 2 * i + 1; }
     int getRight(int i) { return 2 * i + 2; }
 
-    void insertValues(std::string letters, int freq, bool *overflow = nullptr) {
+    void insertValues(std::string letters, int freq, bool* overflow = nullptr) {
         if (heapPtr >= size) {
             if (overflow) *overflow = true;
             return;
@@ -85,8 +85,8 @@ class MinHeap {
         }
     }
 
-    Node *extractMin() {
-        Node *min = new Node(arr[0].letters, arr[0].freq, arr[0].left, arr[0].right);
+    Node* extractMin() {
+        Node* min = new Node(arr[0].letters, arr[0].freq, arr[0].left, arr[0].right);
 
         arr[0] = arr[--heapPtr];
         bubbleDown(0);
