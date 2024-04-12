@@ -10,10 +10,15 @@
 #include <wx/dir.h>
 #include <wx/busyinfo.h>
 #include "MainFrame.h"
+#include "utils.h"
+#include "MinHeap.h"
+#include "Node.h"
+#include "Compress.h"
+#include <filesystem>
+
 
 
 MainFrame::MainFrame(const wxString& title) : wxFrame(nullptr, wxID_ANY, title) {
-	//wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
 	wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
 
 	wxStaticText* titleText = new wxStaticText(this, wxID_ANY, "3A-Z Compressor");
@@ -83,5 +88,37 @@ void MainFrame::onFileSubmit(wxCommandEvent& event) {
 
 	if (fileNames.IsEmpty()) return;
 
-	wxString firstFileName = fileNames[0];
+	std::string filePath = std::string(fileNames[0].mb_str());
+
+	std::string base_filename = filePath.substr(filePath.find_last_of("/\\") + 1);
+	std::string::size_type const p(base_filename.find_last_of('.'));
+	std::string file_without_extension = base_filename.substr(0, p);
+
+	// TOOD DISPLAY A LITTLE LOAD BAR
+
+	int freqTable[128] = { 0 };
+	int size = 0;
+	genFreqTable(filePath, freqTable, &size);
+
+
+	MinHeap* heap = new MinHeap(size);
+	bool overflow = false;
+
+	for (int i = 0; i < 128; i++)
+		if (freqTable[i])
+			heap->insertValues(std::string(1, char(i)), freqTable[i]);
+
+
+	Node* root = tregen(heap);
+	// TODO DISPLAY THE TREE
+	delete heap;
+
+	compress compressor = compress();
+
+	compressor.createMaps(root, "");
+	// TODO DISPALY THE MAP CREATED
+	string codedtext = compressor.compressing(filePath, file_without_extension);
+	string original = compressor.decompressing(codedtext, file_without_extension);
+
+	std::cout << "the program has ended" << std::endl;
 }
