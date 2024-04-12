@@ -31,6 +31,7 @@ int main() {
     compress compressor = compress();
 
     compressor.createMaps(root, "");
+
     string codedtext = compressor.compressing(filePath, file_without_extension);
     string original = compressor.decompressing(codedtext, file_without_extension);
 
