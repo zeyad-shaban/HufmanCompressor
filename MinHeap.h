@@ -41,13 +41,7 @@ class MinHeap {
         heapPtr++;
     }
 
-    void insertNode(Node node, bool *overflow = nullptr) {
-        if (heapPtr >= size) {
-            if (overflow) *overflow = true;
-            return;
-        }
-        arr[heapPtr] = node;
-
+    void orderInsertedNode() {
         int i = heapPtr;
 
         while (true) {

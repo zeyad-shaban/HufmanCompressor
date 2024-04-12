@@ -4,6 +4,7 @@
 #include <iostream>
 #include <stdio.h>
 using namespace std;
+
 int main() {
     int freqTable[128] = {0};
     int size = 0;
