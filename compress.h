@@ -37,6 +37,8 @@ public:
 			if (ch >= 0 && ch < 128) codedText += encoder[string(1, ch)];
 
 		saveStringToFile((string("./data/") + filename + string(".com")).c_str(), codedText.c_str());
+        saveEncoder(filename + "_encoder.txt");
+        saveDecoder(filename + "_decoder.txt");
 		return codedText;
 	}
 	string decompressing(string text, string filename) {
@@ -52,8 +54,21 @@ public:
 		saveStringToFile((string("./data/decompressed_") + filename + string(".txt")).c_str(), decodedText.c_str());
 		return decodedText;
 	}
-
-	// printing the encoder table
+private:
+    void saveEncoder(string filename) {
+        string data = "Keys | Values\n";
+        for (auto it = encoder.begin(); it != encoder.end(); it++) {
+            data += it->first + " | " + it->second + "\n";
+        }
+        saveStringToFile((string("./data/") + filename + string(".txt")).c_str(), data.c_str());
+    }
+    void saveDecoder(string filename) {
+        string data = "Keys | Values\n";
+        for (auto it = decoder.begin(); it != decoder.end(); it++) {
+            data += it->first + " | " + it->second + "\n";
+        }
+        saveStringToFile((string("./data/") + filename + string(".txt")).c_str(), data.c_str());
+    }
 	void printEncoder() {
 		for (auto it = encoder.begin(); it != encoder.end(); it++) {
 			cout << it->first << " " << it->second << endl;
