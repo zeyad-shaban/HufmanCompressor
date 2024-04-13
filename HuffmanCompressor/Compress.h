@@ -5,7 +5,6 @@
 #include <stdio.h>
 #include <string>
 #include <fstream>
-#include "utils.h"
 using namespace std;
 
 class compress {
@@ -14,7 +13,7 @@ class compress {
 	map<std::string, std::string> decoder;
 
 public:
-	void createMaps(Node* root, string code) {
+	void createMaps(Node* root, string code = "") {
 		if (root == NULL) {
 			return;
 		}
@@ -27,16 +26,19 @@ public:
 		createMaps(root->right, code + "1");
 	}
 
-	string compressing(string filePath, string filename) {
+	string compressing(string filePath, bool* validPath) {
 		string codedText = "";
 		std::fstream file(filePath);
-		if (!file.is_open()) return "";
+		if (!file.is_open()) {
+			*validPath = false;
+			return "";
+		}
 
 		char ch;
 		while (file.get(ch))
 			if (ch >= 0 && ch < 128) codedText += encoder[string(1, ch)];
 
-		saveStringToFile((string("./data/") + filename + string(".com")).c_str(), codedText.c_str());
+		file.close();
 		return codedText;
 	}
 	string decompressing(string text, string filename) {
@@ -49,7 +51,7 @@ public:
 				code = "";
 			}
 		}
-		saveStringToFile((string("./data/decompressed_") + filename + string(".txt")).c_str(), decodedText.c_str());
+		//saveStringToFile((string("./data/decompressed_") + filename + string(".txt")).c_str(), decodedText.c_str());
 		return decodedText;
 	}
 

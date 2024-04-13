@@ -10,6 +10,7 @@
 #include "Compress.h"
 #include <filesystem>
 
+using namespace std;
 
 MainFrame::MainFrame(const wxString& title) : wxFrame(nullptr, wxID_ANY, title) {
 	int btnsHeight = 30;
@@ -40,7 +41,7 @@ MainFrame::MainFrame(const wxString& title) : wxFrame(nullptr, wxID_ANY, title) 
 	fileLabel->SetFont(labelFont);
 	mainSizer->Add(fileLabel, 0, wxALL | wxLEFT, 5);
 
-	 filePathCtrl = new wxTextCtrl(this, wxID_ANY);
+	filePathCtrl = new wxTextCtrl(this, wxID_ANY);
 	wxButton* fileBrowseBtn = new wxButton(this, wxID_ANY, "Browse");
 	filePathCtrl->SetMinSize(wxSize(-1, btnsHeight));
 	fileBrowseBtn->SetMinSize(wxSize(-1, btnsHeight));
@@ -79,7 +80,7 @@ MainFrame::MainFrame(const wxString& title) : wxFrame(nullptr, wxID_ANY, title) 
 	startButton->SetMinSize(wxSize(-1, btnsHeight));
 	mainSizer->Add(startButton, 0, wxALL | wxEXPAND, 5);
 
-	Bind(wxEVT_BUTTON, &MainFrame::OnStart, this, startButton->GetId());
+	Bind(wxEVT_BUTTON, &MainFrame::onCompress, this, startButton->GetId());
 
 
 	this->SetSizerAndFit(mainSizer);
@@ -103,83 +104,51 @@ void MainFrame::OnBrowseOutputDir(wxCommandEvent& event) {
 	}
 }
 
-void MainFrame::OnStart(wxCommandEvent& event) {
-	printf("yo");
+void MainFrame::onCompress(wxCommandEvent& event) {
+	string filePath = string(filePathCtrl->GetValue().mb_str());
+	string dirPath = string(dirPathCtrl->GetValue().mb_str());
+
+	string base_filename = filePath.substr(filePath.find_last_of("/\\") + 1);
+	string::size_type const p(base_filename.find_last_of('.'));
+	string file_without_extension = base_filename.substr(0, p);
+
+
+	int freqTable[128] = { 0 };
+	int size = 0;
+	genFreqTable(filePath, freqTable, &size);
+
+
+	MinHeap* heap = new MinHeap(size);
+	bool overflow = false;
+
+	for (int i = 0; i < 128; i++)
+		if (freqTable[i])
+			heap->insertValues(std::string(1, char(i)), freqTable[i]);
+
+
+	Node* root = tregen(heap);
+	delete heap;
+
+	compress compressor = compress();
+
+	bool validPath = false;
+	compressor.createMaps(root);
+	string codedText = compressor.compressing(filePath, &validPath);
+
+	if (!validPath) {
+		// TODO display warning path not valid
+	}
+
+	if (codedText == "") {
+		// TODO display warning file content empty
+	}
+
+	bool success = saveStringToFile((dirPath + "\\" + file_without_extension + string(".com")).c_str(), codedText.c_str());
+
+	if (!success) {
+		// TODO display warning dir path not valid
+	}
+
+
+	//string original = compressor.decompressing(codedtext, file_without_extension);
 }
-
-
-
-
-
-// void MainFrame::OnDropFiles(wxDropFilesEvent& event) {
-// 	if (event.GetNumberOfFiles() > 0) {
-// 
-// 		wxString* dropped = event.GetFiles();
-// 		wxASSERT(dropped);
-// 
-// 		wxBusyCursor busyCursor;
-// 		wxWindowDisabler disabler;
-// 		wxBusyInfo busyInfo(_("Adding files, wait please..."));
-// 
-// 		wxString name;
-// 		wxArrayString files;
-// 
-// 		for (int i = 0; i < event.GetNumberOfFiles(); i++) {
-// 			name = dropped[i];
-// 			if (wxFileExists(name))
-// 				files.push_back(name);
-// 			else if (wxDirExists(name))
-// 				wxDir::GetAllFiles(name, &files);
-// 		}
-// 
-// 		wxTextCtrl* textCtrl = dynamic_cast<wxTextCtrl*>(event.GetEventObject());
-// 		wxASSERT(textCtrl);
-// 		textCtrl->Clear();
-// 		for (size_t i = 0; i < files.size(); i++) {
-// 			*textCtrl << files[i] << wxT('\n');
-// 		}
-// 	}
-// }
-// 
-// void MainFrame::onFileSubmit(wxCommandEvent& event) {
-// 	wxString fileName = dropTarget->GetValue();
-// 
-// 	wxArrayString fileNames = wxStringTokenize(fileName, wxT("\n"));
-// 
-// 	if (fileNames.IsEmpty()) return;
-// 
-// 	std::string filePath = std::string(fileNames[0].mb_str());
-// 
-// 	std::string base_filename = filePath.substr(filePath.find_last_of("/\\") + 1);
-// 	std::string::size_type const p(base_filename.find_last_of('.'));
-// 	std::string file_without_extension = base_filename.substr(0, p);
-// 
-// 	// TOOD DISPLAY A LITTLE LOAD BAR
-// 
-// 	int freqTable[128] = { 0 };
-// 	int size = 0;
-// 	genFreqTable(filePath, freqTable, &size);
-// 
-// 
-// 	MinHeap* heap = new MinHeap(size);
-// 	bool overflow = false;
-// 
-// 	for (int i = 0; i < 128; i++)
-// 		if (freqTable[i])
-// 			heap->insertValues(std::string(1, char(i)), freqTable[i]);
-// 
-// 
-// 	Node* root = tregen(heap);
-// 	// TODO DISPLAY THE TREE
-// 	delete heap;
-// 
-// 	compress compressor = compress();
-// 
-// 	compressor.createMaps(root, "");
-// 	// TODO DISPALY THE MAP CREATED
-// 	string codedtext = compressor.compressing(filePath, file_without_extension);
-// 	string original = compressor.decompressing(codedtext, file_without_extension);
-// 
-// 	std::cout << "the program has ended" << std::endl;
-// }
-// 

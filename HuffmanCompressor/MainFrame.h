@@ -9,7 +9,7 @@ public:
 private:
 	void OnBrowseCompressFile(wxCommandEvent& event);
 	void OnBrowseOutputDir(wxCommandEvent& event);
-	void OnStart(wxCommandEvent& event);
+	void onCompress(wxCommandEvent& event);
 	wxTextCtrl* filePathCtrl;
 	wxTextCtrl* dirPathCtrl;
 };
