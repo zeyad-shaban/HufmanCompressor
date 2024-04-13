@@ -9,6 +9,7 @@
 #include "Node.h"
 #include "Compress.h"
 #include <filesystem>
+#include "InfoFrame.h"
 
 using namespace std;
 
@@ -153,6 +154,11 @@ void MainFrame::onCompress(wxCommandEvent& event) {
 		// TODO display warning dir path not valid
 	}
 
+	InfoFrame* infoFrame = new InfoFrame("Info", this, compressor.encoder, root, codedText);
+	this->Show(false);
+	infoFrame->Show(true);
+	infoFrame->SetSize(this->GetSize());
+	infoFrame->Move(this->GetPosition());
 
 	//string original = compressor.decompressing(codedtext);
 }

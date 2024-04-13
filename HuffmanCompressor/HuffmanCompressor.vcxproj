@@ -136,12 +136,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />
+    <ClCompile Include="InfoFrame.cpp" />
     <ClCompile Include="MainFrame.cpp" />
     <ClCompile Include="MainFrame.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h" />
     <ClInclude Include="Compress.h" />
+    <ClInclude Include="InfoFrame.h" />
     <ClInclude Include="MinHeap.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="utils.h" />
