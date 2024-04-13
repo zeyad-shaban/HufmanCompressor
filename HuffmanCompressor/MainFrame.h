@@ -1,10 +1,15 @@
 #pragma once
 #include <wx/wx.h>
 
+
 class MainFrame : public wxFrame {
 public:
-	wxTextCtrl* dropTarget;
 	MainFrame(const wxString& title);
-	void OnDropFiles(wxDropFilesEvent& event);
-	void onFileSubmit(wxCommandEvent& event);
+
+private:
+	void OnBrowseCompressFile(wxCommandEvent& event);
+	void OnBrowseOutputDir(wxCommandEvent& event);
+	void OnStart(wxCommandEvent& event);
+	wxTextCtrl* filePathCtrl;
+	wxTextCtrl* dirPathCtrl;
 };
