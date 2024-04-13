@@ -34,8 +34,8 @@ public:
             if (ch >= 0 && ch < 128) codedText += encoder[string(1, ch)];
 
 		saveStringToFile((string("./data/") + filename + string(".com")).c_str(), codedText.c_str());
-        saveDecoder("decoder");
-        saveEncoder("encoder");
+        saveDecoder(filename + "_decoder");
+        saveEncoder(filename + "_encoder");
         return codedText;
     }
 	string decompressing(string text, string filename) {
