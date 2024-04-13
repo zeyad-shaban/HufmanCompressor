@@ -50,8 +50,12 @@ bool saveMapToFile(std::string filePath, std::unordered_map<std::string, std::st
 	if (!file) return false;
 	file << "{";
 
-	for (auto& pair : map)
-		file << "\"" + pair.first + "\":\"" << pair.second << "\",";
+	for (auto& pair : map) {
+		file << "\"" + pair.first + "\":\"";
+		if (pair.second == "\n") file << "\\n";
+		else file << pair.second;
+		file << "\",";
+	}
 
 	file.seekp(-1, std::ios::end);
 
