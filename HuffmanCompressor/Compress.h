@@ -1,18 +1,17 @@
 #pragma once
 #include "Node.h"
 #include <iostream>
-#include <map>
+#include <unordered_map>
 #include <stdio.h>
 #include <string>
 #include <fstream>
 using namespace std;
 
 class compress {
-	// TODO SAVE ENCODER AND DECODER AND JSON AND LOAD LATER
-	map<std::string, std::string> encoder;
-	map<std::string, std::string> decoder;
-
 public:
+	unordered_map<std::string, std::string> encoder;
+	unordered_map<std::string, std::string> decoder;
+
 	void createMaps(Node* root, string code = "") {
 		if (root == NULL) {
 			return;
@@ -38,10 +37,9 @@ public:
 		while (file.get(ch))
 			if (ch >= 0 && ch < 128) codedText += encoder[string(1, ch)];
 
-		file.close();
 		return codedText;
 	}
-	string decompressing(string text, string filename) {
+	string decompressing(string text) {
 		string decodedText = "";
 		string code = "";
 		for (int i = 0; i < text.size(); i++) {
@@ -51,7 +49,6 @@ public:
 				code = "";
 			}
 		}
-		//saveStringToFile((string("./data/decompressed_") + filename + string(".txt")).c_str(), decodedText.c_str());
 		return decodedText;
 	}
 

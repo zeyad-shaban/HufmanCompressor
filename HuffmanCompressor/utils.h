@@ -3,6 +3,7 @@
 #include "MinHeap.h"
 #include <stdio.h>
 #include <fstream>
+#include <unordered_map>
 
 
 Node* tregen(MinHeap* heap) {
@@ -35,13 +36,25 @@ bool genFreqTable(std::string filePath, int* freqTable, int* size) {
 
 	return true;
 }
-
-bool saveStringToFile(const char* filename, const char* str) {
-	FILE* file = fopen(filename, "w");
+bool saveStringToFile(std::string path, std::string str) {
+	std::ofstream file(path);
 	if (!file) return false;
 
-	fputs(str, file);
-	fclose(file);
+	file << str;
 
+	return true;
+}
+
+bool saveMapToFile(std::string filePath, std::unordered_map<std::string, std::string> map) {
+	std::ofstream file(filePath);
+	if (!file) return false;
+	file << "{";
+
+	for (auto& pair : map)
+		file << "\"" + pair.first + "\":\"" << pair.second << "\",";
+
+	file.seekp(-1, std::ios::end);
+
+	file << "}";
 	return true;
 }

@@ -112,6 +112,9 @@ void MainFrame::onCompress(wxCommandEvent& event) {
 	string::size_type const p(base_filename.find_last_of('.'));
 	string file_without_extension = base_filename.substr(0, p);
 
+	string fileNamePath = dirPath + "\\" + file_without_extension;
+
+
 
 	int freqTable[128] = { 0 };
 	int size = 0;
@@ -143,12 +146,13 @@ void MainFrame::onCompress(wxCommandEvent& event) {
 		// TODO display warning file content empty
 	}
 
-	bool success = saveStringToFile((dirPath + "\\" + file_without_extension + string(".com")).c_str(), codedText.c_str());
+	bool success = saveStringToFile(fileNamePath + string(".com"), codedText);
+	saveMapToFile(fileNamePath + string(".json"), compressor.decoder);
 
 	if (!success) {
 		// TODO display warning dir path not valid
 	}
 
 
-	//string original = compressor.decompressing(codedtext, file_without_extension);
+	//string original = compressor.decompressing(codedtext);
 }
