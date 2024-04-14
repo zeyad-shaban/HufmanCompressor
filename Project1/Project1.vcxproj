@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{78e5a6fd-e9b1-4846-94c6-36bb2d66bd3f}</ProjectGuid>
-    <RootNamespace>HuffmanCompressor</RootNamespace>
+    <ProjectGuid>{6d65d6a0-2b9a-473e-b5d8-8aa7ec43ca86}</ProjectGuid>
+    <RootNamespace>Project1</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -76,12 +76,10 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Libraries\wxWidgets-3.2.4\include;C:\Libraries\wxWidgets-3.2.4\include\msvc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Libraries\wxWidgets-3.2.4\lib\vc_lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -92,14 +90,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Libraries\wxWidgets-3.2.4\include;C:\Libraries\wxWidgets-3.2.4\include\msvc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Libraries\wxWidgets-3.2.4\lib\vc_lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -108,12 +104,11 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Libraries\wxWidgets-3.2.4\include;C:\Libraries\wxWidgets-3.2.4\include\msvc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\ahmed\source\repos\HufmanCompressor\Project1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Libraries\wxWidgets-3.2.4\lib\vc_x64_lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -124,29 +119,79 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Libraries\wxWidgets-3.2.4\include;C:\Libraries\wxWidgets-3.2.4\include\msvc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\ahmed\source\repos\HufmanCompressor\Project1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Libraries\wxWidgets-3.2.4\lib\vc_x64_lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="App.cpp" />
-    <ClCompile Include="InfoFrame.cpp" />
-    <ClCompile Include="MainFrame.cpp" />
-    <ClCompile Include="MainFrame.h" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="App.h" />
+    <ClInclude Include="app.h" />
     <ClInclude Include="Compress.h" />
-    <ClInclude Include="InfoFrame.h" />
+    <ClInclude Include="include\httplib.h" />
+    <ClInclude Include="include\json.hpp" />
+    <ClInclude Include="include\nlohmann\adl_serializer.hpp" />
+    <ClInclude Include="include\nlohmann\byte_container_with_subtype.hpp" />
+    <ClInclude Include="include\nlohmann\detail\abi_macros.hpp" />
+    <ClInclude Include="include\nlohmann\detail\conversions\from_json.hpp" />
+    <ClInclude Include="include\nlohmann\detail\conversions\to_chars.hpp" />
+    <ClInclude Include="include\nlohmann\detail\conversions\to_json.hpp" />
+    <ClInclude Include="include\nlohmann\detail\exceptions.hpp" />
+    <ClInclude Include="include\nlohmann\detail\hash.hpp" />
+    <ClInclude Include="include\nlohmann\detail\input\binary_reader.hpp" />
+    <ClInclude Include="include\nlohmann\detail\input\input_adapters.hpp" />
+    <ClInclude Include="include\nlohmann\detail\input\json_sax.hpp" />
+    <ClInclude Include="include\nlohmann\detail\input\lexer.hpp" />
+    <ClInclude Include="include\nlohmann\detail\input\parser.hpp" />
+    <ClInclude Include="include\nlohmann\detail\input\position_t.hpp" />
+    <ClInclude Include="include\nlohmann\detail\iterators\internal_iterator.hpp" />
+    <ClInclude Include="include\nlohmann\detail\iterators\iteration_proxy.hpp" />
+    <ClInclude Include="include\nlohmann\detail\iterators\iterator_traits.hpp" />
+    <ClInclude Include="include\nlohmann\detail\iterators\iter_impl.hpp" />
+    <ClInclude Include="include\nlohmann\detail\iterators\json_reverse_iterator.hpp" />
+    <ClInclude Include="include\nlohmann\detail\iterators\primitive_iterator.hpp" />
+    <ClInclude Include="include\nlohmann\detail\json_custom_base_class.hpp" />
+    <ClInclude Include="include\nlohmann\detail\json_pointer.hpp" />
+    <ClInclude Include="include\nlohmann\detail\json_ref.hpp" />
+    <ClInclude Include="include\nlohmann\detail\macro_scope.hpp" />
+    <ClInclude Include="include\nlohmann\detail\macro_unscope.hpp" />
+    <ClInclude Include="include\nlohmann\detail\meta\call_std\begin.hpp" />
+    <ClInclude Include="include\nlohmann\detail\meta\call_std\end.hpp" />
+    <ClInclude Include="include\nlohmann\detail\meta\cpp_future.hpp" />
+    <ClInclude Include="include\nlohmann\detail\meta\detected.hpp" />
+    <ClInclude Include="include\nlohmann\detail\meta\identity_tag.hpp" />
+    <ClInclude Include="include\nlohmann\detail\meta\is_sax.hpp" />
+    <ClInclude Include="include\nlohmann\detail\meta\std_fs.hpp" />
+    <ClInclude Include="include\nlohmann\detail\meta\type_traits.hpp" />
+    <ClInclude Include="include\nlohmann\detail\meta\void_t.hpp" />
+    <ClInclude Include="include\nlohmann\detail\output\binary_writer.hpp" />
+    <ClInclude Include="include\nlohmann\detail\output\output_adapters.hpp" />
+    <ClInclude Include="include\nlohmann\detail\output\serializer.hpp" />
+    <ClInclude Include="include\nlohmann\detail\string_concat.hpp" />
+    <ClInclude Include="include\nlohmann\detail\string_escape.hpp" />
+    <ClInclude Include="include\nlohmann\detail\value_t.hpp" />
+    <ClInclude Include="include\nlohmann\json.hpp" />
+    <ClInclude Include="include\nlohmann\json_fwd.hpp" />
+    <ClInclude Include="include\nlohmann\ordered_map.hpp" />
+    <ClInclude Include="include\nlohmann\thirdparty\hedley\hedley.hpp" />
+    <ClInclude Include="include\nlohmann\thirdparty\hedley\hedley_undef.hpp" />
     <ClInclude Include="MinHeap.h" />
     <ClInclude Include="Node.h" />
+    <ClInclude Include="serverData.h" />
     <ClInclude Include="utils.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="input.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="compressed_file.cod" />
+    <None Include="decoder_map.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
