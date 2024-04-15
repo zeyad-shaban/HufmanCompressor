@@ -62,3 +62,25 @@ bool saveMapToFile(std::string filePath, std::unordered_map<std::string, std::st
 	file << "}";
 	return true;
 }
+
+using json = nlohmann::json;
+
+json nodeToJson(Node* node) {
+	if (node == nullptr) {
+		return nullptr;
+	}
+
+	json j;
+	j["letters"] = node->letters;
+	j["freq"] = node->freq;
+	j["left"] = nodeToJson(node->left);
+	j["right"] = nodeToJson(node->right);
+
+	return j;
+}
+void writeTreeToJsonFile(Node* root, const std::string& filename) {
+	json j = nodeToJson(root);
+	std::ofstream file(filename);
+	file << j.dump(4); 
+	file.close();
+}

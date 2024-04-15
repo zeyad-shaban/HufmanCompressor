@@ -1,0 +1,45 @@
+/* App.css */
+
+.App {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #a76d6d;
+    font-family: 'Arial', sans-serif;
+   }
+   
+   /* Styling for the tree container */
+   .tree-container {
+    width: 90%;
+    height: 90%;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: auto;
+   }
+   
+   /* Styling for the tree nodes */
+   .node {
+    fill: #fff;
+    stroke: steelblue;
+    stroke-width: 3px;
+   }
+   
+   .node text {
+    font: 12px sans-serif;
+    fill: #333;
+   }
+   
+   /* Styling for the tree links */
+   .link {
+    fill: none;
+    stroke: #ccc;
+    stroke-width: 2px;
+   }
+   
+   /* Optional: Additional styling for the tree */
+   .tree {
+    margin: 20px;
+   }
+   

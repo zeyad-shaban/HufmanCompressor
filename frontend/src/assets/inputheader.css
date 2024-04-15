@@ -1,0 +1,7 @@
+.center-bottom-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    height: 100vh; /* Adjust the height as needed */
+    border: 1px solid black; /* Optional: to visualize the container */
+}

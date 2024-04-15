@@ -38,9 +38,6 @@
     <ClInclude Include="app.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="serverData.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\json.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -188,5 +185,6 @@
   <ItemGroup>
     <None Include="decoder_map.json" />
     <None Include="compressed_file.cod" />
+    <None Include="huffman_tree.json" />
   </ItemGroup>
 </Project>

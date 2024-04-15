@@ -30,10 +30,11 @@ int startAPP() {
 	// Generate Huffman tree
 	Node* root = tregen(heap);
 	delete heap;
+	writeTreeToJsonFile(root, "huffman_tree.json");
 
 	// Compress the file
 	compress compressor = compress();
-	bool validPath = false;
+	bool validPath = true;
 	compressor.createMaps(root);
 	string codedText = compressor.compressing(filePath, &validPath);
 
@@ -53,6 +54,7 @@ int startAPP() {
 	if (!success) {
 		cout << "Warning: Directory path not valid." << endl;
 	}
+
 
 	// Cleanup
 	delete root;

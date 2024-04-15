@@ -1,0 +1,49 @@
+import React from 'react';
+import { Form, Button, FormControl } from 'react-bootstrap';
+
+
+class MyForm extends React.Component {
+ handleSubmit = (event) => {
+    event.preventDefault();
+    const target = event.target;
+    const buttonClicked = target.querySelector('button[type="submit"]:focus');
+
+    if (buttonClicked.name === 'textSubmit') {
+      // Handle text submit
+      const textValue = target.querySelector('#formHorizontalText').value;
+      console.log('Text Submit:', textValue);
+    } else if (buttonClicked.name === 'fileSubmit') {
+      // Handle file submit
+      const fileInput = target.querySelector('#formFile');
+      if (fileInput.files.length > 0) {
+        console.log('File Submit:', fileInput.files[0]);
+      }
+    }
+ };
+
+ render() {
+    return (
+        <div style={{display:"flex",   justifyContent: "space-between" , backgroundColor:"#135D66"}}>
+      <Form className="text-white" onSubmit={this.handleSubmit} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
+        <Form.Group controlId="formHorizontalText" style={{ marginRight: '10px',marginLeft:"10px" }}>
+        <div style={{display:"flex",   justifyContent: "space-between"}}>
+          <Form.Label>Inut Text:</Form.Label>
+          <Button variant="outline-light" type="submit" name="textSubmit"  size="sm" style={{marginBottom:"7px"}}>Submit Text</Button>
+        </div>
+          <Form.Control type="text" placeholder="Enter text" />
+        </Form.Group>
+
+        <Form.Group controlId="formFile" className="mb-3" style={{ marginRight: '10px',marginLeft:"10px" }}>
+        <div style={{display:"flex",   justifyContent: "space-between" ,marginTop: '14px' }} > 
+          <Form.Label >Upload File:</Form.Label>
+          <Button variant="outline-light" type="submit" name="fileSubmit"  size="sm" style={{marginBottom:"7px"}}>Submit File</Button>
+          </div>
+          <Form.Control type="file" />
+        </Form.Group>
+      </Form>
+    </div>
+    );
+ }
+}
+
+export default MyForm;

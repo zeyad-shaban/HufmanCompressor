@@ -1,0 +1,36 @@
+.node {
+    position: relative;
+    display: inline-block;
+   }
+   
+   .bubble {
+    border: 1px solid #000;
+    border-radius: 50%;
+    padding: 10px;
+    text-align: center;
+   }
+   
+   .info {
+    margin-bottom: 10px;
+   }
+   
+   .letters, .freq {
+    margin: 5px 0;
+   }
+   
+   .branches {
+    display: flex;
+    justify-content: space-between;
+   }
+   
+   .left, .right {
+    width: 50%;
+   }
+   
+   .left .bubble {
+    margin-left: 20px;
+   }
+   
+   .right .bubble {
+    margin-right: 20px;
+   }

@@ -1,5 +1,7 @@
 #pragma once
 #include <iostream>
+#include <nlohmann/json.hpp>
+#include <fstream>
 
 class Node {
 public:
@@ -19,4 +21,8 @@ public:
 		this->letters = letters;
 		this->freq = freq;
 	}
+
+	
+
+
 };

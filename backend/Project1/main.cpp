@@ -39,7 +39,15 @@ int main() {
 	else {
 		httplib::Server svr;
 
+		svr.Options("/(.*)", [&](const httplib::Request& req, httplib::Response& res) {
+			res.set_header("Access-Control-Allow-Methods", "*");
+			res.set_header("Access-Control-Allow-Headers", "*");
+			res.set_header("Access-Control-Allow-Origin", "*");
+			res.set_header("Connection", "close");
+			});
+
 		svr.Post("/json", [](const httplib::Request& req, httplib::Response& res) {
+			res.set_header("Access-Control-Allow-Origin", "*");
 			// Parse the JSON from the request body
 			json request_json = json::parse(req.body);
 
@@ -66,6 +74,18 @@ int main() {
 				buffer << file1.rdbuf();
 				compressed_fileTXT = buffer.str();
 				file1.close();
+			}
+			else {
+				std::cout << "Unable to open compressed_file.cod";
+			}
+
+			std::ifstream file3("huffman_tree.json");
+			std::string huffman_tree;
+			if (file3.is_open()) {
+				std::stringstream buffer;
+				buffer << file3.rdbuf();
+				huffman_tree = buffer.str();
+				file3.close();
 			}
 			else {
 				std::cout << "Unable to open compressed_file.cod";
@@ -98,7 +118,7 @@ int main() {
 			decoder_mapTXT = array.dump(4);
 
 
-			std::string response_json = R"({"compressed_file": ")" + compressed_fileTXT + R"(","decoder_map":)" + decoder_mapTXT + R"(})";
+			std::string response_json = R"({"compressed_file": ")" + compressed_fileTXT + R"(","decoder_map":)" + decoder_mapTXT +R"(,"huffman_tree":)"+ huffman_tree+ R"(})";
 			res.set_content(response_json, "application/json");
 			});
 
