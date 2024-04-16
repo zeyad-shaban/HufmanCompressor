@@ -36,7 +36,7 @@ const MyForm = ({ onDataUpdate }) => {
   };
 
   const sendDataToServer = (data) => {
-    const url = 'http://localhost:8080/upload';
+    const url = 'http://localhost:8080/decompress';
     fetch(url, {
       method: 'POST',
       headers: {
@@ -68,7 +68,7 @@ const MyForm = ({ onDataUpdate }) => {
         </Form.Group>
 
 
-        <Button variant="outline-light" type="submit" name="fileSubmit" size="sm" style={{ marginBottom: "7px", fontSize: "14px" }}>Submit Files</Button>
+        <Button variant="outline-dark" type="submit" name="fileSubmit" size="sm" style={{ marginBottom: "7px", fontSize: "14px" }}>Upload Files</Button>
       </Form>
     </div>
   );

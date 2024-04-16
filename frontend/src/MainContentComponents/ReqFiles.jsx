@@ -40,7 +40,7 @@ function BasicExample({ compressed_file, decoder_map ,frequency_table}) {
                                 Some quick example text to build on the card title and make up the
                                 bulk of the card's content.
                             </Card.Text>
-                            <Button variant="success" onClick={() => downloadText(compressed_file, 'compressed_txt.cod')}>Download</Button>
+                            <Button variant="success" onClick={() => downloadText(compressed_file, 'compressed_txt.com')}>Download</Button>
                         </Card.Body>
                     </Card>
                 </Col>

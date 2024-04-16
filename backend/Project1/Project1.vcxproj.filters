@@ -185,10 +185,11 @@
       <Filter>Resource Files</Filter>
     </Text>
     <Text Include="frequency_table.txt" />
+    <Text Include="decompressed.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="decoder_map.json" />
-    <None Include="compressed_file.cod" />
     <None Include="huffman_tree.json" />
+    <None Include="compressed_file.com" />
   </ItemGroup>
 </Project>

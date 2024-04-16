@@ -1,45 +1,55 @@
 {
-    "freq": 5,
+    "freq": 15,
     "left": {
-        "freq": 2,
+        "freq": 6,
         "left": {
-            "freq": 1,
-            "left": null,
-            "letters": "a",
-            "right": null
-        },
-        "letters": "ae",
-        "right": {
-            "freq": 1,
+            "freq": 3,
             "left": null,
             "letters": "e",
             "right": null
+        },
+        "letters": "eh",
+        "right": {
+            "freq": 3,
+            "left": null,
+            "letters": "h",
+            "right": null
         }
     },
-    "letters": "aedmh",
+    "letters": "ehgwft",
     "right": {
-        "freq": 3,
+        "freq": 9,
         "left": {
-            "freq": 1,
+            "freq": 4,
             "left": null,
-            "letters": "d",
+            "letters": "g",
             "right": null
         },
-        "letters": "dmh",
+        "letters": "gwft",
         "right": {
-            "freq": 2,
+            "freq": 5,
             "left": {
-                "freq": 1,
+                "freq": 2,
                 "left": null,
-                "letters": "m",
+                "letters": "w",
                 "right": null
             },
-            "letters": "mh",
+            "letters": "wft",
             "right": {
-                "freq": 1,
-                "left": null,
-                "letters": "h",
-                "right": null
+                "freq": 3,
+                "left": {
+                    "freq": 1,
+                    "left": null,
+                    "letters": "f",
+                    "right": null
+                },
+                "letters": "ft",
+                "right": {
+                    "freq": 2,
+                    "left": null,
+                    "letters": "t",
+                    "right": null
+                }
             }
         }
     }

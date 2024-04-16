@@ -17,25 +17,47 @@ using namespace std;
 
 
 int main() {
-	std::string userInput;
-	bool useLocal;
-	std::cout << "would you like to use this program \n [1]as a server \n [2]locally \n type your answer (1 or 2): ";
-	std::cin >> userInput;
 
-	if (userInput == "1") {
+	std::string userInput2;
+	bool useLocal;
+	bool useCompress;
+
+	std::cout << "would you like to use this program \n [1]as a server \n [2]locally \n type your answer (1 or 2): ";
+	std::cin >> userInput2;
+
+	if (userInput2 == "1") {
 		useLocal = false;
 	}
-	else if (userInput == "2") {
+	else if (userInput2 == "2") {
 		useLocal = true;
 	}
 	else {
-		std::cout << "Invalid input. Please enter a boolean value (true/false).";
+		std::cout << "Invalid input";
 	}
+
 
 
 
 	if (useLocal) {
-		startAPP();
+		std::string userInput1;
+		std::cout << "would you like to use this program \n [1]as a Compresser \n [2]as a Decompresser \n type your answer (1 or 2): ";
+		std::cin >> userInput1;
+		if (userInput1 == "1") {
+			useCompress = true;
+		}
+		else if (userInput1 == "2") {
+			useCompress = false;
+		}
+		else {
+			std::cout << "Invalid input. Please enter a boolean value (true/false).";
+		}
+		if (useCompress) {
+
+			startAPP();
+		}
+		else {
+			deCompress();
+		}
 	}
 	else {
 		httplib::Server svr;
@@ -47,11 +69,11 @@ int main() {
 			res.set_header("Connection", "close");
 			});
 
-		svr.Post("/json", [](const httplib::Request& req, httplib::Response& res) {
+		svr.Post("/compress", [](const httplib::Request& req, httplib::Response& res) {
 			res.set_header("Access-Control-Allow-Origin", "*");
 			// Parse the JSON from the request body
 			json request_json = json::parse(req.body);
-			
+
 			std::cout << "\n----INCOMING REQUEST CONTENTS:" << std::endl;
 			std::cout << "-Method: " << req.method << std::endl;
 			std::cout << "-Path: " << req.path << std::endl;
@@ -75,7 +97,7 @@ int main() {
 			std::cout << "->compressing operation started...\n";
 			startAPP();
 
-			std::ifstream file1("compressed_file.cod");
+			std::ifstream file1("compressed_file.com");
 			std::string compressed_fileTXT;
 			if (file1.is_open()) {
 				std::stringstream buffer;
@@ -138,12 +160,12 @@ int main() {
 			//decoder_mapTXT = array.dump(4);
 
 
-			std::string response_json = R"({"compressed_file": ")" + compressed_fileTXT + R"(","decoder_map":)" + decoder_mapTXT +R"(,"huffman_tree":)"+ huffman_tree+ R"(,"frequency_table": ")" + frequency_tableTXT + R"("})";
+			std::string response_json = R"({"compressed_file": ")" + compressed_fileTXT + R"(","decoder_map":)" + decoder_mapTXT + R"(,"huffman_tree":)" + huffman_tree + R"(,"frequency_table": ")" + frequency_tableTXT + R"("})";
 			res.set_content(response_json, "application/json");
 			});
 
 
-		svr.Post("/upload", [](const httplib::Request& req, httplib::Response& res) {
+		svr.Post("/decompress", [](const httplib::Request& req, httplib::Response& res) {
 			res.set_header("Access-Control-Allow-Origin", "*");
 			// Parse the JSON from the request body
 			json request_json = json::parse(req.body);
@@ -157,19 +179,48 @@ int main() {
 			std::string compressedFileValue = request_json.at("compressedFile").get<std::string>();
 			std::string decoderFileValue = request_json.at("decoderFile").get<std::string>();
 
-	
-			std::cout << "Value of compressedFile: " << compressedFileValue << std::endl;
-			std::cout << "Value of decoderFile: " << decoderFileValue << std::endl;
+			std::ofstream file1("compressed_file.com");
+
+			if (file1.is_open()) {
+				file1 << compressedFileValue;
+				std::cout << "READING-COMPLETED:compressed data saved to 'compressed_file.com'\n\n";
+				file1.close(); // Close the file after writing
+			}
+			else {
+				std::cout << "READING-FAILED:Unable to open file\n";
+			}
+			std::ofstream file2("decoder_map.json");
+
+			if (file2.is_open()) {
+				file2 << decoderFileValue;
+				std::cout << "READING-COMPLETED:decodermap data saved to 'decoder_map.json'\n\n";
+				file2.close(); // Close the file after writing
+			}
+			else {
+				std::cout << "READING-FAILED:Unable to open file\n";
+			}
+		
 
 			deCompress();
-			
 
-			std::string response_json = R"({"compressed_file": "denya"})";
+			std::ifstream file3("decompressed.txt");
+			std::string decompressedTXT;
+			if (file3.is_open()) {
+				std::stringstream buffer;
+				buffer << file3.rdbuf();
+				decompressedTXT = buffer.str();
+				file3.close();
+			}
+			else {
+				std::cout << "Unable to open compressed_file.cod";
+			}
+
+			std::string response_json = R"({"decompressed": ")" + decompressedTXT + R"("})";
 
 			res.set_content(response_json, "application/json");
 			});
 
-	
+
 		svr.listen("localhost", 8080);
 
 	}

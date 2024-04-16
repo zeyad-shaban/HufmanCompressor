@@ -33,7 +33,7 @@ const MyForm = ({ onDataUpdate }) => {
  };
 
  const sendDataToServer = (data) => {
-    const url = 'http://localhost:8080/json';
+    const url = 'http://localhost:8080/compress';
     fetch(url, {
       method: 'POST', // or 'PUT'
       headers: {
@@ -52,7 +52,7 @@ const MyForm = ({ onDataUpdate }) => {
  };
 
  return (
-    <div style={{ display: "flex", justifyContent: "space-between", backgroundColor: "#135D66" }}>
+    <div style={{ display: "flex", justifyContent: "center", backgroundColor: "#135D66" }}>
       <Form className="text-white" onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
         <Form.Group controlId="formHorizontalText" style={{ marginRight: '10px', marginLeft: "10px" }}>
           <div style={{ display: "flex", justifyContent: "space-between" }}>

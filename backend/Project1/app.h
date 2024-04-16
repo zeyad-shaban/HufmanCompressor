@@ -54,30 +54,17 @@ int startAPP() {
 	writeTreeToJsonFile(root, "huffman_tree.json");
 
 	// Compress the file
-	compress compressor = compress();
+	compress* compressor = new compress();
 	bool validPath = true;
 	std::cout << "->compressing using HuffmanTree\n";
-	compressor.createMaps(root);
-	string codedText = compressor.compressing(filePath, &validPath);
+	compressor->createMaps(root);
+	string codedTextPrev = compressor->compressing(filePath,"compressed_file.com", &validPath);
 
-	if (!validPath) {
-		cout << "Warning: Path not valid." << endl;
-	}
-
-	if (codedText.empty()) {
-		cout << "Warning: File content is empty." << endl;
-	}
 
 	// Save compressed data and map
-	string fileNamePath = dirPath + "compressed_file.cod";
-	bool success = saveStringToFile(fileNamePath, codedText);
-	saveMapToFile(dirPath + "decoder_map.json", compressor.decoder);
+	saveMapToFile(string("decoder_map.json"), compressor->decoder);
+
 	std::cout << "Compressed and saved 2 files\n";
-
-	if (!success) {
-		cout << "Warning: Directory path not valid." << endl;
-	}
-
 
 	// Cleanup
 	delete root;

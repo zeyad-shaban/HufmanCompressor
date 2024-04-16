@@ -8,9 +8,17 @@
 using namespace std;
 
 class compress {
+private:
+	int bufferSize = 4096;
+
 public:
 	unordered_map<std::string, std::string> encoder;
 	unordered_map<std::string, std::string> decoder;
+
+	compress() {
+		encoder = unordered_map < std::string, std::string>();
+		decoder = unordered_map < std::string, std::string>();
+	}
 
 	void createMaps(Node* root, string code = "") {
 		if (root == NULL) {
@@ -25,31 +33,70 @@ public:
 		createMaps(root->right, code + "1");
 	}
 
-	string compressing(string filePath, bool* validPath) {
-		string codedText = "";
-		std::fstream file(filePath);
-		if (!file.is_open()) {
+	string compressing(string filePath, string outputFilePath, bool* validPath, int prevSize = 300) {
+		ifstream file(filePath);
+		ofstream outputFile(outputFilePath);
+		if (!file.is_open() || !outputFile.is_open()) {
 			*validPath = false;
 			return "";
 		}
 
-		char ch;
-		while (file.get(ch))
-			if (ch >= 0 && ch < 128) codedText += encoder[string(1, ch)];
+		string codedTextPrev = "";
+		string buffer = "";
 
-		return codedText;
-	}
-	string decompressing(string text) {
-		string decodedText = "";
-		string code = "";
-		for (int i = 0; i < text.size(); i++) {
-			code += text[i];
-			if (decoder.find(code) != decoder.end()) {
-				decodedText += decoder[code];
-				code = "";
+		char ch;
+		while (file.get(ch)) {
+			if (!(ch >= 0 && ch < 128)) continue;
+
+			if (codedTextPrev.size() <= prevSize) codedTextPrev += encoder[string(1, ch)];
+
+			buffer += encoder[string(1, ch)];
+			if (buffer.size() >= bufferSize) {
+				outputFile << buffer;
+				buffer = "";
 			}
 		}
-		return decodedText;
+		outputFile << buffer;
+
+		if (codedTextPrev.size() >= prevSize) codedTextPrev += "...";
+		return codedTextPrev;
+	}
+	string decompressing(string compressedFilePath, string outputFilePath, bool* validPath, int prevSize = 300) {
+		ifstream compressedFile(compressedFilePath);
+		ofstream outputFile(outputFilePath);
+
+		if (!compressedFile.is_open() || !outputFile.is_open()) {
+			*validPath = false;
+			return "";
+		}
+
+
+		string decodedTextPrev = "";
+		string code = "";
+		string buffer = "";
+
+		char ch;
+		while (compressedFile.get(ch)) {
+			code += ch;
+			if (decoder.find(code) != decoder.end()) {
+				if (decodedTextPrev.size() <= prevSize) decodedTextPrev += decoder[code];
+
+				buffer += decoder[code];
+				code = "";
+
+				if (buffer.size() >= bufferSize) {
+					outputFile << buffer;
+					buffer = "";
+				}
+
+			}
+		}
+		outputFile << buffer;
+
+
+		if (decodedTextPrev.size() >= prevSize) decodedTextPrev += "...";
+
+		return decodedTextPrev;
 	}
 
 	// printing the encoder table
