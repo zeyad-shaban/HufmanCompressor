@@ -176,11 +176,15 @@
     <ClInclude Include="include\nlohmann\ordered_map.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="decompress.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="input.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="frequency_table.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="decoder_map.json" />

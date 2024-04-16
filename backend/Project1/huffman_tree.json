@@ -1,54 +1,44 @@
 {
-    "freq": 7,
+    "freq": 5,
     "left": {
+        "freq": 2,
+        "left": {
+            "freq": 1,
+            "left": null,
+            "letters": "a",
+            "right": null
+        },
+        "letters": "ae",
+        "right": {
+            "freq": 1,
+            "left": null,
+            "letters": "e",
+            "right": null
+        }
+    },
+    "letters": "aedmh",
+    "right": {
         "freq": 3,
         "left": {
             "freq": 1,
             "left": null,
-            "letters": "n",
+            "letters": "d",
             "right": null
         },
-        "letters": "nai",
+        "letters": "dmh",
         "right": {
             "freq": 2,
             "left": {
-                "freq": 1,
-                "left": null,
-                "letters": "a",
-                "right": null
-            },
-            "letters": "ai",
-            "right": {
-                "freq": 1,
-                "left": null,
-                "letters": "i",
-                "right": null
-            }
-        }
-    },
-    "letters": "nailsm",
-    "right": {
-        "freq": 4,
-        "left": {
-            "freq": 2,
-            "left": null,
-            "letters": "l",
-            "right": null
-        },
-        "letters": "lsm",
-        "right": {
-            "freq": 2,
-            "left": {
-                "freq": 1,
-                "left": null,
-                "letters": "s",
-                "right": null
-            },
-            "letters": "sm",
-            "right": {
                 "freq": 1,
                 "left": null,
                 "letters": "m",
+                "right": null
+            },
+            "letters": "mh",
+            "right": {
+                "freq": 1,
+                "left": null,
+                "letters": "h",
                 "right": null
             }
         }

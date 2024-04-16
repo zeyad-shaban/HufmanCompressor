@@ -10,6 +10,7 @@
 #include "app.h"
 #include "httplib.h"
 #include <nlohmann/json.hpp>
+#include "decompress.h"
 using json = nlohmann::json;
 
 using namespace std;
@@ -50,6 +51,12 @@ int main() {
 			res.set_header("Access-Control-Allow-Origin", "*");
 			// Parse the JSON from the request body
 			json request_json = json::parse(req.body);
+			
+			std::cout << "\n----INCOMING REQUEST CONTENTS:" << std::endl;
+			std::cout << "-Method: " << req.method << std::endl;
+			std::cout << "-Path: " << req.path << std::endl;
+			std::cout << "-Origin: " << req.get_header_value("Origin") << std::endl;
+			std::cout << "-User-Agent: " << req.get_header_value("User-Agent") << "\n\n" << std::endl;
 
 			// Extract the string from the JSON
 			std::string data = request_json["message"];
@@ -58,13 +65,14 @@ int main() {
 
 			if (file.is_open()) {
 				file << data;
-				std::cout << "read file";
+				std::cout << "READING-COMPLETED:input data saved to 'input.txt'\n\n";
 				file.close(); // Close the file after writing
 			}
 			else {
-				std::cout << "Unable to open file";
+				std::cout << "READING-FAILED:Unable to open file\n";
 			}
 
+			std::cout << "->compressing operation started...\n";
 			startAPP();
 
 			std::ifstream file1("compressed_file.cod");
@@ -78,6 +86,18 @@ int main() {
 			else {
 				std::cout << "Unable to open compressed_file.cod";
 			}
+			std::ifstream file2("frequency_table.txt");
+			std::string frequency_tableTXT;
+			if (file2.is_open()) {
+				std::stringstream buffer;
+				buffer << file2.rdbuf();
+				frequency_tableTXT = buffer.str();
+				file2.close();
+			}
+			else {
+				std::cout << "Unable to open compressed_file.cod";
+			}
+
 
 			std::ifstream file3("huffman_tree.json");
 			std::string huffman_tree;
@@ -91,13 +111,13 @@ int main() {
 				std::cout << "Unable to open compressed_file.cod";
 			}
 
-			std::ifstream file2("decoder_map.json");
+			std::ifstream file4("decoder_map.json");
 			std::string decoder_mapTXT;
-			if (file2.is_open()) {
+			if (file4.is_open()) {
 				std::stringstream buffer;
-				buffer << file2.rdbuf();
+				buffer << file4.rdbuf();
 				decoder_mapTXT = buffer.str();
-				file2.close();
+				file4.close();
 			}
 			else {
 				std::cout << "Unable to open decoder_map.json";
@@ -115,14 +135,41 @@ int main() {
 				obj["value"] = it.value();
 				array.push_back(obj);
 			}
-			decoder_mapTXT = array.dump(4);
+			//decoder_mapTXT = array.dump(4);
 
 
-			std::string response_json = R"({"compressed_file": ")" + compressed_fileTXT + R"(","decoder_map":)" + decoder_mapTXT +R"(,"huffman_tree":)"+ huffman_tree+ R"(})";
+			std::string response_json = R"({"compressed_file": ")" + compressed_fileTXT + R"(","decoder_map":)" + decoder_mapTXT +R"(,"huffman_tree":)"+ huffman_tree+ R"(,"frequency_table": ")" + frequency_tableTXT + R"("})";
 			res.set_content(response_json, "application/json");
 			});
 
 
+		svr.Post("/upload", [](const httplib::Request& req, httplib::Response& res) {
+			res.set_header("Access-Control-Allow-Origin", "*");
+			// Parse the JSON from the request body
+			json request_json = json::parse(req.body);
+
+			std::cout << "\n----INCOMING REQUEST CONTENTS:" << std::endl;
+			std::cout << "-Method: " << req.method << std::endl;
+			std::cout << "-Path: " << req.path << std::endl;
+			std::cout << "-Origin: " << req.get_header_value("Origin") << std::endl;
+			std::cout << "-User-Agent: " << req.get_header_value("User-Agent") << "\n\n" << std::endl;
+
+			std::string compressedFileValue = request_json.at("compressedFile").get<std::string>();
+			std::string decoderFileValue = request_json.at("decoderFile").get<std::string>();
+
+	
+			std::cout << "Value of compressedFile: " << compressedFileValue << std::endl;
+			std::cout << "Value of decoderFile: " << decoderFileValue << std::endl;
+
+			deCompress();
+			
+
+			std::string response_json = R"({"compressed_file": "denya"})";
+
+			res.set_content(response_json, "application/json");
+			});
+
+	
 		svr.listen("localhost", 8080);
 
 	}

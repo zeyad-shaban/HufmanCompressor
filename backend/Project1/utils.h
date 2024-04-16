@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <fstream>
 #include <unordered_map>
+#include <iostream>
 
 
 Node* tregen(MinHeap* heap) {
@@ -27,13 +28,14 @@ bool genFreqTable(std::string filePath, int* freqTable, int* size) {
 	std::ifstream file(filePath);
 	if (!file.is_open()) return false;
 
+	
 	char ch;
 	while (file.get(ch))
 		if (ch >= 0 && ch < 128) {
 			freqTable[ch]++;
 			(*size)++;
 		}
-
+	
 	return true;
 }
 bool saveStringToFile(std::string path, std::string str) {

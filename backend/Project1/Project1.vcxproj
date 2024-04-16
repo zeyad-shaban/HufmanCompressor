@@ -104,7 +104,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>E:\scsc\backend\Project1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\gam3a2\HufmanCompressor\backend\Project1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -134,6 +134,7 @@
   <ItemGroup>
     <ClInclude Include="app.h" />
     <ClInclude Include="Compress.h" />
+    <ClInclude Include="decompress.h" />
     <ClInclude Include="include\httplib.h" />
     <ClInclude Include="include\json.hpp" />
     <ClInclude Include="include\nlohmann\adl_serializer.hpp" />
@@ -186,6 +187,7 @@
     <ClInclude Include="utils.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="frequency_table.txt" />
     <Text Include="input.txt" />
   </ItemGroup>
   <ItemGroup>
