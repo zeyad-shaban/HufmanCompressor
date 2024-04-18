@@ -48,6 +48,21 @@
     <ClCompile Include="MainFrame.cpp">
       <Filter>Source Files\LocalFrames</Filter>
     </ClCompile>
+    <ClCompile Include="LocalApp.cpp">
+      <Filter>Source Files\LocalFrames</Filter>
+    </ClCompile>
+    <ClCompile Include="TreeControl.cpp">
+      <Filter>Source Files\LocalFrames</Filter>
+    </ClCompile>
+    <ClCompile Include="Compress.cpp">
+      <Filter>Source Files\MainLogic</Filter>
+    </ClCompile>
+    <ClCompile Include="MinHeap.cpp">
+      <Filter>Source Files\MainLogic</Filter>
+    </ClCompile>
+    <ClCompile Include="Node.cpp">
+      <Filter>Source Files\MainLogic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="utils.h">
@@ -215,7 +230,7 @@
     <ClInclude Include="InfoFrame.h">
       <Filter>Header Files\LocalFrames</Filter>
     </ClInclude>
-    <ClInclude Include="TreeControl.hpp">
+    <ClInclude Include="TreeControl.h">
       <Filter>Header Files\LocalFrames</Filter>
     </ClInclude>
   </ItemGroup>

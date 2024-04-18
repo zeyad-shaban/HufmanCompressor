@@ -1,6 +1,6 @@
 #pragma once
 #include <wx/wx.h>
-#include "TreeControl.hpp"
+#include "TreeControl.h"
 
 class MainFrame;
 

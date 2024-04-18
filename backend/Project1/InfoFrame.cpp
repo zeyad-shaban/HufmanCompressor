@@ -1,6 +1,5 @@
 #include "InfoFrame.h"
-//#include "MainFrame.h"
-
+#include "MainFrame.h"
 
 InfoFrame::InfoFrame(const wxString& title, MainFrame* mainFrame, std::unordered_map<std::string, std::string> map, Node* root, std::string text, bool compressing)
 	: wxFrame(nullptr, wxID_ANY, title), mainFrame(mainFrame) {
@@ -80,6 +79,6 @@ InfoFrame::InfoFrame(const wxString& title, MainFrame* mainFrame, std::unordered
 
 void InfoFrame::OnBack(wxCommandEvent& event) {
 	this->Show(false);
-	//mainFrame->Show(true);
+	mainFrame->Show(true);
 	this->Destroy();
 }

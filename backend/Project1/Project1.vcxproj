@@ -135,11 +135,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Compress.cpp" />
     <ClCompile Include="InfoFrame.cpp" />
+    <ClCompile Include="LocalApp.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainFrame.cpp" />
     <ClCompile Include="MainFrame.h" />
+    <ClCompile Include="MinHeap.cpp" />
+    <ClCompile Include="Node.cpp" />
     <ClCompile Include="StartCompressing.cpp" />
+    <ClCompile Include="TreeControl.cpp" />
     <ClCompile Include="utils.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -197,7 +202,7 @@
     <ClInclude Include="LocalApp.h" />
     <ClInclude Include="MinHeap.h" />
     <ClInclude Include="Node.h" />
-    <ClInclude Include="TreeControl.hpp" />
+    <ClInclude Include="TreeControl.h" />
     <ClInclude Include="utils.h" />
   </ItemGroup>
   <ItemGroup>

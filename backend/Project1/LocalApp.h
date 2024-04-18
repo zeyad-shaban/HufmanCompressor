@@ -1,17 +1,8 @@
 #pragma once
+#include <wx/wx.h>
 #include "MainFrame.h"
 
 class LocalApp : public wxApp {
 public:
-	bool OnInit() {
-		_mkdir("./data");
-
-		MainFrame* mainFrame = new MainFrame("3A-Z");
-		mainFrame->SetClientSize(800, 600);
-		mainFrame->Center();
-		mainFrame->Show();
-		return true;
-	}
+	bool OnInit();
 };
-
-IMPLEMENT_APP(LocalApp);
