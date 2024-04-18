@@ -33,7 +33,7 @@ public:
 		createMaps(root->right, code + "1");
 	}
 
-	string compressing(string filePath, string outputFilePath, bool* validPath, int MAX_BUFFER_SIZE = 16000000) {
+	string compressing(string filePath, string outputFilePath, bool* validPath, int MAX_BUFFER_SIZE = 16000000, int prevSize = 300) {
 		ifstream file(filePath);
 		ofstream outputFile(outputFilePath);
 		if (!file.is_open() || !outputFile.is_open()) {
@@ -42,11 +42,14 @@ public:
 		}
 
 		string buffer = "";
+		string prevText = "";
 		int bufferSize = 0;
 
 		char ch;
 		while (file.get(ch)) {
 			if (!(ch >= 0 && ch < 128)) continue;
+
+			if (prevText.size() < prevSize) prevText += ch;
 
 			buffer += encoder[string(1, ch)];
 			bufferSize++;
@@ -57,7 +60,7 @@ public:
 		}
 		if (!buffer.empty()) outputFile << buffer;
 
-		return "";
+		return prevText;
 	}
 	string decompressing(string compressedFilePath, string outputFilePath, bool* validPath, int prevSize = 300) {
 		ifstream compressedFile(compressedFilePath);

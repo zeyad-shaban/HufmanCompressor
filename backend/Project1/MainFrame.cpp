@@ -1,6 +1,79 @@
 #include "MainFrame.h"
 
 
+void MainFrame::onCompress(wxCommandEvent& event) {
+	string filePath = string(filePathCtrl->GetValue().mb_str());
+	string dirPath = string(dirPathCtrl->GetValue().mb_str());
+
+	unordered_map<string, string> encoder;
+	Node* root = NULL;
+	string textPrev;
+
+	startCompressing(filePath, dirPath, &encoder, root, &textPrev);
+
+	InfoFrame* infoFrame = new InfoFrame("Info", this, encoder, root, textPrev, true);
+	this->Show(false);
+	infoFrame->Show(true);
+	infoFrame->SetSize(this->GetSize());
+	infoFrame->Move(this->GetPosition());
+}
+
+void MainFrame::onDecompress(wxCommandEvent& event) {
+	//string compressedFilePath = string(filePathCtrl->GetValue().mb_str());
+	//string dirPath = string(dirPathCtrl->GetValue().mb_str());
+	//string decoderPath = string(decoderPathCtrl->GetValue().mb_str());
+
+	//string base_filename = compressedFilePath.substr(compressedFilePath.find_last_of("/\\") + 1);
+	//string::size_type const p(base_filename.find_last_of('.'));
+	//string file_without_extension = base_filename.substr(0, p);
+
+	//string fileNamePath = dirPath + "\\" + file_without_extension;
+
+
+	//compress* compressor = new compress();
+	//ifstream decoderFile(decoderPath);
+
+	//if (!decoderFile.is_open()) {
+	//	// TODO HANDLE INVALID DECODER PATH
+	//}
+
+	//nlohmann::json jsonDecoder = nlohmann::json::parse(decoderFile);
+	//for (auto& element : jsonDecoder.items())
+	//	compressor->decoder[element.key()] = element.value();
+
+
+	//bool validPath = false;
+	//string decodedTextPrev = compressor->decompressing(compressedFilePath, fileNamePath + "_decompressed.txt", &validPath);
+
+	//if (!validPath) {
+	//	// TODO HANDLE INVALID PATH HERE
+	//}
+
+	//Node* root = nullptr;
+	//InfoFrame* infoFrame = new InfoFrame("Info", this, compressor->decoder, root, decodedTextPrev, false);
+	//this->Show(false);
+	//infoFrame->Show(true);
+	//infoFrame->SetSize(this->GetSize());
+	//infoFrame->Move(this->GetPosition());
+}
+void MainFrame::onBrowseCompressFile(wxCommandEvent& event) {
+	wxFileDialog openFileDialog(this, _("Open file"), "", "", "All files (*.*)|*.*", wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+
+	if (openFileDialog.ShowModal() == wxID_OK)
+		filePathCtrl->SetValue(openFileDialog.GetPath());
+}
+void MainFrame::onBrowseOutputDir(wxCommandEvent& event) {
+	wxDirDialog openDirDialog(this, _("Open directory"), "", wxDD_DEFAULT_STYLE);
+
+	if (openDirDialog.ShowModal() == wxID_OK)
+		dirPathCtrl->SetValue(openDirDialog.GetPath());
+}
+void MainFrame::onBrowseDecoderFile(wxCommandEvent& event) {
+	wxFileDialog openFileDialog(this, _("Open file"), "", "", "JSON files (*.json)|*.json", wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+
+	if (openFileDialog.ShowModal() == wxID_OK)
+		decoderPathCtrl->SetValue(openFileDialog.GetPath());
+}
 void MainFrame::onToggleBtn(wxCommandEvent& event) {
 	wxToggleButton* toggleButton = (wxToggleButton*)event.GetEventObject();
 
@@ -34,27 +107,6 @@ void MainFrame::onToggleBtn(wxCommandEvent& event) {
 	this->Layout();
 }
 
-
-void MainFrame::onCompress(wxCommandEvent& event) {
-	string filePath = string(filePathCtrl->GetValue().mb_str());
-	string dirPath = string(dirPathCtrl->GetValue().mb_str());
-
-	unordered_map<string, string> encoder;
-	Node* root = NULL;
-	string textPrev;
-
-	startCompressing(filePath, dirPath);
-
-	InfoFrame* infoFrame = new InfoFrame("Info", encoder, root, textPrev, true);
-	this->Show(false);
-	infoFrame->Show(true);
-	infoFrame->SetSize(this->GetSize());
-	infoFrame->Move(this->GetPosition());
-}
-void MainFrame::onDecompress(wxCommandEvent& event) {}
-void MainFrame::onBrowseCompressFile(wxCommandEvent& event) {}
-void MainFrame::onBrowseOutputDir(wxCommandEvent& event) {}
-void MainFrame::onBrowseDecoderFile(wxCommandEvent& event) {}
 
 MainFrame::MainFrame(const wxString& title) : wxFrame(nullptr, wxID_ANY, title) {
 	int btnsHeight = 30;
@@ -138,7 +190,7 @@ MainFrame::MainFrame(const wxString& title) : wxFrame(nullptr, wxID_ANY, title) 
 	outDirLabel->SetFont(labelFont);
 	mainSizer->Add(outDirLabel, 0, wxALL | wxLEFT, 5);
 
-	dirPathCtrl = new wxTextCtrl(this, wxID_ANY); // THIS LINE CAUSES HEAP CORRUPTION
+	dirPathCtrl = new wxTextCtrl(this, wxID_ANY);
 	wxButton* dirBrowseBtn = new wxButton(this, wxID_ANY, "Browse");
 	dirPathCtrl->SetMinSize(wxSize(-1, btnsHeight));
 	dirBrowseBtn->SetMinSize(wxSize(-1, btnsHeight));

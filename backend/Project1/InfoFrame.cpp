@@ -1,10 +1,9 @@
 #include "InfoFrame.h"
-#include "MainFrame.h"
+//#include "MainFrame.h"
 
 
-InfoFrame::InfoFrame(const wxString& title, std::unordered_map<std::string, std::string> map, Node* root, std::string text, bool compressing)
-	//: wxFrame(nullptr, wxID_ANY, title), mainFrame(mainFrame) {
-{
+InfoFrame::InfoFrame(const wxString& title, MainFrame* mainFrame, std::unordered_map<std::string, std::string> map, Node* root, std::string text, bool compressing)
+	: wxFrame(nullptr, wxID_ANY, title), mainFrame(mainFrame) {
 	wxScrolledWindow* scrolledWindow = new wxScrolledWindow(this);
 	wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
 	scrolledWindow->SetSizer(mainSizer);
