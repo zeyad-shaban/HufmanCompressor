@@ -1,0 +1,126 @@
+{
+    "freq": 18,
+    "left": {
+        "freq": 8,
+        "left": {
+            "freq": 4,
+            "left": {
+                "freq": 2,
+                "left": {
+                    "freq": 1,
+                    "left": null,
+                    "letters": "c",
+                    "right": null
+                },
+                "letters": "",
+                "right": {
+                    "freq": 1,
+                    "left": null,
+                    "letters": "k",
+                    "right": null
+                }
+            },
+            "letters": "",
+            "right": {
+                "freq": 2,
+                "left": {
+                    "freq": 1,
+                    "left": null,
+                    "letters": "w",
+                    "right": null
+                },
+                "letters": "",
+                "right": {
+                    "freq": 1,
+                    "left": null,
+                    "letters": "n",
+                    "right": null
+                }
+            }
+        },
+        "letters": "",
+        "right": {
+            "freq": 4,
+            "left": {
+                "freq": 2,
+                "left": null,
+                "letters": "o",
+                "right": null
+            },
+            "letters": "",
+            "right": {
+                "freq": 2,
+                "left": null,
+                "letters": "e",
+                "right": null
+            }
+        }
+    },
+    "letters": "",
+    "right": {
+        "freq": 10,
+        "left": {
+            "freq": 4,
+            "left": {
+                "freq": 2,
+                "left": null,
+                "letters": " ",
+                "right": null
+            },
+            "letters": "",
+            "right": {
+                "freq": 2,
+                "left": {
+                    "freq": 1,
+                    "left": null,
+                    "letters": "d",
+                    "right": null
+                },
+                "letters": "",
+                "right": {
+                    "freq": 1,
+                    "left": null,
+                    "letters": "h",
+                    "right": null
+                }
+            }
+        },
+        "letters": "",
+        "right": {
+            "freq": 6,
+            "left": {
+                "freq": 3,
+                "left": {
+                    "freq": 1,
+                    "left": null,
+                    "letters": "f",
+                    "right": null
+                },
+                "letters": "",
+                "right": {
+                    "freq": 2,
+                    "left": {
+                        "freq": 1,
+                        "left": null,
+                        "letters": "u",
+                        "right": null
+                    },
+                    "letters": "",
+                    "right": {
+                        "freq": 1,
+                        "left": null,
+                        "letters": "r",
+                        "right": null
+                    }
+                }
+            },
+            "letters": "",
+            "right": {
+                "freq": 3,
+                "left": null,
+                "letters": "l",
+                "right": null
+            }
+        }
+    }
+}

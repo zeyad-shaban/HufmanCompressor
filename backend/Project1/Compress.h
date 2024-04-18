@@ -9,7 +9,7 @@ using namespace std;
 
 class compress {
 private:
-	int bufferSize = 4096;
+	int MAX_BUFFER_SIZE = 16000000;
 
 public:
 	unordered_map<std::string, std::string> encoder;
@@ -33,7 +33,7 @@ public:
 		createMaps(root->right, code + "1");
 	}
 
-	string compressing(string filePath, string outputFilePath, bool* validPath, int prevSize = 300) {
+	string compressing(string filePath, string outputFilePath, bool* validPath, int MAX_BUFFER_SIZE = 16000000) {
 		ifstream file(filePath);
 		ofstream outputFile(outputFilePath);
 		if (!file.is_open() || !outputFile.is_open()) {
@@ -41,25 +41,23 @@ public:
 			return "";
 		}
 
-		string codedTextPrev = "";
 		string buffer = "";
+		int bufferSize = 0;
 
 		char ch;
 		while (file.get(ch)) {
 			if (!(ch >= 0 && ch < 128)) continue;
 
-			if (codedTextPrev.size() <= prevSize) codedTextPrev += encoder[string(1, ch)];
-
 			buffer += encoder[string(1, ch)];
-			if (buffer.size() >= bufferSize) {
+			bufferSize++;
+			if (bufferSize > MAX_BUFFER_SIZE) {
 				outputFile << buffer;
 				buffer = "";
 			}
 		}
-		outputFile << buffer;
+		if (!buffer.empty()) outputFile << buffer;
 
-		if (codedTextPrev.size() >= prevSize) codedTextPrev += "...";
-		return codedTextPrev;
+		return "";
 	}
 	string decompressing(string compressedFilePath, string outputFilePath, bool* validPath, int prevSize = 300) {
 		ifstream compressedFile(compressedFilePath);
@@ -84,7 +82,7 @@ public:
 				buffer += decoder[code];
 				code = "";
 
-				if (buffer.size() >= bufferSize) {
+				if (buffer.size() >= MAX_BUFFER_SIZE) {
 					outputFile << buffer;
 					buffer = "";
 				}

@@ -1,3 +1,5 @@
+#define _CRT_SECURE_NO_WARNINGS
+
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -7,58 +9,42 @@
 #include <algorithm>
 #include "utils.h"
 #include "Compress.h"
-#include "app.h"
+#include "StartCompressing.h"
 #include "httplib.h"
 #include <nlohmann/json.hpp>
 #include "decompress.h"
+#include <wx/wx.h>
+#include "LocalApp.h"
+
 using json = nlohmann::json;
 
 using namespace std;
 
 
-int main() {
+int main(int argc, char** argv) {
+	string filePath = "./input.txt";
+	string dirPath = "./data";
+
 
 	std::string userInput2;
-	bool useLocal;
-	bool useCompress;
+	bool useLocal = false;
+	bool useCompress = false;
 
 	std::cout << "would you like to use this program \n [1]as a server \n [2]locally \n type your answer (1 or 2): ";
 	std::cin >> userInput2;
 
-	if (userInput2 == "1") {
+	if (userInput2 == "1")
 		useLocal = false;
-	}
-	else if (userInput2 == "2") {
+	else if (userInput2 == "2")
 		useLocal = true;
-	}
-	else {
+	else
 		std::cout << "Invalid input";
-	}
 
 
 
 
-	if (useLocal) {
-		std::string userInput1;
-		std::cout << "would you like to use this program \n [1]as a Compresser \n [2]as a Decompresser \n type your answer (1 or 2): ";
-		std::cin >> userInput1;
-		if (userInput1 == "1") {
-			useCompress = true;
-		}
-		else if (userInput1 == "2") {
-			useCompress = false;
-		}
-		else {
-			std::cout << "Invalid input. Please enter a boolean value (true/false).";
-		}
-		if (useCompress) {
-
-			startAPP();
-		}
-		else {
-			deCompress();
-		}
-	}
+	if (useLocal)
+		wxEntry(argc, argv);
 	else {
 		httplib::Server svr;
 
@@ -95,7 +81,7 @@ int main() {
 			}
 
 			std::cout << "->compressing operation started...\n";
-			startAPP();
+			startCompressing("filePath", "dirPath");
 
 			std::ifstream file1("compressed_file.com");
 			std::string compressed_fileTXT;
@@ -199,7 +185,7 @@ int main() {
 			else {
 				std::cout << "READING-FAILED:Unable to open file\n";
 			}
-		
+
 
 			deCompress();
 

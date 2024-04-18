@@ -9,8 +9,8 @@
 #include "utils.h"
 #include "Compress.h"
 int deCompress() {
-	string compressedFilePath = "compressed_file.com";
-	string dirPath ="";
+	string compressedFilePath = "./data/input_compressed.bin";
+	string dirPath =".";
 	string decoderPath = "decoder_map.json";
 
 	string base_filename = compressedFilePath.substr(compressedFilePath.find_last_of("/\\") + 1);
