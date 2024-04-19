@@ -1,90 +1,87 @@
 #include "Compress.h"
 
 compress::compress() {
-    encoder = unordered_map<string, string>();
-    decoder = unordered_map<string, string>();
+	encoder = unordered_map<string, string>();
+	decoder = unordered_map<string, string>();
 }
 
 void compress::createMaps(Node* root, string code) {
-    if (root == NULL) {
-        return;
-    }
-    if (root->left == NULL && root->right == NULL) {
-        encoder[root->letters] = code;
-        decoder[code] = root->letters;
-        return;
-    }
-    createMaps(root->left, code + "0");
-    createMaps(root->right, code + "1");
+	if (root == NULL) {
+		return;
+	}
+	if (root->left == NULL && root->right == NULL) {
+		encoder[root->letters] = code;
+		decoder[code] = root->letters;
+		return;
+	}
+	createMaps(root->left, code + "0");
+	createMaps(root->right, code + "1");
 }
 
-string compress::compressing(string filePath, string outputFilePath, bool* validPath, int MAX_BUFFER_SIZE, int prevSize) {
-    ifstream file(filePath);
-    ofstream outputFile(outputFilePath);
-    if (!file.is_open() || !outputFile.is_open()) {
-        *validPath = false;
-        return "";
-    }
+string compress::compressing(string filePath, string outputFilePath, bool* validPath, int MAX_BUFFER_SIZE) {
+	ifstream file(filePath);
+	ofstream outputFile(outputFilePath);
+	if (!file.is_open() || !outputFile.is_open()) {
+		*validPath = false;
+		return "";
+	}
 
-    string buffer = "";
-    string prevText = "";
-    int bufferSize = 0;
+	string buffer = "";
+	int bufferSize = 0;
 
-    char ch;
-    while (file.get(ch)) {
-        if (!(ch >= 0 && ch < 128)) continue;
+	char ch;
+	while (file.get(ch)) {
+		if (!(ch >= 0 && ch < 128)) continue;
 
-        if (prevText.size() < prevSize) prevText += ch;
+		buffer += encoder[string(1, ch)];
+		bufferSize++;
+		if (bufferSize > MAX_BUFFER_SIZE) {
+			outputFile << buffer;
+			buffer = "";
+		}
+	}
+	if (!buffer.empty()) outputFile << buffer;
 
-        buffer += encoder[string(1, ch)];
-        bufferSize++;
-        if (bufferSize > MAX_BUFFER_SIZE) {
-            outputFile << buffer;
-            buffer = "";
-        }
-    }
-    if (!buffer.empty()) outputFile << buffer;
-
-    return prevText;
+	return buffer.substr(0, 300);
 }
 
 string compress::decompressing(string compressedFilePath, string outputFilePath, bool* validPath, int prevSize) {
-    ifstream compressedFile(compressedFilePath);
-    ofstream outputFile(outputFilePath);
+	ifstream compressedFile(compressedFilePath);
+	ofstream outputFile(outputFilePath);
 
-    if (!compressedFile.is_open() || !outputFile.is_open()) {
-        *validPath = false;
-        return "";
-    }
+	if (!compressedFile.is_open() || !outputFile.is_open()) {
+		*validPath = false;
+		return "";
+	}
 
-    string decodedTextPrev = "";
-    string code = "";
-    string buffer = "";
+	string decodedTextPrev = "";
+	string code = "";
+	string buffer = "";
 
-    char ch;
-    while (compressedFile.get(ch)) {
-        code += ch;
-        if (decoder.find(code) != decoder.end()) {
-            if (decodedTextPrev.size() <= prevSize) decodedTextPrev += decoder[code];
+	char ch;
+	while (compressedFile.get(ch)) {
+		code += ch;
+		if (decoder.find(code) != decoder.end()) {
+			if (decodedTextPrev.size() <= prevSize) decodedTextPrev += decoder[code];
 
-            buffer += decoder[code];
-            code = "";
+			buffer += decoder[code];
+			code = "";
 
-            if (buffer.size() >= MAX_BUFFER_SIZE) {
-                outputFile << buffer;
-                buffer = "";
-            }
-        }
-    }
-    outputFile << buffer;
+			if (buffer.size() >= MAX_BUFFER_SIZE) {
+				outputFile << buffer;
+				buffer = "";
+			}
+		}
+	}
+	outputFile << buffer;
 
-    if (decodedTextPrev.size() >= prevSize) decodedTextPrev += "...";
+	if (decodedTextPrev.size() >= prevSize) decodedTextPrev += "...";
 
-    return decodedTextPrev;
+	return decodedTextPrev;
 }
 
 void compress::printEncoder() {
-    for (auto it = encoder.begin(); it != encoder.end(); it++) {
-        cout << it->first << " " << it->second << endl;
-    }
+	for (auto it = encoder.begin(); it != encoder.end(); it++) {
+		cout << it->first << " " << it->second << endl;
+	}
 }

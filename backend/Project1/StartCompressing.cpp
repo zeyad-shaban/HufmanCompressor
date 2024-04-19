@@ -1,6 +1,6 @@
 #include "StartCompressing.h"
 
-int startCompressing(string filePath, string dirPath, unordered_map<string, string>* encoderPtr, Node* rootPtr, string* textPrevPtr) {
+int startCompressing(string filePath, string dirPath, unordered_map<string, string>* encoderPtr, Node** rootPtr, string* textPrevPtr) {
 	std::string base_filename = filePath.substr(filePath.find_last_of("/\\") + 1);
 	std::string::size_type const p(base_filename.find_last_of('.'));
 	std::string file_without_extension = base_filename.substr(0, p);
@@ -49,12 +49,10 @@ int startCompressing(string filePath, string dirPath, unordered_map<string, stri
 
 	std::cout << "Compressed and saved 2 files\n";
 
-	// Cleanup
+	// Extra Info
 	if (encoderPtr) *encoderPtr = compressor->encoder;
-	if (rootPtr) *rootPtr = *root;
+	if (rootPtr) *rootPtr = root;
 	if (textPrevPtr) *textPrevPtr = codedTextPrev;
-
-	delete root;
 
 
 	return 0;

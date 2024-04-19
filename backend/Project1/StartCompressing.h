@@ -9,4 +9,4 @@
 #include "utils.h"
 #include "Compress.h"
 
-int startCompressing(string filePath, string dirPath, unordered_map<string, string>* encoderPtr=nullptr, Node* rootPtr=nullptr, string* textPrevPtr=nullptr);
+int startCompressing(string filePath, string dirPath, unordered_map<string, string>* encoderPtr=nullptr, Node** rootPtr=nullptr, string* textPrevPtr=nullptr);

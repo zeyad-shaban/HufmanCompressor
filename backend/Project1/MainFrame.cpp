@@ -9,7 +9,7 @@ void MainFrame::onCompress(wxCommandEvent& event) {
 	Node* root = NULL;
 	string textPrev;
 
-	startCompressing(filePath, dirPath, &encoder, root, &textPrev);
+	startCompressing(filePath, dirPath, &encoder, &root, &textPrev);
 
 	InfoFrame* infoFrame = new InfoFrame("Info", this, encoder, root, textPrev, true);
 	this->Show(false);
@@ -19,9 +19,9 @@ void MainFrame::onCompress(wxCommandEvent& event) {
 }
 
 void MainFrame::onDecompress(wxCommandEvent& event) {
-	//string compressedFilePath = string(filePathCtrl->GetValue().mb_str());
-	//string dirPath = string(dirPathCtrl->GetValue().mb_str());
-	//string decoderPath = string(decoderPathCtrl->GetValue().mb_str());
+	string compressedFilePath = string(filePathCtrl->GetValue().mb_str());
+	string dirPath = string(dirPathCtrl->GetValue().mb_str());
+	string decoderPath = string(decoderPathCtrl->GetValue().mb_str());
 
 	//string base_filename = compressedFilePath.substr(compressedFilePath.find_last_of("/\\") + 1);
 	//string::size_type const p(base_filename.find_last_of('.'));

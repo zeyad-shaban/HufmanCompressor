@@ -18,7 +18,7 @@ public:
 
     void createMaps(Node* root, string code = "");
 
-    string compressing(string filePath, string outputFilePath, bool* validPath, int MAX_BUFFER_SIZE = 16000000, int prevSize = 300);
+    string compressing(string filePath, string outputFilePath, bool* validPath, int MAX_BUFFER_SIZE = 16000000);
     string decompressing(string compressedFilePath, string outputFilePath, bool* validPath, int prevSize = 300);
 
     void printEncoder();
