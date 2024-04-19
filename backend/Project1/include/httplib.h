@@ -2161,7 +2161,7 @@ public:
   virtual ~compressor() = default;
 
   typedef std::function<bool(const char *data, size_t data_len)> Callback;
-  virtual bool compress(const char *data, size_t data_length, bool last,
+  virtual bool Compressor(const char *data, size_t data_length, bool last,
                         Callback callback) = 0;
 };
 
@@ -2180,7 +2180,7 @@ class nocompressor final : public compressor {
 public:
   ~nocompressor() override = default;
 
-  bool compress(const char *data, size_t data_length, bool /*last*/,
+  bool Compressor(const char *data, size_t data_length, bool /*last*/,
                 Callback callback) override;
 };
 
@@ -3560,7 +3560,7 @@ inline EncodingType encoding_type(const Request &req, const Response &res) {
   return EncodingType::None;
 }
 
-inline bool nocompressor::compress(const char *data, size_t data_length,
+inline bool nocompressor::Compressor(const char *data, size_t data_length,
                                    bool /*last*/, Callback callback) {
   if (!data_length) { return true; }
   return callback(data, data_length);
@@ -4172,7 +4172,7 @@ write_content_chunked(Stream &strm, const ContentProvider &content_provider,
       offset += l;
 
       std::string payload;
-      if (compressor.compress(d, l, false,
+      if (compressor.Compressor(d, l, false,
                               [&](const char *data, size_t data_len) {
                                 payload.append(data, data_len);
                                 return true;
@@ -4201,7 +4201,7 @@ write_content_chunked(Stream &strm, const ContentProvider &content_provider,
     data_available = false;
 
     std::string payload;
-    if (!compressor.compress(nullptr, 0, true,
+    if (!compressor.Compressor(nullptr, 0, true,
                              [&](const char *data, size_t data_len) {
                                payload.append(data, data_len);
                                return true;
@@ -6607,7 +6607,7 @@ inline void Server::apply_ranges(const Request &req, Response &res,
 
       if (compressor) {
         std::string compressed;
-        if (compressor->compress(res.body.data(), res.body.size(), true,
+        if (compressor->Compressor(res.body.data(), res.body.size(), true,
                                  [&](const char *data, size_t data_len) {
                                    compressed.append(data, data_len);
                                    return true;

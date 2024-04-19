@@ -7,6 +7,6 @@
 #include <queue>
 #include <algorithm>
 #include "utils.h"
-#include "Compress.h"
+#include "Compressor.h"
 
 int startCompressing(string filePath, string dirPath, unordered_map<string, string>* encoderPtr=nullptr, Node** rootPtr=nullptr, string* textPrevPtr=nullptr);

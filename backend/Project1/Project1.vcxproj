@@ -144,14 +144,16 @@
     <ClCompile Include="MinHeap.cpp" />
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="StartCompressing.cpp" />
+    <ClCompile Include="StartDecmopressing.cpp" />
     <ClCompile Include="TreeControl.cpp" />
     <ClCompile Include="utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="InfoFrame.h" />
+    <ClInclude Include="StartServer.h" />
     <ClInclude Include="StartCompressing.h" />
-    <ClInclude Include="Compress.h" />
-    <ClInclude Include="decompress.h" />
+    <ClInclude Include="Compressor.h" />
+    <ClInclude Include="StartDecompressing.h" />
     <ClInclude Include="include\httplib.h" />
     <ClInclude Include="include\json.hpp" />
     <ClInclude Include="include\nlohmann\adl_serializer.hpp" />

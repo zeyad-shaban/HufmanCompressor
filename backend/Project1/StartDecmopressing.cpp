@@ -1,16 +1,9 @@
-#pragma once
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <vector>
-#include <map>
-#include <queue>
-#include <algorithm>
-#include "utils.h"
-#include "Compress.h"
-int deCompress() {
+#include "StartDecompressing.h"
+
+
+bool StartDecompressing() {
 	string compressedFilePath = "./data/input_compressed.bin";
-	string dirPath =".";
+	string dirPath = ".";
 	string decoderPath = "decoder_map.json";
 
 	string base_filename = compressedFilePath.substr(compressedFilePath.find_last_of("/\\") + 1);
@@ -18,7 +11,7 @@ int deCompress() {
 	string file_without_extension = base_filename.substr(0, p);
 
 
-	compress* compressor = new compress();
+	Compressor* compressor = new Compressor();
 	ifstream decoderFile(decoderPath);
 
 	if (!decoderFile.is_open()) {
@@ -31,7 +24,7 @@ int deCompress() {
 
 
 	bool validPath = false;
-	string decodedTextPrev = compressor->decompressing(compressedFilePath,"decompressed.txt", &validPath);
+	string decodedTextPrev = compressor->decompressing(compressedFilePath, "decompressed.txt", &validPath);
 
 	if (!validPath) {
 		// TODO HANDLE INVALID PATH HERE
@@ -40,5 +33,5 @@ int deCompress() {
 	Node* root = nullptr;
 
 
-	return 0;
+	return true;
 }

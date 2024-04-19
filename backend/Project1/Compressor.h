@@ -6,7 +6,7 @@
 #include <fstream>
 using namespace std;
 
-class compress {
+class Compressor {
 private:
     int MAX_BUFFER_SIZE = 16000000;
 
@@ -14,7 +14,7 @@ public:
     unordered_map<string, string> encoder;
     unordered_map<string, string> decoder;
 
-    compress();
+    Compressor();
 
     void createMaps(Node* root, string code = "");
 

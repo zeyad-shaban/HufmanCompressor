@@ -37,7 +37,7 @@ int startCompressing(string filePath, string dirPath, unordered_map<string, stri
 	writeTreeToJsonFile(root, dirPath + "/" + file_without_extension + "_tree.json");
 
 	// Compress the file
-	compress* compressor = new compress();
+	Compressor* compressor = new Compressor();
 	bool validPath = true;
 	std::cout << "->compressing using HuffmanTree\n";
 	compressor->createMaps(root);

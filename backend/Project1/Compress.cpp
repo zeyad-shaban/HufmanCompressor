@@ -1,11 +1,11 @@
-#include "Compress.h"
+#include "Compressor.h"
 
-compress::compress() {
+Compressor::Compressor() {
 	encoder = unordered_map<string, string>();
 	decoder = unordered_map<string, string>();
 }
 
-void compress::createMaps(Node* root, string code) {
+void Compressor::createMaps(Node* root, string code) {
 	if (root == NULL) {
 		return;
 	}
@@ -18,7 +18,7 @@ void compress::createMaps(Node* root, string code) {
 	createMaps(root->right, code + "1");
 }
 
-string compress::compressing(string filePath, string outputFilePath, bool* validPath, int MAX_BUFFER_SIZE) {
+string Compressor::compressing(string filePath, string outputFilePath, bool* validPath, int MAX_BUFFER_SIZE) {
 	ifstream file(filePath);
 	ofstream outputFile(outputFilePath);
 	if (!file.is_open() || !outputFile.is_open()) {
@@ -45,7 +45,7 @@ string compress::compressing(string filePath, string outputFilePath, bool* valid
 	return buffer.substr(0, 300);
 }
 
-string compress::decompressing(string compressedFilePath, string outputFilePath, bool* validPath, int prevSize) {
+string Compressor::decompressing(string compressedFilePath, string outputFilePath, bool* validPath, int prevSize) {
 	ifstream compressedFile(compressedFilePath);
 	ofstream outputFile(outputFilePath);
 
@@ -80,7 +80,7 @@ string compress::decompressing(string compressedFilePath, string outputFilePath,
 	return decodedTextPrev;
 }
 
-void compress::printEncoder() {
+void Compressor::printEncoder() {
 	for (auto it = encoder.begin(); it != encoder.end(); it++) {
 		cout << it->first << " " << it->second << endl;
 	}

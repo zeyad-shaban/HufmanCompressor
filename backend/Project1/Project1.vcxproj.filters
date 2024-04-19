@@ -28,6 +28,12 @@
     <Filter Include="Source Files\LocalFrames">
       <UniqueIdentifier>{f33ef699-627a-4f09-8d65-249458703c4d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\BackendServer">
+      <UniqueIdentifier>{d45d883f-7ac8-4c90-afbe-fd1bedfc883b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\BackendServer">
+      <UniqueIdentifier>{612d5b7b-0cb5-4681-bfe4-111f032c7929}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -63,6 +69,9 @@
     <ClCompile Include="Node.cpp">
       <Filter>Source Files\MainLogic</Filter>
     </ClCompile>
+    <ClCompile Include="StartDecmopressing.cpp">
+      <Filter>Source Files\MainLogic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="utils.h">
@@ -74,10 +83,10 @@
     <ClInclude Include="MinHeap.h">
       <Filter>Header Files\MainLogic</Filter>
     </ClInclude>
-    <ClInclude Include="Compress.h">
+    <ClInclude Include="Compressor.h">
       <Filter>Header Files\MainLogic</Filter>
     </ClInclude>
-    <ClInclude Include="decompress.h">
+    <ClInclude Include="StartDecompressing.h">
       <Filter>Header Files\MainLogic</Filter>
     </ClInclude>
     <ClInclude Include="StartCompressing.h">
@@ -232,6 +241,9 @@
     </ClInclude>
     <ClInclude Include="TreeControl.h">
       <Filter>Header Files\LocalFrames</Filter>
+    </ClInclude>
+    <ClInclude Include="StartServer.h">
+      <Filter>Header Files\BackendServer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
