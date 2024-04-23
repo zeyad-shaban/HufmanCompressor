@@ -3,9 +3,12 @@
 #include "utils.h"
 #include <iostream>
 #include <stdio.h>
+#include <chrono>
 using namespace std;
 
 int main() {
+
+    auto start = std::chrono::high_resolution_clock::now();
     std::string filePath = "./data/input.txt";
 
     std::string base_filename = filePath.substr(filePath.find_last_of("/\\") + 1);
@@ -28,14 +31,16 @@ int main() {
     Node *root = tregen(heap);
     delete heap;
 
-    compress compressor = compress();
+   compress compressor = compress();
 
     compressor.createMaps(root, "");
 
     string codedtext = compressor.compressing(filePath, file_without_extension);
     string original = compressor.decompressing(codedtext, file_without_extension);
-
-    std::cout << "the program has ended" << std::endl;
+auto stop = std::chrono::high_resolution_clock::now();
+auto duration = std::chrono::duration_cast<std::chrono::seconds>(stop - start);
+std::cout << "program took : "
+          << duration.count() << " seconds" << std::endl;
 
     return 0;
 }

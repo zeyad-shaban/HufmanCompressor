@@ -24,7 +24,7 @@ public:
         createMaps(root->left, code + "0");
         createMaps(root->right, code + "1");
     }
-    	string compressing(string filePath, string filename) {
+    string compressing(string filePath, string filename) {
         string codedText = "";
 		std::fstream file(filePath);
 		if (!file.is_open()) return "";
@@ -41,12 +41,14 @@ public:
 	string decompressing(string text, string filename) {
         string decodedText = "";
         string code = "";
-        for (int i = 0; i < text.size(); i++) {
-            code += text[i];
+        int c = 0;
+        while (text.size()>= c){
+            code += text[c];
             if (decoder.find(code) != decoder.end()) {
-                decodedText += decoder[code];
+                decodedText += decoder[code]; 
                 code = "";
             }
+            c++; // i made it for the jokes 
         }
 		saveStringToFile((string("./data/decompressed_") + filename + string(".txt")).c_str(), decodedText.c_str());
         return decodedText;
