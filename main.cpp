@@ -8,7 +8,7 @@ using namespace std;
 
 int main() {
 
-    auto start = std::chrono::high_resolution_clock::now();
+
     std::string filePath = "./data/input.txt";
 
     std::string base_filename = filePath.substr(filePath.find_last_of("/\\") + 1);
@@ -34,10 +34,11 @@ int main() {
    compress compressor = compress();
 
     compressor.createMaps(root, "");
-
+       auto start = std::chrono::high_resolution_clock::now();
     string codedtext = compressor.compressing(filePath, file_without_extension);
-    string original = compressor.decompressing(codedtext, file_without_extension);
-auto stop = std::chrono::high_resolution_clock::now();
+ auto stop = std::chrono::high_resolution_clock::now();
+   // string original = compressor.decompressing(codedtext, file_without_extension);
+
 auto duration = std::chrono::duration_cast<std::chrono::seconds>(stop - start);
 std::cout << "program took : "
           << duration.count() << " seconds" << std::endl;

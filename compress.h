@@ -31,28 +31,35 @@ public:
 
         char ch;
 		while (file.get(ch))
-            if (ch >= 0 && ch < 128) codedText += encoder[string(1, ch)];
+            if (ch >= 0 && ch < 128) codedText.append(encoder[string(1, ch)]) ;
 
 		saveStringToFile((string("./data/") + filename + string(".com")).c_str(), codedText.c_str());
         saveDecoder(filename + "_decoder");
         saveEncoder(filename + "_encoder");
         return codedText;
     }
-	string decompressing(string text, string filename) {
-        string decodedText = "";
-        string code = "";
+    string decompressing(const string text, const string filename) {
+        string decodedText;
+        string code;
         int c = 0;
-        while (text.size()>= c){
+        decodedText.reserve(text.size());
+
+        while (c < text.size()) {
             code += text[c];
-            if (decoder.find(code) != decoder.end()) {
-                decodedText += decoder[code]; 
-                code = "";
+            auto it = decoder.find(code);
+            if (it != decoder.end()) {
+                decodedText.append(it->second);
+                code.clear();
             }
-            c++; // i made it for the jokes 
+            c++; 
         }
-		saveStringToFile((string("./data/decompressed_") + filename + string(".txt")).c_str(), decodedText.c_str());
+
+        // Save decodedText to file
+        saveStringToFile((string("./data/decompressed_") + filename + string(".txt")).c_str(), decodedText.c_str());
+
         return decodedText;
     }
+
 private:
     void saveEncoder(string filename) {
         string data = "Keys | Values\n";
