@@ -52,10 +52,7 @@ string Compressor::decompressing(string compressedFilePath, string outputFilePat
 			buffer += decoder[code];
 			code = "";
 
-			if (buffer.size() >= MAX_BUFFER_SIZE) {
-				outputFile << buffer;
-				buffer = "";
-			}
+			
 		}
 	}
 	outputFile << buffer;

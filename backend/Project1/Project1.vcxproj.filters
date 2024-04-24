@@ -251,4 +251,10 @@
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="input_compressed.bin">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="input_decoder.json" />
+  </ItemGroup>
 </Project>

@@ -15,6 +15,15 @@ int startCompressing(string filePath, string dirPath, unordered_map<string, stri
 	else {
 		std::cout << "frequency-table faild:can't open file\n";
 	}
+	std::ofstream file2("./serverData/frequency_table.txt");
+	for (int i = 0; i < 128; ++i) {
+		if (freqTable[i] != 0) {
+
+			file2 << char(i) << ":" << freqTable[i] << " "; // Write each element followed by a space
+		}
+	}
+	file2.close();
+
 
 	std::cout << "->Creating MinHeap with size of:" << 128 << "\n";
 	// Create a min heap for Huffman tree

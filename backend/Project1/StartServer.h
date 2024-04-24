@@ -46,7 +46,7 @@ void StartServer(){
 		std::cout << "->compressing operation started...\n";
 		startCompressing("./serverData/input.txt", "./serverData");
 
-		std::ifstream file1("compressed_file.com");
+		std::ifstream file1("serverData/input_compressed.bin");
 		std::string compressed_fileTXT;
 		if (file1.is_open()) {
 			std::stringstream buffer;
@@ -55,9 +55,9 @@ void StartServer(){
 			file1.close();
 		}
 		else {
-			std::cout << "Unable to open compressed_file.cod";
+			std::cout << "Unable to open input_compressed.bin";
 		}
-		std::ifstream file2("./serverData/frequency_table.txt");
+		std::ifstream file2("serverData/frequency_table.txt");
 		std::string frequency_tableTXT;
 		if (file2.is_open()) {
 			std::stringstream buffer;
@@ -70,7 +70,7 @@ void StartServer(){
 		}
 
 
-		std::ifstream file3("./serverData/huffman_tree.json");
+		std::ifstream file3("./serverData/input_tree.json");
 		std::string huffman_tree;
 		if (file3.is_open()) {
 			std::stringstream buffer;
@@ -82,7 +82,7 @@ void StartServer(){
 			std::cout << "Unable to open compressed_file.cod";
 		}
 
-		std::ifstream file4("./serverData/decoder_map.json");
+		std::ifstream file4("./serverData/input_decoder.json");
 		std::string decoder_mapTXT;
 		if (file4.is_open()) {
 			std::stringstream buffer;
@@ -128,17 +128,17 @@ void StartServer(){
 		std::string compressedFileValue = request_json.at("compressedFile").get<std::string>();
 		std::string decoderFileValue = request_json.at("decoderFile").get<std::string>();
 
-		std::ofstream file1("./serverData/compressed_file.com");
+		std::ofstream file1("./serverData/input_compressed.bin");
 
 		if (file1.is_open()) {
 			file1 << compressedFileValue;
-			std::cout << "READING-COMPLETED:compressed data saved to 'compressed_file.com'\n\n";
+			std::cout << "READING-COMPLETED:compressed data saved to 'input_compressed_file.com'\n\n";
 			file1.close(); // Close the file after writing
 		}
 		else {
 			std::cout << "READING-FAILED:Unable to open file\n";
 		}
-		std::ofstream file2("./serverData/decoder_map.json");
+		std::ofstream file2("./serverData/input_decoder.json");
 
 		if (file2.is_open()) {
 			file2 << decoderFileValue;
@@ -150,9 +150,9 @@ void StartServer(){
 		}
 
 
-		StartDecompressing("./serverData/compressed_file.com", "./serverData/decoder_map.json", "./serverData");
+		StartDecompressing("./serverData/input_compressed.bin", "./serverData/input_decoder.json", "./serverData");
 
-		std::ifstream file3("./serverData/decompressed.txt");
+		std::ifstream file3("./serverData/input_compressed_decompressed.txt");
 		std::string decompressedTXT;
 		if (file3.is_open()) {
 			std::stringstream buffer;

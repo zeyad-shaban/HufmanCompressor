@@ -76,12 +76,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\zeyad\OneDrive\Desktop\Workspace\Code\3A-Z\3A-Z_MAIN\backend\Project1\include;C:\Libraries\wxWidgets-3.2.4\include;C:\Libraries\wxWidgets-3.2.4\include\msvc</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Libaries\wxWidgets-3.2.4\include\msvc;C:\Libaries\wxWidgets-3.2.4\include;E:\gam3a2\HuffmanCompresserCombinedGUIs\backend\Project1\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Libraries\wxWidgets-3.2.4\lib\vc_lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Libaries\wxWidgets-3.2.4\lib\vc_lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -108,12 +108,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\zeyad\OneDrive\Desktop\Workspace\Code\3A-Z\3A-Z_MAIN\backend\Project1\include;C:\Libraries\wxWidgets-3.2.4\include;C:\Libraries\wxWidgets-3.2.4\include\msvc</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Libaries\wxWidgets-3.2.4\include\msvc;C:\Libaries\wxWidgets-3.2.4\include;E:\gam3a2\HuffmanCompresserCombinedGUIs\backend\Project1\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Libraries\wxWidgets-3.2.4\lib\vc_x64_lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Libaries\wxWidgets-3.2.4\lib\vc_x64_lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -208,7 +208,18 @@
     <ClInclude Include="utils.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="input.txt" />
+    <Text Include="serverData\frequency_table.txt" />
+    <Text Include="serverData\input.txt" />
+    <Text Include="serverData\input_compressed_decompressed.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="data\input_compressed.bin" />
+    <None Include="data\input_decoder.json" />
+    <None Include="data\input_tree.json" />
+    <None Include="data\_tree.json" />
+    <None Include="serverData\input_compressed.bin" />
+    <None Include="serverData\input_decoder.json" />
+    <None Include="serverData\input_tree.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
