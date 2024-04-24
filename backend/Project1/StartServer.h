@@ -8,6 +8,7 @@
 using json = nlohmann::json;
 
 void StartServer(){
+	_mkdir("./serverData");
 	httplib::Server svr;
 
 	svr.Options("/(.*)", [&](const httplib::Request& req, httplib::Response& res) {
@@ -18,7 +19,7 @@ void StartServer(){
 		});
 
 	svr.Post("/compress", [](const httplib::Request& req, httplib::Response& res) {
-		res.set_header("Access-Control-Allow-Origin", "*");
+ 		res.set_header("Access-Control-Allow-Origin", "*");
 		// Parse the JSON from the request body
 		json request_json = json::parse(req.body);
 
@@ -31,7 +32,7 @@ void StartServer(){
 		// Extract the string from the JSON
 		std::string data = request_json["message"];
 
-		std::ofstream file("input.txt");
+		std::ofstream file("./serverData/input.txt");
 
 		if (file.is_open()) {
 			file << data;
@@ -43,7 +44,7 @@ void StartServer(){
 		}
 
 		std::cout << "->compressing operation started...\n";
-		startCompressing("filePath", "dirPath");
+		startCompressing("./serverData/input.txt", "./serverData");
 
 		std::ifstream file1("compressed_file.com");
 		std::string compressed_fileTXT;
@@ -56,7 +57,7 @@ void StartServer(){
 		else {
 			std::cout << "Unable to open compressed_file.cod";
 		}
-		std::ifstream file2("frequency_table.txt");
+		std::ifstream file2("./serverData/frequency_table.txt");
 		std::string frequency_tableTXT;
 		if (file2.is_open()) {
 			std::stringstream buffer;
@@ -69,7 +70,7 @@ void StartServer(){
 		}
 
 
-		std::ifstream file3("huffman_tree.json");
+		std::ifstream file3("./serverData/huffman_tree.json");
 		std::string huffman_tree;
 		if (file3.is_open()) {
 			std::stringstream buffer;
@@ -81,7 +82,7 @@ void StartServer(){
 			std::cout << "Unable to open compressed_file.cod";
 		}
 
-		std::ifstream file4("decoder_map.json");
+		std::ifstream file4("./serverData/decoder_map.json");
 		std::string decoder_mapTXT;
 		if (file4.is_open()) {
 			std::stringstream buffer;
@@ -127,7 +128,7 @@ void StartServer(){
 		std::string compressedFileValue = request_json.at("compressedFile").get<std::string>();
 		std::string decoderFileValue = request_json.at("decoderFile").get<std::string>();
 
-		std::ofstream file1("compressed_file.com");
+		std::ofstream file1("./serverData/compressed_file.com");
 
 		if (file1.is_open()) {
 			file1 << compressedFileValue;
@@ -137,7 +138,7 @@ void StartServer(){
 		else {
 			std::cout << "READING-FAILED:Unable to open file\n";
 		}
-		std::ofstream file2("decoder_map.json");
+		std::ofstream file2("./serverData/decoder_map.json");
 
 		if (file2.is_open()) {
 			file2 << decoderFileValue;
@@ -149,9 +150,9 @@ void StartServer(){
 		}
 
 
-		//StartDecompressing();
+		StartDecompressing("./serverData/compressed_file.com", "./serverData/decoder_map.json", "./serverData");
 
-		std::ifstream file3("decompressed.txt");
+		std::ifstream file3("./serverData/decompressed.txt");
 		std::string decompressedTXT;
 		if (file3.is_open()) {
 			std::stringstream buffer;

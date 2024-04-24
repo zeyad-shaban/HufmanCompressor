@@ -1,0 +1,36 @@
+{
+    "freq": 4,
+    "left": {
+        "freq": 2,
+        "left": {
+            "freq": 1,
+            "left": null,
+            "letters": "a",
+            "right": null
+        },
+        "letters": "",
+        "right": {
+            "freq": 1,
+            "left": null,
+            "letters": "d",
+            "right": null
+        }
+    },
+    "letters": "",
+    "right": {
+        "freq": 2,
+        "left": {
+            "freq": 1,
+            "left": null,
+            "letters": "s",
+            "right": null
+        },
+        "letters": "",
+        "right": {
+            "freq": 1,
+            "left": null,
+            "letters": "f",
+            "right": null
+        }
+    }
+}

@@ -17,6 +17,8 @@ int main(int argc, char** argv) {
 	bool useLocal = false;
 	bool useCompress = false;
 
+
+
 	std::cout << "would you like to use this program \n [1]as a server (Not recommended for larger files) \n [2]locally (looks ugly..) \n type your answer (1 or 2): ";
 	std::cin >> userInput2;
 
