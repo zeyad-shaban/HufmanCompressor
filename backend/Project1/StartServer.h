@@ -149,7 +149,7 @@ void StartServer(){
 		}
 
 
-		StartDecompressing();
+		//StartDecompressing();
 
 		std::ifstream file3("decompressed.txt");
 		std::string decompressedTXT;

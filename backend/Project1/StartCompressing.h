@@ -8,5 +8,7 @@
 #include <algorithm>
 #include "utils.h"
 #include "Compressor.h"
+#include <thread>
+#include <future>
 
 int startCompressing(string filePath, string dirPath, unordered_map<string, string>* encoderPtr=nullptr, Node** rootPtr=nullptr, string* textPrevPtr=nullptr);

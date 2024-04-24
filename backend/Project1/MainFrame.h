@@ -4,6 +4,7 @@
 #include "StartCompressing.h"
 #include "InfoFrame.h"
 #include <unordered_map>
+#include "StartDecompressing.h"
 
 
 class MainFrame : public wxFrame {

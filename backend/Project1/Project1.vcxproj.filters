@@ -60,7 +60,7 @@
     <ClCompile Include="TreeControl.cpp">
       <Filter>Source Files\LocalFrames</Filter>
     </ClCompile>
-    <ClCompile Include="Compress.cpp">
+    <ClCompile Include="Compressor.cpp">
       <Filter>Source Files\MainLogic</Filter>
     </ClCompile>
     <ClCompile Include="MinHeap.cpp">

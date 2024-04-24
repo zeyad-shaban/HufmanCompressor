@@ -135,7 +135,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Compress.cpp" />
+    <ClCompile Include="Compressor.cpp" />
     <ClCompile Include="InfoFrame.cpp" />
     <ClCompile Include="LocalApp.cpp" />
     <ClCompile Include="main.cpp" />

@@ -23,38 +23,16 @@ void MainFrame::onDecompress(wxCommandEvent& event) {
 	string dirPath = string(dirPathCtrl->GetValue().mb_str());
 	string decoderPath = string(decoderPathCtrl->GetValue().mb_str());
 
-	//string base_filename = compressedFilePath.substr(compressedFilePath.find_last_of("/\\") + 1);
-	//string::size_type const p(base_filename.find_last_of('.'));
-	//string file_without_extension = base_filename.substr(0, p);
+	unordered_map<string, string> encoder;
+	string textPrev;
 
-	//string fileNamePath = dirPath + "\\" + file_without_extension;
+	StartDecompressing(compressedFilePath, decoderPath, dirPath, &encoder, &textPrev);
 
-
-	//compress* compressor = new compress();
-	//ifstream decoderFile(decoderPath);
-
-	//if (!decoderFile.is_open()) {
-	//	// TODO HANDLE INVALID DECODER PATH
-	//}
-
-	//nlohmann::json jsonDecoder = nlohmann::json::parse(decoderFile);
-	//for (auto& element : jsonDecoder.items())
-	//	compressor->decoder[element.key()] = element.value();
-
-
-	//bool validPath = false;
-	//string decodedTextPrev = compressor->decompressing(compressedFilePath, fileNamePath + "_decompressed.txt", &validPath);
-
-	//if (!validPath) {
-	//	// TODO HANDLE INVALID PATH HERE
-	//}
-
-	//Node* root = nullptr;
-	//InfoFrame* infoFrame = new InfoFrame("Info", this, compressor->decoder, root, decodedTextPrev, false);
-	//this->Show(false);
-	//infoFrame->Show(true);
-	//infoFrame->SetSize(this->GetSize());
-	//infoFrame->Move(this->GetPosition());
+	InfoFrame* infoFrame = new InfoFrame("Info", this, encoder, nullptr, textPrev, false);
+	this->Show(false);
+	infoFrame->Show(true);
+	infoFrame->SetSize(this->GetSize());
+	infoFrame->Move(this->GetPosition());
 }
 void MainFrame::onBrowseCompressFile(wxCommandEvent& event) {
 	wxFileDialog openFileDialog(this, _("Open file"), "", "", "All files (*.*)|*.*", wxFD_OPEN | wxFD_FILE_MUST_EXIST);

@@ -18,41 +18,26 @@ void Compressor::createMaps(Node* root, string code) {
 	createMaps(root->right, code + "1");
 }
 
-string Compressor::compressing(string filePath, string outputFilePath, bool* validPath, int MAX_BUFFER_SIZE) {
+string Compressor::compressing(string filePath, streamoff start, streamoff end) {
 	ifstream file(filePath);
-	ofstream outputFile(outputFilePath);
-	if (!file.is_open() || !outputFile.is_open()) {
-		*validPath = false;
-		return "";
-	}
-
 	string buffer = "";
-	int bufferSize = 0;
 
 	char ch;
-	while (file.get(ch)) {
+	while (file.get(ch) && file.tellg() < end) {
 		if (!(ch >= 0 && ch < 128)) continue;
 
 		buffer += encoder[string(1, ch)];
-		bufferSize++;
-		if (bufferSize > MAX_BUFFER_SIZE) {
-			outputFile << buffer;
-			buffer = "";
-		}
 	}
-	if (!buffer.empty()) outputFile << buffer;
-
-	return buffer.substr(0, 300);
+	std::cout << "DONE WITH BUFFER" << std::endl;
+	return buffer;
 }
 
-string Compressor::decompressing(string compressedFilePath, string outputFilePath, bool* validPath, int prevSize) {
+string Compressor::decompressing(string compressedFilePath, string outputFilePath, int prevSize) {
 	ifstream compressedFile(compressedFilePath);
 	ofstream outputFile(outputFilePath);
 
-	if (!compressedFile.is_open() || !outputFile.is_open()) {
-		*validPath = false;
-		return "";
-	}
+	if (!compressedFile.is_open() || !outputFile.is_open())
+		return "Failed to open file";
 
 	string decodedTextPrev = "";
 	string code = "";
