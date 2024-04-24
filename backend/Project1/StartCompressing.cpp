@@ -65,7 +65,7 @@ int startCompressing(string filePath, string dirPath, unordered_map<string, stri
 
 	ofstream outputFile(dirPath + "/" + file_without_extension + "_compressed.bin");
 
-	if (false) { // (fileSize < 10000) { // TODO put max file size before starting to use threads
+	if (true) { // (fileSize < 10000) { // TODO put max file size before starting to use threads
 		// don't perform threads
 		outputFile << compressor.compressing(filePath, 0, fileSize);
 	}
