@@ -23,7 +23,7 @@ string Compressor::compressing(string filePath, streamoff start, streamoff end) 
 	string buffer = "";
 
 	char ch;
-	while (file.get(ch) && file.tellg() < end) {
+	while (file.get(ch) && file.tellg() <= end) {
 		if (!(ch >= 0 && ch < 128)) continue;
 
 		buffer += encoder[string(1, ch)];

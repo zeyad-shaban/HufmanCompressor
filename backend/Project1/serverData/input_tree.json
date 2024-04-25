@@ -3,19 +3,19 @@
     "left": {
         "freq": 1,
         "left": null,
-        "letters": "b",
+        "letters": "i",
         "right": null
     },
-    "letters": "bca",
+    "letters": "ila",
     "right": {
         "freq": 2,
         "left": {
             "freq": 1,
             "left": null,
-            "letters": "c",
+            "letters": "l",
             "right": null
         },
-        "letters": "ca",
+        "letters": "la",
         "right": {
             "freq": 1,
             "left": null,
