@@ -1,6 +1,26 @@
 {
-    "freq": 1,
-    "left": null,
-    "letters": "a",
-    "right": null
+    "freq": 3,
+    "left": {
+        "freq": 1,
+        "left": null,
+        "letters": "b",
+        "right": null
+    },
+    "letters": "bca",
+    "right": {
+        "freq": 2,
+        "left": {
+            "freq": 1,
+            "left": null,
+            "letters": "c",
+            "right": null
+        },
+        "letters": "ca",
+        "right": {
+            "freq": 1,
+            "left": null,
+            "letters": "a",
+            "right": null
+        }
+    }
 }
