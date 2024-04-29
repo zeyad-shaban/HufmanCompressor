@@ -76,12 +76,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Libaries\wxWidgets-3.2.4\include\msvc;C:\Libaries\wxWidgets-3.2.4\include;E:\gam3a2\HuffmanCompresserCombinedGUIs\backend\Project1\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\zeyad\OneDrive\Desktop\Workspace\Code\3A-Z\3A-Z_MAIN\backend\Project1\include;C:\Libraries\wxWidgets-3.2.4\include;C:\Libraries\wxWidgets-3.2.4\include\msvc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Libaries\wxWidgets-3.2.4\lib\vc_lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Libraries\wxWidgets-3.2.4\lib\vc_lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -92,14 +92,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\zeyad\OneDrive\Desktop\Workspace\Code\3A-Z\3A-Z_MAIN\backend\Project1\include;C:\Libraries\wxWidgets-3.2.4\include;C:\Libraries\wxWidgets-3.2.4\include\msvc</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\zeyad\OneDrive\Desktop\Workspace\Code\3A-Z\3A-Z_MAIN\backend\Project1\include;C:\Libraries\wxWidgets-3.2.4\include;C:\Libraries\wxWidgets-3.2.4\include\msvc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Libraries\wxWidgets-3.2.4\lib\vc_lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Libraries\wxWidgets-3.2.4\lib\vc_lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -108,12 +108,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>.\include;C:\Libraries\wxWidgets-3.2.4\include\msvc;C:\Libraries\wxWidgets-3.2.4\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\zeyad\OneDrive\Desktop\Workspace\Code\3A-Z\3A-Z_MAIN\backend\Project1\include;C:\Libraries\wxWidgets-3.2.4\include;C:\Libraries\wxWidgets-3.2.4\include\msvc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Libaries\wxWidgets-3.2.4\lib\vc_x64_lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Libraries\wxWidgets-3.2.4\lib\vc_x64_lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -124,14 +124,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>.\include;C:\Libraries\wxWidgets-3.2.4\include\msvc;C:\Libraries\wxWidgets-3.2.4\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\zeyad\OneDrive\Desktop\Workspace\Code\3A-Z\3A-Z_MAIN\backend\Project1\include;C:\Libraries\wxWidgets-3.2.4\include;C:\Libraries\wxWidgets-3.2.4\include\msvc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Libraries\wxWidgets-3.2.4\lib\vc_x64_lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Libraries\wxWidgets-3.2.4\lib\vc_x64_lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

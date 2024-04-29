@@ -1,26 +1,76 @@
 {
-    "freq": 3,
+    "freq": 11,
     "left": {
-        "freq": 1,
-        "left": null,
-        "letters": "i",
-        "right": null
-    },
-    "letters": "ila",
-    "right": {
-        "freq": 2,
+        "freq": 4,
         "left": {
-            "freq": 1,
+            "freq": 2,
+            "left": null,
+            "letters": "o",
+            "right": null
+        },
+        "letters": "oe ",
+        "right": {
+            "freq": 2,
+            "left": {
+                "freq": 1,
+                "left": null,
+                "letters": "e",
+                "right": null
+            },
+            "letters": "e ",
+            "right": {
+                "freq": 1,
+                "left": null,
+                "letters": " ",
+                "right": null
+            }
+        }
+    },
+    "letters": "oe ldhwr",
+    "right": {
+        "freq": 7,
+        "left": {
+            "freq": 3,
             "left": null,
             "letters": "l",
             "right": null
         },
-        "letters": "la",
+        "letters": "ldhwr",
         "right": {
-            "freq": 1,
-            "left": null,
-            "letters": "a",
-            "right": null
+            "freq": 4,
+            "left": {
+                "freq": 2,
+                "left": {
+                    "freq": 1,
+                    "left": null,
+                    "letters": "d",
+                    "right": null
+                },
+                "letters": "dh",
+                "right": {
+                    "freq": 1,
+                    "left": null,
+                    "letters": "h",
+                    "right": null
+                }
+            },
+            "letters": "dhwr",
+            "right": {
+                "freq": 2,
+                "left": {
+                    "freq": 1,
+                    "left": null,
+                    "letters": "w",
+                    "right": null
+                },
+                "letters": "wr",
+                "right": {
+                    "freq": 1,
+                    "left": null,
+                    "letters": "r",
+                    "right": null
+                }
+            }
         }
     }
 }

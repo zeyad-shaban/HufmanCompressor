@@ -22,13 +22,29 @@ string Compressor::compressing(string filePath, streamoff start, streamoff end) 
 	ifstream file(filePath);
 	string buffer = "";
 
+	string charsTable[128];
+
+	time_t time_start, time_end;
+	time(&time_start);
+	for (int i = 0; i < 128; i++)
+		if (encoder.find(std::to_string(i)) != encoder.end())
+			charsTable[i] = encoder[std::to_string(i)];
+	time(&time_end);
+	cout << "TIME TAKEN TO GENERATE THE TABLE: " << time_end - time_start << endl;
+
+
+	time(&time_start);
+
 	char ch;
-	while (file.get(ch) && file.tellg() <= end) {
+	while (file.get(ch) && file.tellg() <= end) { // TODO use memory map
 		if (!(ch >= 0 && ch < 128)) continue;
 
-		buffer += encoder[string(1, ch)];
+		buffer += charsTable[ch];
 	}
-	std::cout << "DONE WITH BUFFER" << std::endl;
+
+	time(&time_end);
+
+	std::cout << "DONE WITH BUFFER IN " << time_end - time_start << std::endl;
 	return buffer;
 }
 
@@ -52,7 +68,7 @@ string Compressor::decompressing(string compressedFilePath, string outputFilePat
 			buffer += decoder[code];
 			code = "";
 
-			
+
 		}
 	}
 	outputFile << buffer;
