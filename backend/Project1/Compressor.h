@@ -8,7 +8,7 @@ using namespace std;
 
 class Compressor {
 private:
-    int MAX_BUFFER_SIZE = 16000000; // TODO determine good value for this
+    const int BUFFER_SIZE = 16000000;
 
 public:
     unordered_map<string, string> encoder;
@@ -18,7 +18,7 @@ public:
 
     void createMaps(Node* root, string code = "");
 
-    string compressing(string filePath);
+    string compressing(string filePath, string outPath);
     string decompressing(string compressedFilePath, string outputFilePath, int prevSize = 300);
 
     void printEncoder();

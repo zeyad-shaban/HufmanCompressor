@@ -18,32 +18,34 @@ void Compressor::createMaps(Node* root, string code) {
 	createMaps(root->right, code + "1");
 }
 
-string Compressor::compressing(string filePath) {
-	FILE* file;
-	fopen_s(&file, filePath.c_str(), "r");
-	string buffer = "";
+string Compressor::compressing(string filePath, string outPath) {
+	FILE* file; fopen_s(&file, filePath.c_str(), "r");
+
+	//FILE* outFile; fopen_s(&outFile, outPath.c_str(), "wb");
+	ofstream outFile(outPath);
 
 	string charsTable[128];
-
-	time_t time_start, time_end;
-
 	for (int i = 0; i < 128; i++)
 		if (encoder.find(std::to_string(i)) != encoder.end())
 			charsTable[i] = encoder[std::to_string(i)];
 
+	time_t time_start, time_end;
 	time(&time_start);
 
-	char ch;
-	while (ch = fgetc(file) != EOF) { // TODO use memory map
-		if (!(ch >= 0 && ch < 128)) continue;
+	char inBuffer[1000000];
+	string outBuffer = "";
+	int bytesRead;
+	while ((bytesRead = fread(inBuffer, sizeof(char), 1000000, file)) > 0) {
+		for (int i = 0; i < bytesRead; i++)
+			outBuffer += charsTable[inBuffer[i]];
 
-		buffer += charsTable[ch];
+		outFile << outBuffer;
 	}
 
 	time(&time_end);
 
 	std::cout << "DONE WITH BUFFER IN " << time_end - time_start << std::endl;
-	return buffer;
+	return "hi";
 }
 
 string Compressor::decompressing(string compressedFilePath, string outputFilePath, int prevSize) {

@@ -63,34 +63,11 @@ int startCompressing(string filePath, string dirPath, unordered_map<string, stri
 	streamoff partSize = fileSize / threadNum;
 	file.close();
 
-	ofstream outputFile(dirPath + "/" + file_without_extension + "_compressed.bin");
+	string outPath = dirPath + "/" + file_without_extension + "_compressed.bin";
 
-	//if (true) { // (fileSize < 10000) { // TODO put max file size before starting to use threads
-		// don't perform threads
-		outputFile << compressor.compressing(filePath);
-	//}
-	//else if (partSize > 99999999999999) { // TODO put max part size value instead
-	//	// perform threads with files
-	//}
-	//else {
-	//	// thread without files
-	//	vector<future<string>> futures;
-	//	for (int i = 0; i < threadNum; i++) {
-	//		streamoff start = i * partSize;
-	//		streamoff end = i == (threadNum - 1) ? fileSize : start + partSize;
-
-	//		futures.push_back(std::async(std::launch::async, &Compressor::compressing, compressor,
-	//			filePath, start, end 
-	//		));
-	//	}
-
-	//	for (auto& future : futures)
-	//		outputFile << future.get();
-	//}
+	string codedTextPrev = compressor.compressing(filePath, outPath);
 
 
-
-	// Save compressed data and map
 	saveMapToFile(dirPath + "/" + file_without_extension + "_decoder.json", compressor.decoder);
 
 	std::cout << "Compressed and saved 2 files\n";
@@ -98,7 +75,7 @@ int startCompressing(string filePath, string dirPath, unordered_map<string, stri
 	// Extra Info
 	if (encoderPtr) *encoderPtr = compressor.encoder;
 	if (rootPtr) *rootPtr = root;
-	//if (textPrevPtr) *textPrevPtr = codedTextPrev;
+	if (textPrevPtr) *textPrevPtr = codedTextPrev;
 
 
 	return 0;
