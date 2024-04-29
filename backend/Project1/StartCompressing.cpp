@@ -65,28 +65,28 @@ int startCompressing(string filePath, string dirPath, unordered_map<string, stri
 
 	ofstream outputFile(dirPath + "/" + file_without_extension + "_compressed.bin");
 
-	if (true) { // (fileSize < 10000) { // TODO put max file size before starting to use threads
+	//if (true) { // (fileSize < 10000) { // TODO put max file size before starting to use threads
 		// don't perform threads
-		outputFile << compressor.compressing(filePath, 0, fileSize);
-	}
-	else if (partSize > 99999999999999) { // TODO put max part size value instead
-		// perform threads with files
-	}
-	else {
-		// thread without files
-		vector<future<string>> futures;
-		for (int i = 0; i < threadNum; i++) {
-			streamoff start = i * partSize;
-			streamoff end = i == (threadNum - 1) ? fileSize : start + partSize;
+		outputFile << compressor.compressing(filePath);
+	//}
+	//else if (partSize > 99999999999999) { // TODO put max part size value instead
+	//	// perform threads with files
+	//}
+	//else {
+	//	// thread without files
+	//	vector<future<string>> futures;
+	//	for (int i = 0; i < threadNum; i++) {
+	//		streamoff start = i * partSize;
+	//		streamoff end = i == (threadNum - 1) ? fileSize : start + partSize;
 
-			futures.push_back(std::async(std::launch::async, &Compressor::compressing, compressor,
-				filePath, start, end 
-			));
-		}
+	//		futures.push_back(std::async(std::launch::async, &Compressor::compressing, compressor,
+	//			filePath, start, end 
+	//		));
+	//	}
 
-		for (auto& future : futures)
-			outputFile << future.get();
-	}
+	//	for (auto& future : futures)
+	//		outputFile << future.get();
+	//}
 
 
 

@@ -18,25 +18,23 @@ void Compressor::createMaps(Node* root, string code) {
 	createMaps(root->right, code + "1");
 }
 
-string Compressor::compressing(string filePath, streamoff start, streamoff end) {
-	ifstream file(filePath);
+string Compressor::compressing(string filePath) {
+	FILE* file;
+	fopen_s(&file, filePath.c_str(), "r");
 	string buffer = "";
 
 	string charsTable[128];
 
 	time_t time_start, time_end;
-	time(&time_start);
+
 	for (int i = 0; i < 128; i++)
 		if (encoder.find(std::to_string(i)) != encoder.end())
 			charsTable[i] = encoder[std::to_string(i)];
-	time(&time_end);
-	cout << "TIME TAKEN TO GENERATE THE TABLE: " << time_end - time_start << endl;
-
 
 	time(&time_start);
 
 	char ch;
-	while (file.get(ch) && file.tellg() <= end) { // TODO use memory map
+	while (ch = fgetc(file) != EOF) { // TODO use memory map
 		if (!(ch >= 0 && ch < 128)) continue;
 
 		buffer += charsTable[ch];
