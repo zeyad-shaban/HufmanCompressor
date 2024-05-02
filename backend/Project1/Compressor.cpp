@@ -26,8 +26,8 @@ string Compressor::compressing(string filePath, string outPath) {
 
 	string charsTable[128];
 	for (int i = 0; i < 128; i++)
-		if (encoder.find(std::to_string(i)) != encoder.end())
-			charsTable[i] = encoder[std::to_string(i)];
+		if (encoder.find(std::string(1, static_cast<char>(i))) != encoder.end())
+			charsTable[i] = encoder[std::string(1, static_cast<char>(i))];
 
 	time_t time_start, time_end;
 	time(&time_start);
