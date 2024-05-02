@@ -28,6 +28,7 @@ bool genFreqTable(std::string filePath, int* freqTable) {
 		if (ch >= 0 && ch < 128)
 			freqTable[ch]++;
 
+	file.close();
 	return true;
 }
 bool saveStringToFile(std::string path, std::string str) {

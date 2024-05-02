@@ -41,8 +41,8 @@ string Compressor::compressing(string filePath, string outPath) {
 
 		outFile << outBuffer;
 	}
-
 	time(&time_end);
+	fclose(file);
 
 	std::cout << "DONE WITH BUFFER IN " << time_end - time_start << std::endl;
 	return "hi";

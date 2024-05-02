@@ -76,7 +76,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\zeyad\OneDrive\Desktop\Workspace\Code\3A-Z\3A-Z_MAIN\backend\Project1\include;C:\Libraries\wxWidgets-3.2.4\include;C:\Libraries\wxWidgets-3.2.4\include\msvc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\gam3a2\HufmanCompressor-\backend\Project1\include;C:\Libraries\wxWidgets-3.2.4\include;C:\Libraries\wxWidgets-3.2.4\include\msvc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -92,7 +92,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\zeyad\OneDrive\Desktop\Workspace\Code\3A-Z\3A-Z_MAIN\backend\Project1\include;C:\Libraries\wxWidgets-3.2.4\include;C:\Libraries\wxWidgets-3.2.4\include\msvc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\gam3a2\HufmanCompressor-\backend\Project1\include;C:\Libraries\wxWidgets-3.2.4\include;C:\Libraries\wxWidgets-3.2.4\include\msvc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -108,7 +108,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\zeyad\OneDrive\Desktop\Workspace\Code\3A-Z\3A-Z_MAIN\backend\Project1\include;C:\Libraries\wxWidgets-3.2.4\include;C:\Libraries\wxWidgets-3.2.4\include\msvc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\gam3a2\HufmanCompressor-\backend\Project1\include;C:\Libraries\wxWidgets-3.2.4\include;C:\Libraries\wxWidgets-3.2.4\include\msvc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -124,7 +124,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\zeyad\OneDrive\Desktop\Workspace\Code\3A-Z\3A-Z_MAIN\backend\Project1\include;C:\Libraries\wxWidgets-3.2.4\include;C:\Libraries\wxWidgets-3.2.4\include\msvc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\gam3a2\HufmanCompressor-\backend\Project1\include;C:\Libraries\wxWidgets-3.2.4\include;C:\Libraries\wxWidgets-3.2.4\include\msvc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -150,6 +150,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="InfoFrame.h" />
+    <ClInclude Include="serverJsonMaker.h" />
     <ClInclude Include="StartServer.h" />
     <ClInclude Include="StartCompressing.h" />
     <ClInclude Include="Compressor.h" />

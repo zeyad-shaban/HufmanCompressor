@@ -1,4 +1,7 @@
 #include "StartCompressing.h"
+#include <chrono>
+#include <thread>
+
 
 int startCompressing(string filePath, string dirPath, unordered_map<string, string>* encoderPtr, Node** rootPtr, string* textPrevPtr) {
 	std::string base_filename = filePath.substr(filePath.find_last_of("/\\") + 1);
