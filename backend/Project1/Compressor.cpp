@@ -33,33 +33,24 @@ string Compressor::compressing(string filePath, string outPath) {
 	time(&time_start);
 
 	char inBuffer[1000000]; // todo change this very large number to whatever the system needs
-	string outBuffer = "";
 	int charsRead;
 
 	int currBit = 0;
 	unsigned char bitBuffer = 0;
 
 	while ((charsRead = fread(inBuffer, sizeof(char), 1000000, file)) > 0) {
-		for (int i = 0; i < charsRead; i++)
-			outBuffer += charsTable[inBuffer[i]];
-
-
-		int outBufferSize = outBuffer.size();
-		for (int i = 0; i < outBufferSize; i++) {
-			int bit = (int)(outBuffer[i] - '0');
-			if (bit)
-				bitBuffer |= (1 << currBit);
-
-			currBit++;
-			if (currBit >= 8) {
-				fwrite(&bitBuffer, 1, 1, outFile);
-				currBit = 0;
-				bitBuffer = 0;
+		for (int i = 0; i < charsRead; i++) {
+			for (char bit : charsTable[inBuffer[i]]) {
+				bitBuffer = (bitBuffer << 1) | (bit - '0');
+				currBit++;
+				if (currBit >= 8) {
+					fwrite(&bitBuffer, 1, 1, outFile);
+					currBit = 0;
+					bitBuffer = 0;
+				}
 			}
 		}
-
 		if (bitBuffer) fwrite(&bitBuffer, 1, 1, outFile);
-		outBuffer = "";
 	}
 	time(&time_end);
 	fclose(file);
