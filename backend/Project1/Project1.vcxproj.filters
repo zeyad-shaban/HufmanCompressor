@@ -245,16 +245,16 @@
     <ClInclude Include="StartServer.h">
       <Filter>Header Files\BackendServer</Filter>
     </ClInclude>
+    <ClInclude Include="serverJsonMaker.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="input.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="input_compressed.bin">
+    <None Include="data\input_compressed.bin">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="input_decoder.json" />
+    <None Include="serverData\input_compressed.bin">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

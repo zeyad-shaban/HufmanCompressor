@@ -209,18 +209,8 @@
     <ClInclude Include="utils.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="serverData\frequency_table.txt" />
-    <Text Include="serverData\input.txt" />
-    <Text Include="serverData\input_compressed_decompressed.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="data\input_compressed.bin" />
-    <None Include="data\input_decoder.json" />
-    <None Include="data\input_tree.json" />
-    <None Include="data\_tree.json" />
     <None Include="serverData\input_compressed.bin" />
-    <None Include="serverData\input_decoder.json" />
-    <None Include="serverData\input_tree.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

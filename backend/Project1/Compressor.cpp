@@ -20,9 +20,9 @@ void Compressor::createMaps(Node* root, string code) {
 
 string Compressor::compressing(string filePath, string outPath) {
 	FILE* file; fopen_s(&file, filePath.c_str(), "r");
+	FILE* outFile; fopen_s(&outFile, outPath.c_str(), "wb");
 
-	//FILE* outFile; fopen_s(&outFile, outPath.c_str(), "wb");
-	ofstream outFile(outPath);
+	if (!file || !outFile) return "";
 
 	string charsTable[128];
 	for (int i = 0; i < 128; i++)
@@ -32,17 +32,38 @@ string Compressor::compressing(string filePath, string outPath) {
 	time_t time_start, time_end;
 	time(&time_start);
 
-	char inBuffer[1000000];
+	char inBuffer[1000000]; // todo change this very large number to whatever the system needs
 	string outBuffer = "";
-	int bytesRead;
-	while ((bytesRead = fread(inBuffer, sizeof(char), 1000000, file)) > 0) {
-		for (int i = 0; i < bytesRead; i++)
+	int charsRead;
+
+	int currBit = 0;
+	unsigned char bitBuffer = 0;
+
+	while ((charsRead = fread(inBuffer, sizeof(char), 1000000, file)) > 0) {
+		for (int i = 0; i < charsRead; i++)
 			outBuffer += charsTable[inBuffer[i]];
 
-		outFile << outBuffer;
+
+		int outBufferSize = outBuffer.size();
+		for (int i = 0; i < outBufferSize; i++) {
+			int bit = (int)(outBuffer[i] - '0');
+			if (bit)
+				bitBuffer |= (1 << currBit);
+
+			currBit++;
+			if (currBit >= 8) {
+				fwrite(&bitBuffer, 1, 1, outFile);
+				currBit = 0;
+				bitBuffer = 0;
+			}
+		}
+
+		if (bitBuffer) fwrite(&bitBuffer, 1, 1, outFile);
+		outBuffer = "";
 	}
 	time(&time_end);
 	fclose(file);
+	fclose(outFile);
 
 	std::cout << "DONE WITH BUFFER IN " << time_end - time_start << std::endl;
 	return "hi";
