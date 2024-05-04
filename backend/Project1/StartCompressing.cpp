@@ -1,7 +1,7 @@
 #include "StartCompressing.h"
 #include <chrono>
 #include <thread>
-
+#include <string>
 
 int startCompressing(string filePath, string dirPath, unordered_map<string, string>* encoderPtr, Node** rootPtr, string* textPrevPtr) {
 	std::string base_filename = filePath.substr(filePath.find_last_of("/\\") + 1);
@@ -18,14 +18,17 @@ int startCompressing(string filePath, string dirPath, unordered_map<string, stri
 	else {
 		std::cout << "frequency-table faild:can't open file\n";
 	}
-	std::ofstream file2("./serverData/frequency_table.txt");
+	string path1 = "./serverData/frequency_table.txt";
+	FILE* file2;  fopen_s(&file2, path1.c_str(), "wb");
 	for (int i = 0; i < 128; ++i) {
 		if (freqTable[i] != 0) {
-
-			file2 << char(i) << ":" << freqTable[i] << " "; // Write each element followed by a space
+			char ch = char(i);
+			fwrite(&ch, sizeof(char), 1, file2); // Write the character
+			fwrite(":", sizeof(char), 1, file2); // Write the colon
+			fwrite(" ", sizeof(char), 1, file2); //  Write the space
 		}
 	}
-	file2.close();
+	fclose(file2);
 
 
 	std::cout << "->Creating MinHeap with size of:" << 128 << "\n";
@@ -55,21 +58,32 @@ int startCompressing(string filePath, string dirPath, unordered_map<string, stri
 	compressor.createMaps(root);
 
 	// thread based compression
-	ifstream file(filePath, std::ios::ate);
-	if (!file.is_open()) {
-		// handle file not there
-		return 0;
+	int get_file_size_and_split(const std::string & filePath, size_t * fileSize, size_t * threadNum, size_t * partSize){
+		FILE* file = fopen(filePath.c_str(), "rb"); 
+		if (file == NULL) {
+			fprintf(stderr, "Error opening file %s\n", filePath.c_str());
+			return 0; // Indicate error
+		}
+
+		// Get file size using fseek and ftell
+		if (fseek(file, 0, SEEK_END) != 0) {
+			fprintf(stderr, "Error seeking in file %s\n", filePath.c_str());
+			fclose(file);
+			return 0; // Indicate error
+		}
+		*fileSize = ftell(file);
+		*threadNum = std::thread::hardware_concurrency();
+		*partSize = *fileSize / *threadNum;
+		fclose(file);
+		return 1; // Indicate success
 	}
 
-	streamoff fileSize = file.tellg();
-	streamoff threadNum = thread::hardware_concurrency();
-	streamoff partSize = fileSize / threadNum;
-	file.close();
 
 	string outPath = dirPath + "/" + file_without_extension + "_compressed.bin";
-
 	string codedTextPrev = compressor.compressing(filePath, outPath);
 
+
+	
 
 	saveMapToFile(dirPath + "/" + file_without_extension + "_decoder.json", compressor.decoder);
 
