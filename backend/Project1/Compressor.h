@@ -8,17 +8,15 @@ using namespace std;
 
 class Compressor {
 private:
-    const int BUFFER_SIZE = 16000000;
-
 public:
-    unordered_map<string, string> encoder;
+    unordered_map<char, string> encoder;
     unordered_map<string, string> decoder;
 
     Compressor();
 
     void createMaps(Node* root, string code = "");
 
-    string compressing(string filePath, string outPath);
+    void compressing(string filePath, string outPath);
     string decompressing(string compressedFilePath, string outputFilePath, int prevSize = 300);
 
     void printEncoder();

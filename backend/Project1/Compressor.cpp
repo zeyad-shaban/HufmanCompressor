@@ -1,7 +1,7 @@
 #include "Compressor.h"
 
 Compressor::Compressor() {
-	encoder = unordered_map<string, string>();
+	encoder = unordered_map<char, string>();
 	decoder = unordered_map<string, string>();
 }
 
@@ -10,7 +10,7 @@ void Compressor::createMaps(Node* root, string code) {
 		return;
 	}
 	if (root->left == NULL && root->right == NULL) {
-		encoder[root->letters] = code;
+		encoder[root->letters[0]] = code;
 		decoder[code] = root->letters;
 		return;
 	}
@@ -18,19 +18,20 @@ void Compressor::createMaps(Node* root, string code) {
 	createMaps(root->right, code + "1");
 }
 
-string Compressor::compressing(string filePath, string outPath) {
-	FILE* file; fopen_s(&file, filePath.c_str(), "r");
-	FILE* outFile; fopen_s(&outFile, outPath.c_str(), "wb");
+void Compressor::compressing(string filePath, string outPath) {
+	FILE* file = nullptr;
+	FILE* outFile = nullptr;
 
-	if (!file || !outFile) return "";
+	if (fopen_s(&file, filePath.c_str(), "r") || fopen_s(&outFile, outPath.c_str(), "wb")) {
+		if (file) fclose(file);
+		if (outFile)fclose(outFile);
+		return;
+	}
 
 	string charsTable[128];
 	for (int i = 0; i < 128; i++)
-		if (encoder.find(std::string(1, static_cast<char>(i))) != encoder.end())
-			charsTable[i] = encoder[std::string(1, static_cast<char>(i))];
-
-	time_t time_start, time_end;
-	time(&time_start);
+		if (encoder.find(i) != encoder.end())
+			charsTable[i] = encoder[i];
 
 	char inBuffer[1000000]; // todo change this very large number to whatever the system needs
 	int charsRead;
@@ -52,18 +53,15 @@ string Compressor::compressing(string filePath, string outPath) {
 		}
 		if (bitBuffer) fwrite(&bitBuffer, 1, 1, outFile);
 	}
-	time(&time_end);
 	fclose(file);
 	fclose(outFile);
-
-	std::cout << "DONE WITH BUFFER IN " << time_end - time_start << std::endl;
-	return "hi";
+	return;
 }
 
 string Compressor::decompressing(string compressedFilePath, string outputFilePath, int prevSize) {
-	FILE* compressedFile;
+	FILE* compressedFile = nullptr;
 	bool errCompressed = fopen_s(&compressedFile, compressedFilePath.c_str(), "rb");
-	FILE* outputFile;
+	FILE* outputFile = nullptr;
 	bool errOut = fopen_s(&outputFile, outputFilePath.c_str(), "w");
 
 	if (errCompressed || errOut) {
