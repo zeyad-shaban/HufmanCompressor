@@ -33,21 +33,28 @@ void Compressor::compressing(string filePath, string outPath) {
 		if (encoder.find(i) != encoder.end())
 			charsTable[i] = encoder[i];
 
-	char inBuffer[1000000]; // todo change this very large number to whatever the system needs
+	unsigned char inBuffer[500000]; // todo change this very large number to whatever the system needs
 	int charsRead;
 
-	int currBit = 0;
 	unsigned char bitBuffer = 0;
+	int currBit = 0;
 
-	while ((charsRead = fread(inBuffer, 1, 1000000, file)) > 0) {
+	unsigned char outBuffer[500000];
+	int outIndex = 0;
+
+	while ((charsRead = fread(inBuffer, 1, 500000, file)) > 0) {
 		for (int i = 0; i < charsRead; i++) {
 			for (char bit : charsTable[inBuffer[i]]) {
 				bitBuffer = (bitBuffer << 1) | (bit - '0');
 				currBit++;
 				if (currBit >= 8) {
-					fwrite(&bitBuffer, 1, 1, outFile);
+					outBuffer[outIndex++] = bitBuffer;
 					currBit = 0;
 					bitBuffer = 0;
+				}
+				if (outIndex >= 500000) {
+					fwrite(outBuffer, 1, outIndex, outFile);
+					outIndex = 0;
 				}
 			}
 		}
