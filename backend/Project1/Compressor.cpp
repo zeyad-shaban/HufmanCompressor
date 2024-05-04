@@ -38,7 +38,7 @@ string Compressor::compressing(string filePath, string outPath) {
 	int currBit = 0;
 	unsigned char bitBuffer = 0;
 
-	while ((charsRead = fread(inBuffer, sizeof(char), 1000000, file)) > 0) {
+	while ((charsRead = fread(inBuffer, 1, 1000000, file)) > 0) {
 		for (int i = 0; i < charsRead; i++) {
 			for (char bit : charsTable[inBuffer[i]]) {
 				bitBuffer = (bitBuffer << 1) | (bit - '0');
@@ -61,33 +61,38 @@ string Compressor::compressing(string filePath, string outPath) {
 }
 
 string Compressor::decompressing(string compressedFilePath, string outputFilePath, int prevSize) {
-	ifstream compressedFile(compressedFilePath);
-	ofstream outputFile(outputFilePath);
+	FILE* compressedFile;
+	bool errCompressed = fopen_s(&compressedFile, compressedFilePath.c_str(), "rb");
+	FILE* outputFile;
+	bool errOut = fopen_s(&outputFile, outputFilePath.c_str(), "w");
 
-	if (!compressedFile.is_open() || !outputFile.is_open())
+	if (errCompressed || errOut) {
+		if (compressedFile) fclose(compressedFile);
+		if (outputFile) fclose(outputFile);
 		return "Failed to open file";
+	}
 
-	string decodedTextPrev = "";
+	time_t start, end;
+
+	time(&start);
 	string code = "";
-	string buffer = "";
-
-	char ch;
-	while (compressedFile.get(ch)) {
-		code += ch;
-		if (decoder.find(code) != decoder.end()) {
-			if (decodedTextPrev.size() <= prevSize) decodedTextPrev += decoder[code];
-
-			buffer += decoder[code];
-			code = "";
-
-
+	unsigned char byte;
+	while (fread(&byte, 1, 1, compressedFile)) {
+		for (int i = 7; i >= 0; i--) {
+			code += (byte >> i) & 1 ? '1' : '0';
+			if (decoder.find(code) != decoder.end()) {
+				fputc(decoder[code][0], outputFile);
+				code = "";
+			}
 		}
 	}
-	outputFile << buffer;
+	time(&end);
 
-	if (decodedTextPrev.size() >= prevSize) decodedTextPrev += "...";
+	cout << "TIME TAKEN TO DECOMPRESS: " << end - start << endl;
+	fclose(compressedFile);
+	fclose(outputFile);
 
-	return decodedTextPrev;
+	return "hi agian lol";
 }
 
 void Compressor::printEncoder() {
