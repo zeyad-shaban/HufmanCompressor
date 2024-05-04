@@ -58,8 +58,9 @@ void Compressor::compressing(string filePath, string outPath) {
 				}
 			}
 		}
-		if (bitBuffer) fwrite(&bitBuffer, 1, 1, outFile);
 	}
+
+	if (outIndex > 0) fwrite(outBuffer, 1, outIndex, outFile);
 	fclose(file);
 	fclose(outFile);
 	return;
