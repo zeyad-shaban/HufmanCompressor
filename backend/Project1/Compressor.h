@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include <string>
 #include <fstream>
+#include <Windows.h>
 using namespace std;
 
 class Compressor {
@@ -16,7 +17,7 @@ public:
 
     void createMaps(Node* root, string code = "");
 
-    void compressing(string filePath, string outPath);
+    bool compressing(string filePath, string outPath);
     string decompressing(string compressedFilePath, string outputFilePath, int prevSize = 300);
 
     void printEncoder();

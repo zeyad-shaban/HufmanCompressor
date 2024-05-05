@@ -18,53 +18,59 @@ void Compressor::createMaps(Node* root, string code) {
 	createMaps(root->right, code + "1");
 }
 
-void Compressor::compressing(string filePath, string outPath) {
-	FILE* file = nullptr;
-	FILE* outFile = nullptr;
+bool Compressor::compressing(string filePath, string outPath) {
+	HANDLE inputFile = CreateFileA(filePath.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+	HANDLE inputFileMap = CreateFileMappingA(inputFile, NULL, PAGE_READONLY, 0, 0, NULL);
+	char* inputData = (char*)MapViewOfFile(inputFileMap, FILE_MAP_READ, 0, 0, 0);
 
-	if (fopen_s(&file, filePath.c_str(), "r") || fopen_s(&outFile, outPath.c_str(), "wb")) {
-		if (file) fclose(file);
-		if (outFile)fclose(outFile);
-		return;
+	LARGE_INTEGER inFileSize;
+	if (!GetFileSizeEx(inputFile, &inFileSize)) {
+		std::cout << "Failed to get file size\n";
+		UnmapViewOfFile(inputData);
+		CloseHandle(inputFile);
+		CloseHandle(inputFileMap);
+		return false;
 	}
+
+	HANDLE outFile = CreateFileA(outPath.c_str(), GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+	HANDLE outFileMap = CreateFileMappingA(outFile, NULL, PAGE_READWRITE, 0, inFileSize.QuadPart, NULL);
+	char* outData = (char*)MapViewOfFile(outFileMap, FILE_MAP_WRITE, 0, 0, inFileSize.QuadPart);
+	unsigned long long outIndex = 0;
+
+	// TODO HANDLE FAILING FOR EITHER ORIGNAL OR OUT FILE
 
 	string charsTable[128];
 	for (int i = 0; i < 128; i++)
 		if (encoder.find(i) != encoder.end())
 			charsTable[i] = encoder[i];
 
-	unsigned char inBuffer[500000]; // todo change this very large number to whatever the system needs
-	int charsRead;
-
 	unsigned char bitBuffer = 0;
 	int currBit = 0;
 
-	unsigned char outBuffer[500000];
-	int outIndex = 0;
 
-	while ((charsRead = fread(inBuffer, 1, 500000, file)) > 0) {
-		for (int i = 0; i < charsRead; i++) {
-			for (char bit : charsTable[inBuffer[i]]) {
-				bitBuffer = (bitBuffer << 1) | (bit - '0');
-				currBit++;
-				if (currBit >= 8) {
-					outBuffer[outIndex++] = bitBuffer;
-					currBit = 0;
-					bitBuffer = 0;
-				}
-				if (outIndex >= 500000) {
-					fwrite(outBuffer, 1, outIndex, outFile);
-					outIndex = 0;
-				}
+	for (LONGLONG i = 0; i < inFileSize.QuadPart; i++) {
+		for (char bit : charsTable[inputData[i]]) {
+			bitBuffer = (bitBuffer << 1) | (bit - '0');
+			currBit++;
+			if (currBit >= 8) {
+				outData[outIndex++] = bitBuffer;
+				currBit = 0;
+				bitBuffer = 0;
 			}
 		}
 	}
 
-	if (outIndex > 0) fwrite(outBuffer, 1, outIndex, outFile);
-	fclose(file);
-	fclose(outFile);
-	return;
+	UnmapViewOfFile(inputData);
+	CloseHandle(inputFile);
+	CloseHandle(inputFileMap);
+
+	UnmapViewOfFile(outData);
+	CloseHandle(outFile);
+	CloseHandle(outFileMap);
+
+	return true;
 }
+
 
 string Compressor::decompressing(string compressedFilePath, string outputFilePath, int prevSize) {
 	FILE* compressedFile = nullptr;
