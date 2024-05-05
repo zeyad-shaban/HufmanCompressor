@@ -1,4 +1,5 @@
 #include "Compressor.h"
+#include <Windows.h>
 
 Compressor::Compressor() {
 	encoder = unordered_map<char, string>();
@@ -33,7 +34,16 @@ bool Compressor::compressing(string filePath, string outPath) {
 	}
 
 	HANDLE outFile = CreateFileA(outPath.c_str(), GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+	if (outFile == INVALID_HANDLE_VALUE) {
+		std::cout << "fuck this\n";
+		return false;
+	}
 	HANDLE outFileMap = CreateFileMappingA(outFile, NULL, PAGE_READWRITE, 0, inFileSize.QuadPart, NULL);
+	if (!outFileMap) {
+		DWORD dwError = GetLastError();
+		std::cout << "Failed to create file mapping. Error: " << dwError << "\n";
+		return false;
+	}
 	char* outData = (char*)MapViewOfFile(outFileMap, FILE_MAP_WRITE, 0, 0, inFileSize.QuadPart);
 	unsigned long long outIndex = 0;
 

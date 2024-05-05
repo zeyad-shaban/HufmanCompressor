@@ -2,8 +2,6 @@
 
 #include <iostream>
 #include "utils.h"
-#include "StartCompressing.h"
-#include "StartDecompressing.h"
 #include "LocalApp.h"
 #include "StartServer.h"
 

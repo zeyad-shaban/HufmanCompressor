@@ -4,7 +4,6 @@
 #include <unordered_map>
 #include <string>
 #include <fstream>
-#include <Windows.h>
 using namespace std;
 
 class Compressor {
