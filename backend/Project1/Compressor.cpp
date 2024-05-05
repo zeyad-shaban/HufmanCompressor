@@ -33,11 +33,7 @@ bool Compressor::compressing(string filePath, string outPath) {
 		return false;
 	}
 
-	HANDLE outFile = CreateFileA(outPath.c_str(), GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
-	if (outFile == INVALID_HANDLE_VALUE) {
-		std::cout << "fuck this\n";
-		return false;
-	}
+	HANDLE outFile = CreateFileA(outPath.c_str(), GENERIC_READ | GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 	HANDLE outFileMap = CreateFileMappingA(outFile, NULL, PAGE_READWRITE, 0, inFileSize.QuadPart, NULL);
 	if (!outFileMap) {
 		DWORD dwError = GetLastError();
