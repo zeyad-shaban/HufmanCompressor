@@ -53,8 +53,7 @@ bool Compressor::compressing(string filePath, string outPath) {
 	unsigned char bitBuffer = 0;
 	int currBit = 0;
 
-
-	for (LONGLONG i = 0; i < inFileSize.QuadPart; i++) {
+	for (LONGLONG i = 0; i < inFileSize.QuadPart; ++i) {
 		for (char bit : charsTable[inputData[i]]) {
 			bitBuffer = (bitBuffer << 1) | (bit - '0');
 			currBit++;
