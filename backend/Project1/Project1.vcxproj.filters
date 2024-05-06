@@ -256,5 +256,12 @@
     <None Include="serverData\input_compressed.bin">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="serverData\input_decoder.json" />
+    <None Include="serverData\input_tree.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="serverData\frequency_table.txt" />
+    <Text Include="serverData\input.txt" />
+    <Text Include="serverData\input_compressed_decompressed.txt" />
   </ItemGroup>
 </Project>

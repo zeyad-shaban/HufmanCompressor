@@ -64,21 +64,33 @@ bool Compressor::compressing(string filePath, string outPath) {
 				bitBuffer = 0;
 			}
 		}
+
 	}
+	if (currBit > 0) {
+		bitBuffer <<= (8 - currBit);
+		outData[outIndex++] = bitBuffer;
+		
+		outData[outIndex++] = currBit;
+	}
+
 
 	UnmapViewOfFile(inputData);
 	CloseHandle(inputFile);
 	CloseHandle(inputFileMap);
 
+	
 	UnmapViewOfFile(outData);
-	CloseHandle(outFile);
 	CloseHandle(outFileMap);
+	SetFilePointer(outFile, outIndex, NULL, FILE_BEGIN);
+	SetEndOfFile(outFile);
+	CloseHandle(outFile);
 
 	return true;
 }
 
 
 string Compressor::decompressing(string compressedFilePath, string outputFilePath, int prevSize) {
+	// Open the files
 	FILE* compressedFile = nullptr;
 	bool errCompressed = fopen_s(&compressedFile, compressedFilePath.c_str(), "rb");
 	FILE* outputFile = nullptr;
@@ -90,27 +102,51 @@ string Compressor::decompressing(string compressedFilePath, string outputFilePat
 		return "Failed to open file";
 	}
 
-	time_t start, end;
+	// Get the size of the compressed file
+	fseek(compressedFile, 0, SEEK_END);
+	long fileSize = ftell(compressedFile);
+	fseek(compressedFile, 0, SEEK_SET);
 
+	// Read the number of valid bits in the last byte
+	fseek(compressedFile, -1, SEEK_END);
+	unsigned char validBits;
+	fread(&validBits, 1, 1, compressedFile);
+	fseek(compressedFile, 0, SEEK_SET);
+
+	time_t start, end;
 	time(&start);
+
 	string code = "";
 	unsigned char byte;
-	while (fread(&byte, 1, 1, compressedFile)) {
-		for (int i = 7; i >= 0; i--) {
-			code += (byte >> i) & 1 ? '1' : '0';
+	for (long i = 0; i < fileSize - 2; i++) {  // Don't read the last two bytes
+		fread(&byte, 1, 1, compressedFile);
+		for (int j = 7; j >= 0; j--) {
+			code += (byte >> j) & 1 ? '1' : '0';
 			if (decoder.find(code) != decoder.end()) {
 				fputc(decoder[code][0], outputFile);
 				code = "";
 			}
 		}
 	}
-	time(&end);
+	//Read until the valid bits
+	fread(&byte, 1, 1, compressedFile);
+	for (int j = 7; j >= 8 - validBits; j--) { 
+		code += (byte >> j) & 1 ? '1' : '0';
+		if (decoder.find(code) != decoder.end()) {
+			fputc(decoder[code][0], outputFile);
+			code = "";
+		}
+	}
 
+	time(&end);
 	cout << "TIME TAKEN TO DECOMPRESS: " << end - start << endl;
+
 	fclose(compressedFile);
 	fclose(outputFile);
 
-	return "hi agian lol";
+	return "Decompression completed successfully!";
+
+
 }
 
 void Compressor::printEncoder() {
