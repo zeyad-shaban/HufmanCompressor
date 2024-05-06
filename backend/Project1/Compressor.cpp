@@ -41,12 +41,12 @@ bool Compressor::compressing(string filePath, string outPath) {
 		return false;
 	}
 	char* outData = (char*)MapViewOfFile(outFileMap, FILE_MAP_WRITE, 0, 0, inFileSize.QuadPart);
-	unsigned long long outIndex = 0;
+	unsigned long long outIndex = -1;
 
 	// TODO HANDLE FAILING FOR EITHER ORIGNAL OR OUT FILE
 
 	string charsTable[128];
-	for (int i = 0; i < 128; i++)
+	for (int i = 0; i < 128; ++i)
 		if (encoder.find(i) != encoder.end())
 			charsTable[i] = encoder[i];
 
@@ -59,7 +59,7 @@ bool Compressor::compressing(string filePath, string outPath) {
 			bitBuffer = (bitBuffer << 1) | (bit - '0');
 			currBit++;
 			if (currBit >= 8) {
-				outData[outIndex++] = bitBuffer;
+				outData[++outIndex] = bitBuffer;
 				currBit = 0;
 				bitBuffer = 0;
 			}
@@ -71,8 +71,12 @@ bool Compressor::compressing(string filePath, string outPath) {
 	CloseHandle(inputFileMap);
 
 	UnmapViewOfFile(outData);
-	CloseHandle(outFile);
 	CloseHandle(outFileMap);
+
+	SetFilePointer(outFile, ++outIndex, NULL, FILE_BEGIN);
+	SetEndOfFile(outFile);
+
+	CloseHandle(outFile);
 
 	return true;
 }
