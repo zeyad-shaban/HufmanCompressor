@@ -58,14 +58,18 @@ bool Compressor::compressing(Node* root, string filePath, string outPath) {
 				bitBuffer = 0;
 			}
 		}
-
 	}
+
+	// 00000010
+
 	if (currBit > 0) {
 		bitBuffer <<= (8 - currBit);
 		outData[outIndex++] = bitBuffer;
 
 		outData[outIndex++] = currBit;
 	}
+	else
+		outData[outIndex++] = 8;
 
 
 	UnmapViewOfFile(inputData);
@@ -126,12 +130,10 @@ bool Compressor::decompressing(Node* root, string compressedFilePath, string out
 		}
 	}
 
-	//// compressed index now standing at the before last bit
+	// compressed index now standing at the before last bit
+	char validBits = compressedData[compressedIndex + 1]; // 00000100 = 4
 
-	char validBits = compressedData[compressedIndex + 1];
-	nodeIt = root;
-
-	for (int j = 7; j >= 8 - validBits; --j) {
+	for (int j = 7; j >= 8 - validBits; j--) { // 0010110
 		nodeIt = (compressedData[compressedIndex] >> j) & 1 ? nodeIt->right : nodeIt->left;
 		if (nodeIt->letter) {
 			outData[++outIndex] = nodeIt->letter;
