@@ -131,9 +131,9 @@ bool Compressor::decompressing(Node* root, string compressedFilePath, string out
 	}
 
 	// compressed index now standing at the before last bit
-	char validBits = compressedData[compressedIndex + 1]; // 00000100 = 4
+	char validBits = compressedData[compressedIndex + 1];
 
-	for (int j = 7; j >= 8 - validBits; j--) { // 0010110
+	for (int j = 7; j >= 8 - validBits; j--) {
 		nodeIt = (compressedData[compressedIndex] >> j) & 1 ? nodeIt->right : nodeIt->left;
 		if (nodeIt->letter) {
 			outData[++outIndex] = nodeIt->letter;
