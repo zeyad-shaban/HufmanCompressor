@@ -10,7 +10,7 @@ class Compressor {
 private:
 public:
 	bool compressing(Node* root, string filePath, string outPath);
-	bool decompressing(string compressedFilePath, string outputFilePath, int prevSize = 300);
+	bool decompressing(Node* root, string compressedFilePath, string outputFilePath, int prevSize = 300);
 
 	void printEncoder();
 };

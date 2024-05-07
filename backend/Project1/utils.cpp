@@ -61,12 +61,10 @@ bool saveMapToFile(std::string filePath, std::unordered_map<std::string, std::st
 }
 
 json nodeToJson(Node* node) {
-	if (node == nullptr) {
-		return nullptr;
-	}
+	if (node == nullptr)return nullptr;
 
 	json j;
-	j["letters"] = node->letter;
+	j["letter"] = node->letter;
 	j["freq"] = node->freq;
 	j["left"] = nodeToJson(node->left);
 	j["right"] = nodeToJson(node->right);
@@ -79,4 +77,26 @@ void writeTreeToJsonFile(Node* root, const std::string& filename) {
 	std::ofstream file(filename);
 	file << j.dump(4);
 	file.close();
+}
+
+
+Node* jsonToNode(const json& j) {
+	if (j.is_null()) return nullptr;
+
+	Node* node = new Node;
+	node->letter = j["letter"].get<char>();
+	node->freq = j["freq"].get<int>();
+	node->left = jsonToNode(j["left"]);
+	node->right = jsonToNode(j["right"]);
+
+	return node;
+}
+
+Node* readTreeFromJsonFile(const std::string& filename) {
+	std::ifstream file(filename);
+	json j;
+	file >> j;
+	file.close();
+
+	return jsonToNode(j);
 }

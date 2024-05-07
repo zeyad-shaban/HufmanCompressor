@@ -2,7 +2,7 @@
 #include <Windows.h>
 
 void closeMMap() {
-
+	// todo to fircken make the memory map look nicer
 }
 
 void generateAsciiTable(Node* root, string* charsTable, string code = "") {
@@ -83,7 +83,7 @@ bool Compressor::compressing(Node* root, string filePath, string outPath) {
 }
 
 
-bool Compressor::decompressing(string compressedFilePath, string outputFilePath, int prevSize) {
+bool Compressor::decompressing(Node* root, string compressedFilePath, string outputFilePath, int prevSize) {
 	HANDLE compressedFile = CreateFileA(compressedFilePath.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 	HANDLE compressedFileMap = CreateFileMappingA(compressedFile, NULL, PAGE_READONLY, 0, 0, NULL);
 	char* compressedData = (char*)MapViewOfFile(compressedFileMap, FILE_MAP_READ, 0, 0, 0);
@@ -113,43 +113,46 @@ bool Compressor::decompressing(string compressedFilePath, string outputFilePath,
 	time_t start, end;
 	time(&start);
 
-	string code = "";
-	//for (compressedIndex = 0; compressedIndex < compressedFileSize.QuadPart - 2; ++compressedIndex) {
-	//	for (int j = 7; j >= 0; --j) {
-	//		code += (compressedData[compressedIndex] >> j) & 1 ? '1' : '0';
-	//		if (decoder.find(code) != decoder.end()) {
-	//			outData[++outIndex] = decoder[code][0];
-	//			code = "";
-	//		}
-	//	}
-	//}
+	Node* nodeIt = root;
+
+	for (compressedIndex = 0; compressedIndex < compressedFileSize.QuadPart - 2; ++compressedIndex) {
+		for (int j = 7; j >= 0; --j) {
+			nodeIt = (compressedData[compressedIndex] >> j) & 1 ? nodeIt->right : nodeIt->left;
+
+			if (nodeIt->letter) {
+				outData[++outIndex] = nodeIt->letter;
+				nodeIt = root;
+			}
+		}
+	}
 
 	//// compressed index now standing at the before last bit
 
-	//char validBits = compressedData[compressedIndex + 1];
+	char validBits = compressedData[compressedIndex + 1];
+	nodeIt = root;
 
-	//for (int j = 7; j >= 8 - validBits; --j) {
-	//	code += (compressedData[compressedIndex] >> j) & 1 ? '1' : '0';
-	//	if (decoder.find(code) != decoder.end()) {
-	//		outData[++outIndex] = decoder[code][0];
-	//		code = "";
-	//	}
-	//}
+	for (int j = 7; j >= 8 - validBits; --j) {
+		nodeIt = (compressedData[compressedIndex] >> j) & 1 ? nodeIt->right : nodeIt->left;
+		if (nodeIt->letter) {
+			outData[++outIndex] = nodeIt->letter;
+			nodeIt = root;
+		}
+	}
 
-	//time(&end);
-	//cout << "TIME TAKEN TO DECOMPRESS: " << end - start << endl;
-
-
-	//UnmapViewOfFile(compressedData);
-	//CloseHandle(compressedFile);
-	//CloseHandle(compressedFileMap);
+	time(&end);
+	cout << "TIME TAKEN TO DECOMPRESS: " << end - start << endl;
 
 
-	//UnmapViewOfFile(outData);
-	//CloseHandle(outFileMap);
-	//SetFilePointer(outFile, outIndex + 1, NULL, FILE_BEGIN);
-	//SetEndOfFile(outFile);
-	//CloseHandle(outFile);
+	UnmapViewOfFile(compressedData);
+	CloseHandle(compressedFile);
+	CloseHandle(compressedFileMap);
 
-	//return true;
+
+	UnmapViewOfFile(outData);
+	CloseHandle(outFileMap);
+	SetFilePointer(outFile, outIndex + 1, NULL, FILE_BEGIN);
+	SetEndOfFile(outFile);
+	CloseHandle(outFile);
+
+	return true;
 }

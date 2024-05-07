@@ -23,5 +23,6 @@ int main(int argc, char** argv) {
 	// else
 	// 	std::cout << "Invalid input";
 
-	startCompressing("C:/Users/zeyad/OneDrive/Desktop/test/easy.txt", "C:/Users/zeyad/OneDrive/Desktop/test");
+	//startCompressing("C:/Users/zeyad/OneDrive/Desktop/test/easy.txt", "C:/Users/zeyad/OneDrive/Desktop/test");
+	StartDecompressing("C:/Users/zeyad/OneDrive/Desktop/test/easy_compressed.bin", "C:/Users/zeyad/OneDrive/Desktop/test/easy_tree.json", "C:/Users/zeyad/OneDrive/Desktop/test");
 }
