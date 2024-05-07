@@ -7,7 +7,7 @@ void closeMMap() {
 
 void generateAsciiTable(Node* root, string* charsTable, string code = "") {
 	if (root->letter) {
-		charsTable[root->letter] = code == "" ? 0 : code;
+		charsTable[root->letter] = code == "" ? "0" : code;
 		return;
 	}
 
@@ -60,8 +60,6 @@ bool Compressor::compressing(Node* root, string filePath, string outPath) {
 		}
 	}
 
-	// 00000010
-
 	if (currBit > 0) {
 		bitBuffer <<= (8 - currBit);
 		outData[outIndex++] = bitBuffer;
@@ -102,13 +100,13 @@ bool Compressor::decompressing(Node* root, string compressedFilePath, string out
 	}
 
 	HANDLE outFile = CreateFileA(outputFilePath.c_str(), GENERIC_READ | GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
-	HANDLE outFileMap = CreateFileMappingA(outFile, NULL, PAGE_READWRITE, 0, compressedFileSize.QuadPart * 4, NULL);
+	HANDLE outFileMap = CreateFileMappingA(outFile, NULL, PAGE_READWRITE, 0, compressedFileSize.QuadPart * 16, NULL);
 	if (!outFileMap) {
 		DWORD dwError = GetLastError();
 		std::cout << "Failed to create file mapping. Error: " << dwError << "\n";
 		return false;
 	}
-	char* outData = (char*)MapViewOfFile(outFileMap, FILE_MAP_WRITE, 0, 0, compressedFileSize.QuadPart * 4);
+	char* outData = (char*)MapViewOfFile(outFileMap, FILE_MAP_WRITE, 0, 0, compressedFileSize.QuadPart * 16);
 	LONGLONG compressedIndex = 0;
 	unsigned long long outIndex = -1;
 
@@ -118,10 +116,12 @@ bool Compressor::decompressing(Node* root, string compressedFilePath, string out
 	time(&start);
 
 	Node* nodeIt = root;
+	bool rootOnly = false;
+	if (nodeIt->letter) rootOnly = true;
 
 	for (compressedIndex = 0; compressedIndex < compressedFileSize.QuadPart - 2; ++compressedIndex) {
 		for (int j = 7; j >= 0; --j) {
-			nodeIt = (compressedData[compressedIndex] >> j) & 1 ? nodeIt->right : nodeIt->left;
+			if (!rootOnly) nodeIt = (compressedData[compressedIndex] >> j) & 1 ? nodeIt->right : nodeIt->left;
 
 			if (nodeIt->letter) {
 				outData[++outIndex] = nodeIt->letter;
