@@ -6,10 +6,13 @@ void closeMMap() {
 }
 
 void generateAsciiTable(Node* root, string* charsTable, string code = "") {
-	//root->left->letters
-//	for (int i = 0; i < 128; i++)
-//		if (encoder.find(i) != encoder.end())
-//			charsTable[i] = encoder[i];
+	if (root->letter) {
+		charsTable[root->letter] = code == "" ? 0 : code;
+		return;
+	}
+
+	generateAsciiTable(root->left, charsTable, code + '0');
+	generateAsciiTable(root->right, charsTable, code + '1');
 }
 
 
