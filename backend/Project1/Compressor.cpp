@@ -46,7 +46,7 @@ bool Compressor::compressing(string filePath, string outPath) {
 	// TODO HANDLE FAILING FOR EITHER ORIGNAL OR OUT FILE
 
 	string charsTable[128];
-	for (int i = 0; i < 128; i++)
+	for (int i = 0; i < 128; ++i)
 		if (encoder.find(i) != encoder.end())
 			charsTable[i] = encoder[i];
 
@@ -54,7 +54,7 @@ bool Compressor::compressing(string filePath, string outPath) {
 	int currBit = 0;
 
 
-	for (LONGLONG i = 0; i < inFileSize.QuadPart; i++) {
+	for (LONGLONG i = 0; i < inFileSize.QuadPart; ++i) {
 		for (char bit : charsTable[inputData[i]]) {
 			bitBuffer = (bitBuffer << 1) | (bit - '0');
 			currBit++;
@@ -107,7 +107,6 @@ string Compressor::decompressing(string compressedFilePath, string outputFilePat
 	long fileSize = ftell(compressedFile);
 	fseek(compressedFile, 0, SEEK_SET);
 
-	// Read the number of valid bits in the last byte
 	fseek(compressedFile, -1, SEEK_END);
 	unsigned char validBits;
 	fread(&validBits, 1, 1, compressedFile);
