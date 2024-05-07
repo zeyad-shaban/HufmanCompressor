@@ -64,7 +64,7 @@ void StartServer() {
 		compressionThread.join();
 
 
-		res.set_content(getCompressedFiles(), "application/json");
+		res.set_content(getCommpressedFiles(), "application/json");
 
 		});
 
