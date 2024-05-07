@@ -17,7 +17,7 @@ public:
     void createMaps(Node* root, string code = "");
 
     bool compressing(string filePath, string outPath);
-    string decompressing(string compressedFilePath, string outputFilePath, int prevSize = 300);
+    bool decompressing(string compressedFilePath, string outputFilePath, int prevSize = 300);
 
     void printEncoder();
 };

@@ -89,51 +89,55 @@ bool Compressor::compressing(string filePath, string outPath) {
 }
 
 
-string Compressor::decompressing(string compressedFilePath, string outputFilePath, int prevSize) {
-	// Open the files
-	FILE* compressedFile = nullptr;
-	bool errCompressed = fopen_s(&compressedFile, compressedFilePath.c_str(), "rb");
-	FILE* outputFile = nullptr;
-	bool errOut = fopen_s(&outputFile, outputFilePath.c_str(), "w");
+bool Compressor::decompressing(string compressedFilePath, string outputFilePath, int prevSize) {
+	HANDLE compressedFile = CreateFileA(compressedFilePath.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+	HANDLE compressedFileMap = CreateFileMappingA(compressedFile, NULL, PAGE_READONLY, 0, 0, NULL);
+	char* compressedData = (char*)MapViewOfFile(compressedFileMap, FILE_MAP_READ, 0, 0, 0);
 
-	if (errCompressed || errOut) {
-		if (compressedFile) fclose(compressedFile);
-		if (outputFile) fclose(outputFile);
-		return "Failed to open file";
+	LARGE_INTEGER compressedFileSize;
+	if (!GetFileSizeEx(compressedFile, &compressedFileSize)) {
+		std::cout << "Failed to get file size\n";
+		UnmapViewOfFile(compressedData);
+		CloseHandle(compressedFile);
+		CloseHandle(compressedFileMap);
+		return false;
 	}
 
-	// Get the size of the compressed file
-	fseek(compressedFile, 0, SEEK_END);
-	long fileSize = ftell(compressedFile);
-	fseek(compressedFile, 0, SEEK_SET);
+	HANDLE outFile = CreateFileA(outputFilePath.c_str(), GENERIC_READ | GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+	HANDLE outFileMap = CreateFileMappingA(outFile, NULL, PAGE_READWRITE, 0, compressedFileSize.QuadPart * 4, NULL);
+	if (!outFileMap) {
+		DWORD dwError = GetLastError();
+		std::cout << "Failed to create file mapping. Error: " << dwError << "\n";
+		return false;
+	}
+	char* outData = (char*)MapViewOfFile(outFileMap, FILE_MAP_WRITE, 0, 0, compressedFileSize.QuadPart * 4);
+	LONGLONG compressedIndex = 0;
+	unsigned long long outIndex = -1;
 
-	// Read the number of valid bits in the last byte
-	fseek(compressedFile, -1, SEEK_END);
-	unsigned char validBits;
-	fread(&validBits, 1, 1, compressedFile);
-	fseek(compressedFile, 0, SEEK_SET);
+	// TODO HANDLE OPENING FILE ERRS
 
 	time_t start, end;
 	time(&start);
 
 	string code = "";
-	unsigned char byte;
-	for (long i = 0; i < fileSize - 2; i++) {  // Don't read the last two bytes
-		fread(&byte, 1, 1, compressedFile);
-		for (int j = 7; j >= 0; j--) {
-			code += (byte >> j) & 1 ? '1' : '0';
+	for (compressedIndex = 0; compressedIndex < compressedFileSize.QuadPart - 2; ++compressedIndex) {
+		for (int j = 7; j >= 0; --j) {
+			code += (compressedData[compressedIndex] >> j) & 1 ? '1' : '0';
 			if (decoder.find(code) != decoder.end()) {
-				fputc(decoder[code][0], outputFile);
+				outData[++outIndex] = decoder[code][0];
 				code = "";
 			}
 		}
 	}
-	//Read until the valid bits
-	fread(&byte, 1, 1, compressedFile);
-	for (int j = 7; j >= 8 - validBits; j--) {
-		code += (byte >> j) & 1 ? '1' : '0';
+
+	// compressed index now standing at the before last bit
+
+	char validBits = compressedData[compressedIndex + 1];
+
+	for (int j = 7; j >= 8 - validBits; --j) {
+		code += (compressedData[compressedIndex] >> j) & 1 ? '1' : '0';
 		if (decoder.find(code) != decoder.end()) {
-			fputc(decoder[code][0], outputFile);
+			outData[++outIndex] = decoder[code][0];
 			code = "";
 		}
 	}
@@ -141,12 +145,19 @@ string Compressor::decompressing(string compressedFilePath, string outputFilePat
 	time(&end);
 	cout << "TIME TAKEN TO DECOMPRESS: " << end - start << endl;
 
-	fclose(compressedFile);
-	fclose(outputFile);
 
-	return "Decompression completed successfully!";
+	UnmapViewOfFile(compressedData);
+	CloseHandle(compressedFile);
+	CloseHandle(compressedFileMap);
 
 
+	UnmapViewOfFile(outData);
+	CloseHandle(outFileMap);
+	SetFilePointer(outFile, outIndex + 1, NULL, FILE_BEGIN);
+	SetEndOfFile(outFile);
+	CloseHandle(outFile);
+
+	return true;
 }
 
 void Compressor::printEncoder() {

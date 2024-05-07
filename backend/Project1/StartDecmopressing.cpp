@@ -19,7 +19,7 @@ bool StartDecompressing(string compressedFilePath, string decoderPath, string di
 		compressor->decoder[element.key()] = element.value();
 
 
-	string decodedTextPrev = compressor->decompressing(compressedFilePath, dirPath + "/" + file_without_extension + "_decompressed.txt");
+	bool success = compressor->decompressing(compressedFilePath, dirPath + "/" + file_without_extension + "_decompressed.txt");
 
 	if (decoderPtr) *decoderPtr = compressor->decoder;
 
