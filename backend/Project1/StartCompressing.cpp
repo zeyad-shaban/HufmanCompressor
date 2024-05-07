@@ -39,7 +39,7 @@ int startCompressing(string filePath, string dirPath, unordered_map<string, stri
 
 	for (int i = 0; i < 128; i++)
 		if (freqTable[i])
-			heap->insertValues(std::string(1, char(i)), freqTable[i]);
+			heap->insertValues(i, freqTable[i]);
 
 	// Generate Huffman tree
 	Node* root = tregen(heap);
@@ -48,23 +48,22 @@ int startCompressing(string filePath, string dirPath, unordered_map<string, stri
 	writeTreeToJsonFile(root, dirPath + "/" + file_without_extension + "_tree.json");
 
 	// Compress the file
-	Compressor compressor = Compressor();
+	Compressor compressor = Compressor(); // FUCK THIS WHY IS IT EVEN IN A CLASS JUST PUT IT IN A FUCKEN VOID FUNCTION LIEK ALL FUCKEN NORMAL PEOPLE DO
 	bool validPath = true;
 	std::cout << "->compressing using HuffmanTree...\n";
 
-	compressor.createMaps(root);
 	string outPath = dirPath + "/" + file_without_extension + "_compressed.bin";
 
 	time(&start);
-	compressor.compressing(filePath, outPath);
+	compressor.compressing(root, filePath, outPath);
 	time(&end);
 	cout << "Done copmressing in " << end - start << "sec" << endl;
 
-	saveMapToFile(dirPath + "/" + file_without_extension + "_decoder.json", compressor.decoder);
+	//saveMapToFile(dirPath + "/" + file_without_extension + "_decoder.json", compressor.decoder);
 
 	// Extra Info
-	if (encoderPtr) *encoderPtr = compressor.decoder;
-	if (rootPtr) *rootPtr = root;
+	//if (encoderPtr) *encoderPtr = compressor.decoder;
+	//if (rootPtr) *rootPtr = root;
 
 	return 0;
 }

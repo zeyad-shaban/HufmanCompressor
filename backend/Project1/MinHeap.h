@@ -15,7 +15,7 @@ public:
     int getLeft(int i);
     int getRight(int i);
 
-    void insertValues(std::string letters, int freq, bool* overflow = nullptr);
+    void insertValues(char letter, int freq, bool* overflow = nullptr);
     void orderInsertedNode();
     void bubbleDown(int index);
     Node* extractMin();

@@ -15,13 +15,13 @@ bool StartDecompressing(string compressedFilePath, string decoderPath, string di
 	}
 
 	nlohmann::json jsonDecoder = nlohmann::json::parse(decoderFile);
-	for (auto& element : jsonDecoder.items())
-		compressor->decoder[element.key()] = element.value();
+	//for (auto& element : jsonDecoder.items())
+		//compressor->decoder[element.key()] = element.value();
 
 
 	bool success = compressor->decompressing(compressedFilePath, dirPath + "/" + file_without_extension + "_decompressed.txt");
 
-	if (decoderPtr) *decoderPtr = compressor->decoder;
+	//if (decoderPtr) *decoderPtr = compressor->decoder;
 
 	return true;
 }

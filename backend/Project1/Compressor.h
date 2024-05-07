@@ -9,15 +9,8 @@ using namespace std;
 class Compressor {
 private:
 public:
-    unordered_map<char, string> encoder;
-    unordered_map<string, string> decoder;
+	bool compressing(Node* root, string filePath, string outPath);
+	bool decompressing(string compressedFilePath, string outputFilePath, int prevSize = 300);
 
-    Compressor();
-
-    void createMaps(Node* root, string code = "");
-
-    bool compressing(string filePath, string outPath);
-    bool decompressing(string compressedFilePath, string outputFilePath, int prevSize = 300);
-
-    void printEncoder();
+	void printEncoder();
 };

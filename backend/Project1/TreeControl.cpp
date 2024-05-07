@@ -35,7 +35,7 @@ void TreeControl::OnChar(wxKeyEvent& event) {
 
 void TreeControl::drawNode(wxDC& dc, Node* node, int x, int y, float depth) {
 	dc.DrawCircle(wxPoint(x, y), 20);
-	dc.DrawText(!node->left && !node->right ? node->letters : std::to_string(node->freq), wxPoint(x - 5, y - 5));
+	dc.DrawText(node->letter ? std::to_string(node->letter) : std::to_string(node->freq), wxPoint(x - 5, y - 5));
 
 	float childY = y + 100;
 	float childXSpacing = 300 / (depth + 1);

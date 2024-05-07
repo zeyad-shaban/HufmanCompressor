@@ -1,25 +1,19 @@
 #include "Compressor.h"
 #include <Windows.h>
 
-Compressor::Compressor() {
-	encoder = unordered_map<char, string>();
-	decoder = unordered_map<string, string>();
+void closeMMap() {
+
 }
 
-void Compressor::createMaps(Node* root, string code) {
-	if (root == NULL) {
-		return;
-	}
-	if (root->left == NULL && root->right == NULL) {
-		encoder[root->letters[0]] = code;
-		decoder[code] = root->letters;
-		return;
-	}
-	createMaps(root->left, code + "0");
-	createMaps(root->right, code + "1");
+void generateAsciiTable(Node* root, string* charsTable, string code = "") {
+	//root->left->letters
+//	for (int i = 0; i < 128; i++)
+//		if (encoder.find(i) != encoder.end())
+//			charsTable[i] = encoder[i];
 }
 
-bool Compressor::compressing(string filePath, string outPath) {
+
+bool Compressor::compressing(Node* root, string filePath, string outPath) {
 	HANDLE inputFile = CreateFileA(filePath.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 	HANDLE inputFileMap = CreateFileMappingA(inputFile, NULL, PAGE_READONLY, 0, 0, NULL);
 	char* inputData = (char*)MapViewOfFile(inputFileMap, FILE_MAP_READ, 0, 0, 0);
@@ -46,13 +40,10 @@ bool Compressor::compressing(string filePath, string outPath) {
 	// TODO HANDLE FAILING FOR EITHER ORIGNAL OR OUT FILE
 
 	string charsTable[128];
-	for (int i = 0; i < 128; i++)
-		if (encoder.find(i) != encoder.end())
-			charsTable[i] = encoder[i];
+	generateAsciiTable(root, charsTable);
 
 	unsigned char bitBuffer = 0;
 	int currBit = 0;
-
 
 	for (LONGLONG i = 0; i < inFileSize.QuadPart; i++) {
 		for (char bit : charsTable[inputData[i]]) {
@@ -120,48 +111,42 @@ bool Compressor::decompressing(string compressedFilePath, string outputFilePath,
 	time(&start);
 
 	string code = "";
-	for (compressedIndex = 0; compressedIndex < compressedFileSize.QuadPart - 2; ++compressedIndex) {
-		for (int j = 7; j >= 0; --j) {
-			code += (compressedData[compressedIndex] >> j) & 1 ? '1' : '0';
-			if (decoder.find(code) != decoder.end()) {
-				outData[++outIndex] = decoder[code][0];
-				code = "";
-			}
-		}
-	}
+	//for (compressedIndex = 0; compressedIndex < compressedFileSize.QuadPart - 2; ++compressedIndex) {
+	//	for (int j = 7; j >= 0; --j) {
+	//		code += (compressedData[compressedIndex] >> j) & 1 ? '1' : '0';
+	//		if (decoder.find(code) != decoder.end()) {
+	//			outData[++outIndex] = decoder[code][0];
+	//			code = "";
+	//		}
+	//	}
+	//}
 
-	// compressed index now standing at the before last bit
+	//// compressed index now standing at the before last bit
 
-	char validBits = compressedData[compressedIndex + 1];
+	//char validBits = compressedData[compressedIndex + 1];
 
-	for (int j = 7; j >= 8 - validBits; --j) {
-		code += (compressedData[compressedIndex] >> j) & 1 ? '1' : '0';
-		if (decoder.find(code) != decoder.end()) {
-			outData[++outIndex] = decoder[code][0];
-			code = "";
-		}
-	}
+	//for (int j = 7; j >= 8 - validBits; --j) {
+	//	code += (compressedData[compressedIndex] >> j) & 1 ? '1' : '0';
+	//	if (decoder.find(code) != decoder.end()) {
+	//		outData[++outIndex] = decoder[code][0];
+	//		code = "";
+	//	}
+	//}
 
-	time(&end);
-	cout << "TIME TAKEN TO DECOMPRESS: " << end - start << endl;
-
-
-	UnmapViewOfFile(compressedData);
-	CloseHandle(compressedFile);
-	CloseHandle(compressedFileMap);
+	//time(&end);
+	//cout << "TIME TAKEN TO DECOMPRESS: " << end - start << endl;
 
 
-	UnmapViewOfFile(outData);
-	CloseHandle(outFileMap);
-	SetFilePointer(outFile, outIndex + 1, NULL, FILE_BEGIN);
-	SetEndOfFile(outFile);
-	CloseHandle(outFile);
+	//UnmapViewOfFile(compressedData);
+	//CloseHandle(compressedFile);
+	//CloseHandle(compressedFileMap);
 
-	return true;
-}
 
-void Compressor::printEncoder() {
-	for (auto it = encoder.begin(); it != encoder.end(); it++) {
-		cout << it->first << " " << it->second << endl;
-	}
+	//UnmapViewOfFile(outData);
+	//CloseHandle(outFileMap);
+	//SetFilePointer(outFile, outIndex + 1, NULL, FILE_BEGIN);
+	//SetEndOfFile(outFile);
+	//CloseHandle(outFile);
+
+	//return true;
 }

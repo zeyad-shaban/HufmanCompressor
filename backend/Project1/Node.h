@@ -5,12 +5,12 @@
 
 class Node {
 public:
-    std::string letters;
+    char letter;
     int freq;
     Node* left = NULL;
     Node* right = NULL;
 
-    Node(std::string letters = "", int freq = 0, Node* left = NULL, Node* right = NULL);
+    Node(char letter = NULL, int freq = 0, Node* left = NULL, Node* right = NULL);
 
-    void update(std::string letters, int freq);
+    void update(char letter, int freq);
 };

@@ -1,13 +1,13 @@
 #include "Node.h"
 
-Node::Node(std::string letters, int freq, Node* left, Node* right) {
-    this->letters = letters;
+Node::Node(char letter, int freq, Node* left, Node* right) {
+    this->letter = letter;
     this->freq = freq;
     this->left = left;
     this->right = right;
 }
 
-void Node::update(std::string letters, int freq) {
-    this->letters = letters;
+void Node::update(char letter, int freq) {
+    this->letter = letter;
     this->freq = freq;
 }

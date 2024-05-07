@@ -8,7 +8,7 @@ Node* tregen(MinHeap* heap) {
 
 		int hPtr = heap->heapPtr;
 
-		heap->arr[hPtr].letters = node1->letters + node2->letters;
+		heap->arr[hPtr].letter = NULL;
 		heap->arr[hPtr].freq = node1->freq + node2->freq;
 		heap->arr[hPtr].left = node1;
 		heap->arr[hPtr].right = node2;
@@ -66,7 +66,7 @@ json nodeToJson(Node* node) {
 	}
 
 	json j;
-	j["letters"] = node->letters;
+	j["letters"] = node->letter;
 	j["freq"] = node->freq;
 	j["left"] = nodeToJson(node->left);
 	j["right"] = nodeToJson(node->right);

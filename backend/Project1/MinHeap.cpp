@@ -9,12 +9,12 @@ int MinHeap::getParent(int i) { return (i - 1) / 2; }
 int MinHeap::getLeft(int i) { return 2 * i + 1; }
 int MinHeap::getRight(int i) { return 2 * i + 2; }
 
-void MinHeap::insertValues(std::string letters, int freq, bool* overflow) {
+void MinHeap::insertValues(char letter, int freq, bool* overflow) {
     if (heapPtr >= size) {
         if (overflow) *overflow = true;
         return;
     }
-    arr[heapPtr].update(letters, freq);
+    arr[heapPtr].update(letter, freq);
 
     int i = heapPtr;
     while (true) {
@@ -75,11 +75,11 @@ void MinHeap::bubbleDown(int index) {
 }
 
 Node* MinHeap::extractMin() {
-    Node* min = new Node(arr[0].letters, arr[0].freq, arr[0].left, arr[0].right);
+    Node* min = new Node(arr[0].letter, arr[0].freq, arr[0].left, arr[0].right);
 
     arr[0] = arr[--heapPtr];
     bubbleDown(0);
-    arr[heapPtr].update("", 0);
+    arr[heapPtr].update(NULL, 0);
 
     return min;
 }
@@ -87,7 +87,7 @@ Node* MinHeap::extractMin() {
 std::string MinHeap::traverse(int i) {
     if (!arr[i].freq) return "";
     std::ostringstream oss;
-    oss << "{(" << arr[i].letters << "/" << arr[i].freq << "), Left: " << traverse(getLeft(i)) << ", Right: " << traverse(getRight(i)) << "}";
+    oss << "{(" << arr[i].letter << "/" << arr[i].freq << "), Left: " << traverse(getLeft(i)) << ", Right: " << traverse(getRight(i)) << "}";
     return oss.str();
 }
 

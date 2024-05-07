@@ -13,13 +13,15 @@ using namespace std;
 int main(int argc, char** argv) {
 	std::string userInput2;
 
-	std::cout << "would you like to use this program \n [1]as a server (Not recommended for larger files) \n [2]locally (looks ugly..) \n type your answer (1 or 2): ";
-	std::cin >> userInput2;
+	// std::cout << "would you like to use this program \n [1]as a server (Not recommended for larger files) \n [2]locally (looks ugly..) \n type your answer (1 or 2): ";
+	// std::cin >> userInput2;
 
-	if (userInput2 == "1")
-		StartServer();
-	else if (userInput2 == "2")
-		wxEntry(argc, argv);
-	else
-		std::cout << "Invalid input";
+	// if (userInput2 == "1")
+	// 	StartServer();
+	// else if (userInput2 == "2")
+	// 	wxEntry(argc, argv);
+	// else
+	// 	std::cout << "Invalid input";
+
+	startCompressing("C:/Users/zeyad/OneDrive/Desktop/test/easy.txt", "C:/Users/zeyad/OneDrive/Desktop/test");
 }
