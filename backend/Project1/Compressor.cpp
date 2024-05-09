@@ -99,14 +99,17 @@ bool Compressor::decompressing(Node* root, string compressedFilePath, string out
 		return false;
 	}
 
+	LONGLONG allocatedFileSize = compressedFileSize.QuadPart;
+
+
 	HANDLE outFile = CreateFileA(outputFilePath.c_str(), GENERIC_READ | GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
-	HANDLE outFileMap = CreateFileMappingA(outFile, NULL, PAGE_READWRITE, 0, compressedFileSize.QuadPart * 16, NULL);
+	HANDLE outFileMap = CreateFileMappingA(outFile, NULL, PAGE_READWRITE, 0, allocatedFileSize, NULL);
 	if (!outFileMap) {
 		DWORD dwError = GetLastError();
 		std::cout << "Failed to create file mapping. Error: " << dwError << "\n";
 		return false;
 	}
-	char* outData = (char*)MapViewOfFile(outFileMap, FILE_MAP_WRITE, 0, 0, compressedFileSize.QuadPart * 16);
+	char* outData = (char*)MapViewOfFile(outFileMap, FILE_MAP_WRITE, 0, 0, allocatedFileSize);
 	LONGLONG compressedIndex = 0;
 	unsigned long long outIndex = -1;
 
@@ -124,6 +127,15 @@ bool Compressor::decompressing(Node* root, string compressedFilePath, string out
 			if (!rootOnly) nodeIt = (compressedData[compressedIndex] >> j) & 1 ? nodeIt->right : nodeIt->left;
 
 			if (nodeIt->letter) {
+				if (outIndex + 1 >= allocatedFileSize) {
+					CloseHandle(outFileMap);
+					UnmapViewOfFile(outData);
+
+					allocatedFileSize *= 2;
+					outFileMap = CreateFileMappingA(outFile, NULL, PAGE_READWRITE, 0, allocatedFileSize, NULL);
+					outData = (char*)MapViewOfFile(outFileMap, FILE_MAP_WRITE, 0, 0, allocatedFileSize);
+				}
+
 				outData[++outIndex] = nodeIt->letter;
 				nodeIt = root;
 			}
@@ -134,7 +146,7 @@ bool Compressor::decompressing(Node* root, string compressedFilePath, string out
 	char validBits = compressedData[compressedIndex + 1];
 
 	for (int j = 7; j >= 8 - validBits; j--) {
-		nodeIt = (compressedData[compressedIndex] >> j) & 1 ? nodeIt->right : nodeIt->left;
+		if (!rootOnly) nodeIt = (compressedData[compressedIndex] >> j) & 1 ? nodeIt->right : nodeIt->left;
 		if (nodeIt->letter) {
 			outData[++outIndex] = nodeIt->letter;
 			nodeIt = root;
@@ -142,7 +154,7 @@ bool Compressor::decompressing(Node* root, string compressedFilePath, string out
 	}
 
 	time(&end);
-	cout << "TIME TAKEN TO DECOMPRESS: " << end - start << endl;
+	std::cout << "TIME TAKEN TO DECOMPRESS: " << end - start << "\n";
 
 
 	UnmapViewOfFile(compressedData);

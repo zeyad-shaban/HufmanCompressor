@@ -137,7 +137,7 @@ MainFrame::MainFrame(const wxString& title) : wxFrame(nullptr, wxID_ANY, title) 
 
 	// ========================  DECODER FILE AREA  ===========================
 
-	decoderLabel = new wxStaticText(this, wxID_ANY, "Decoder File");
+	decoderLabel = new wxStaticText(this, wxID_ANY, "Tree File");
 	decoderLabel->SetFont(labelFont);
 	mainSizer->Add(decoderLabel, 0, wxALL | wxLEFT, 5);
 
