@@ -6,7 +6,7 @@ void closeMMap() {
 }
 
 void generateAsciiTable(Node* root, string* charsTable, string code = "") {
-	if (root->letter) {
+	if (!root->left && !root->right) {
 		charsTable[root->letter] = code == "" ? "0" : code;
 		return;
 	}
@@ -42,14 +42,14 @@ bool Compressor::compressing(Node* root, string filePath, string outPath) {
 
 	// TODO HANDLE FAILING FOR EITHER ORIGNAL OR OUT FILE
 
-	string charsTable[128];
+	string charsTable[256];
 	generateAsciiTable(root, charsTable);
 
 	unsigned char bitBuffer = 0;
 	int currBit = 0;
 
 	for (LONGLONG i = 0; i < inFileSize.QuadPart; i++) {
-		for (char bit : charsTable[inputData[i]]) {
+		for (char bit : charsTable[(unsigned char)inputData[i]]) {
 			bitBuffer = (bitBuffer << 1) | (bit - '0');
 			currBit++;
 			if (currBit >= 8) {
@@ -120,7 +120,7 @@ bool Compressor::decompressing(Node* root, string compressedFilePath, string out
 
 	Node* nodeIt = root;
 	bool rootOnly = false;
-	if (nodeIt->letter) rootOnly = true;
+	if (!nodeIt->left && !nodeIt->right) rootOnly = true;
 
 	for (compressedIndex = 0; compressedIndex < compressedFileSize.QuadPart - 2; ++compressedIndex) {
 		for (int j = 7; j >= 0; --j) {

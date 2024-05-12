@@ -10,7 +10,7 @@ int startCompressing(string filePath, string dirPath, unordered_map<string, stri
 
 
 	// Generate frequency table
-	int freqTable[128] = { 0 };
+	int freqTable[256] = { 0 };
 	std::cout << "->Generating frequency-table...\n";
 	time_t start, end;
 	time(&start);
@@ -24,7 +24,7 @@ int startCompressing(string filePath, string dirPath, unordered_map<string, stri
 	FILE* freqTableFile;  bool errFreqTableFile = fopen_s(&freqTableFile, "./serverData/frequency_table.txt", "wb");
 	if (errFreqTableFile) return 0;
 
-	for (int i = 0; i < 128; ++i) {
+	for (int i = 0; i < 256; ++i) {
 		if (freqTable[i] != 0) {
 			char ch = char(i);
 			fprintf(freqTableFile, "%c:%d ", char(i), freqTable[i]);
@@ -34,10 +34,10 @@ int startCompressing(string filePath, string dirPath, unordered_map<string, stri
 
 
 	// Create min heap for Huffman tree
-	MinHeap* heap = new MinHeap(128);
+	MinHeap* heap = new MinHeap(256);
 	bool overflow = false;
 
-	for (int i = 0; i < 128; i++)
+	for (int i = 0; i < 256; i++)
 		if (freqTable[i])
 			heap->insertValues(i, freqTable[i]);
 
