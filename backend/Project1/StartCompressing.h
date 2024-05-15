@@ -11,4 +11,4 @@
 #include <thread>
 #include <future>
 
-int startCompressing(string filePath, string dirPath, unordered_map<string, string>* encoderPtr=nullptr, Node** rootPtr=nullptr, string* textPrevPtr=nullptr);
+int startCompressing(string filePath, string dirPath, int order = 1, Node** rootPtr = nullptr);

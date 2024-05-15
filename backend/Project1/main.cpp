@@ -11,10 +11,10 @@ using namespace std;
 
 
 int main(int argc, char** argv) {
-	bool debugMode = false;
+	bool debugMode = true;
 	if (debugMode) {
 		std::string folder = "C:/Users/zeyad/OneDrive/Desktop/test";
-		startCompressing(folder + "/hello_compressed.bin", folder);
+		startCompressing(folder + "/hello_compressed.bin", folder, 2);
 		// StartDecompressing("C:/Users/zeyad/OneDrive/Desktop/test/f_compressed_compressed.bin", "C:/Users/zeyad/OneDrive/Desktop/test/f_compressed_tree.json", "C:/Users/zeyad/OneDrive/Desktop/test");
 		return 0;
 	}
