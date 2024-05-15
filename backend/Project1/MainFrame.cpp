@@ -9,7 +9,7 @@ void MainFrame::onCompress(wxCommandEvent& event) {
 	Node* root = NULL;
 	string textPrev;
 
-	startCompressing(filePath, dirPath, 2, &root); // TODO TAKE THIS THE COMPRESSION ORDER (2) THROUGH GUI
+	startCompressing(filePath, dirPath, 5, &root); // TODO TAKE THIS THE COMPRESSION ORDER (5) THROUGH GUI
 
 	InfoFrame* infoFrame = new InfoFrame("Info", this, encoder, root, textPrev, true);
 	this->Show(false);
@@ -26,7 +26,7 @@ void MainFrame::onDecompress(wxCommandEvent& event) {
 	unordered_map<string, string> encoder;
 	string textPrev;
 
-	StartDecompressing(compressedFilePath, decoderPath, dirPath, &encoder, &textPrev);
+	StartDecompressing(compressedFilePath, decoderPath, dirPath);
 
 	InfoFrame* infoFrame = new InfoFrame("Info", this, encoder, nullptr, textPrev, false);
 	this->Show(false);

@@ -94,11 +94,20 @@ Node* jsonToNode(const json& j) {
 	return node;
 }
 
-Node* readTreeFromJsonFile(const std::string& filename) {
+Node** readTreeArrFromJsonFile(const std::string& filename, int* size) {
 	std::ifstream file(filename);
-	json j;
-	file >> j;
+	json jsonArr;
+	file >> jsonArr;
 	file.close();
 
-	return jsonToNode(j);
+	*size = jsonArr.size();
+	Node** treeArr = (Node**)malloc(*size * sizeof(Node));
+
+	int i = 0;
+	for (const auto& jsonObj : jsonArr) {
+		treeArr[i] = jsonToNode(jsonObj);
+		i++;
+	}
+
+	return treeArr;
 }

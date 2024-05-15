@@ -13,9 +13,9 @@ using namespace std;
 int main(int argc, char** argv) {
 	bool debugMode = true;
 	if (debugMode) {
-		std::string folder = "C:/Users/zeyad/OneDrive/Desktop/test";
-		startCompressing(folder + "/hello.txt", folder, 2);
-		// StartDecompressing("C:/Users/zeyad/OneDrive/Desktop/test/f_compressed_compressed.bin", "C:/Users/zeyad/OneDrive/Desktop/test/f_compressed_tree.json", "C:/Users/zeyad/OneDrive/Desktop/test");
+		std::string dirpath = "C:/Users/zeyad/OneDrive/Desktop/test";
+		//startCompressing(dirpath + "/hello.txt", dirpath, 2);
+		 StartDecompressing(dirpath + "/fibonacci_compressed.bin", dirpath + "/fibonacci.json", dirpath);
 		return 0;
 	}
 
