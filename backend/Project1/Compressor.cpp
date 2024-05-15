@@ -128,7 +128,7 @@ bool Compressor::decompressing(Node* root, string compressedFilePath, string out
 		for (int j = 7; j >= 0; --j) {
 			if (!rootOnly) nodeIt = (compressedData[compressedIndex] >> j) & 1 ? nodeIt->right : nodeIt->left;
 
-			if (nodeIt->letter) {
+			if (!nodeIt->left && !nodeIt->right) {
 				if (outIndex + 1 >= allocatedFileSize) {
 					CloseHandle(outFileMap);
 					UnmapViewOfFile(outData);
@@ -145,11 +145,11 @@ bool Compressor::decompressing(Node* root, string compressedFilePath, string out
 	}
 
 	// compressed index now standing at the before last bit
-	char validBits = compressedData[compressedIndex + 1];
+	unsigned char validBits = compressedData[compressedIndex + 1];
 
 	for (int j = 7; j >= 8 - validBits; j--) {
 		if (!rootOnly) nodeIt = (compressedData[compressedIndex] >> j) & 1 ? nodeIt->right : nodeIt->left;
-		if (nodeIt->letter) {
+		if (!nodeIt->left && !nodeIt->right) {
 			outData[++outIndex] = nodeIt->letter;
 			nodeIt = root;
 		}

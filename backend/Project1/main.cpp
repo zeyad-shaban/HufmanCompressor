@@ -11,7 +11,7 @@ using namespace std;
 
 
 int main(int argc, char** argv) {
-	bool debugMode = true;
+	bool debugMode = false;
 	if (debugMode) {
 		std::string dirpath = "C:/Users/zeyad/OneDrive/Desktop/test";
 		std::string filename = "small";
