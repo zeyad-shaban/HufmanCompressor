@@ -14,8 +14,9 @@ int main(int argc, char** argv) {
 	bool debugMode = true;
 	if (debugMode) {
 		std::string dirpath = "C:/Users/zeyad/OneDrive/Desktop/test";
-		//startCompressing(dirpath + "/hello.txt", dirpath, 2);
-		 StartDecompressing(dirpath + "/fibonacci_compressed.bin", dirpath + "/fibonacci.json", dirpath);
+		std::string filename = "small";
+		startCompressing(dirpath + "/" + filename + ".txt", dirpath, 2);
+		 StartDecompressing(dirpath + "/" + filename + "_compressed.bin", dirpath + "/" + filename + "_tree.json", dirpath);
 		return 0;
 	}
 
