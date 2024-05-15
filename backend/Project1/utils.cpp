@@ -71,10 +71,13 @@ json nodeToJson(Node* node) {
 	return j;
 }
 
-void writeTreeToJsonFile(Node* root, const std::string& filename) {
-	json j = nodeToJson(root);
+void writeTreeArrToJsonFile(Node* treeArr[], int treeSize, const std::string& filename) {
+	json jsonArr = json::array();
+
+	for (int i = 0; i < treeSize; ++i) jsonArr.push_back(nodeToJson(treeArr[i]));
+
 	std::ofstream file(filename);
-	file << j.dump(4);
+	file << jsonArr.dump(4);
 	file.close();
 }
 

@@ -66,9 +66,9 @@ int startCompressing(string filePath, string dirPath, int order, Node** rootPtr)
 	}
 
 
-	writeTreeToJsonFile(treeArr[0], dirPath + "/" + file_without_extension + "_tree.json");
+	writeTreeArrToJsonFile(treeArr, order, dirPath + "/" + file_without_extension + "_tree.json");
 
-	for (int i = 0; i < order; i++)
+	for (int i = 0; i < order; ++i)
 		delete treeArr[i];
 	free(treeArr);
 
