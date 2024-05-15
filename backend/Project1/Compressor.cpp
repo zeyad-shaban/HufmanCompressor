@@ -71,14 +71,16 @@ bool Compressor::compressing(Node* root, string filePath, string outPath) {
 
 
 	UnmapViewOfFile(inputData);
-	CloseHandle(inputFile);
 	CloseHandle(inputFileMap);
+	CloseHandle(inputFile);
 
 
 	UnmapViewOfFile(outData);
 	CloseHandle(outFileMap);
+
 	SetFilePointer(outFile, outIndex, NULL, FILE_BEGIN);
 	SetEndOfFile(outFile);
+
 	CloseHandle(outFile);
 
 	return true;

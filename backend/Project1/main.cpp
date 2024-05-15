@@ -14,7 +14,7 @@ int main(int argc, char** argv) {
 	bool debugMode = true;
 	if (debugMode) {
 		std::string folder = "C:/Users/zeyad/OneDrive/Desktop/test";
-		startCompressing(folder + "/hello_compressed.bin", folder, 2);
+		startCompressing(folder + "/hello.txt", folder, 2);
 		// StartDecompressing("C:/Users/zeyad/OneDrive/Desktop/test/f_compressed_compressed.bin", "C:/Users/zeyad/OneDrive/Desktop/test/f_compressed_tree.json", "C:/Users/zeyad/OneDrive/Desktop/test");
 		return 0;
 	}
