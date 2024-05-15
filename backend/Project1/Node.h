@@ -5,7 +5,7 @@
 
 class Node {
 public:
-    char letter;
+    unsigned char letter;
     int freq;
     Node* left = NULL;
     Node* right = NULL;

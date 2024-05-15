@@ -21,17 +21,6 @@ int startCompressing(string filePath, string dirPath, unordered_map<string, stri
 	else
 		std::cout << "FreqTable faild:can't open file\n";
 
-	FILE* freqTableFile;  bool errFreqTableFile = fopen_s(&freqTableFile, "./serverData/frequency_table.txt", "wb");
-	if (errFreqTableFile) return 0;
-
-	for (int i = 0; i < 256; ++i) {
-		if (freqTable[i] != 0) {
-			char ch = char(i);
-			fprintf(freqTableFile, "%c:%d ", char(i), freqTable[i]);
-		}
-	}
-	fclose(freqTableFile);
-
 
 	// Create min heap for Huffman tree
 	MinHeap* heap = new MinHeap(256);

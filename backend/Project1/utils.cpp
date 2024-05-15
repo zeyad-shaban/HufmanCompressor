@@ -23,12 +23,11 @@ bool genFreqTable(std::string filePath, int* freqTable) {
 	if (fileErr) return false;
 
 
-	char buffer[1000000];
+	unsigned char buffer[1000000];
 	int charsRead = 0;
 	while ((charsRead = fread(buffer, 1, 1000000, file)) > 0)
 		for (int i = 0; i < charsRead; i++)
-			if (buffer[i] >= 0 && buffer[i] <= 255)
-				freqTable[buffer[i]]++;
+			freqTable[buffer[i]]++;
 
 	fclose(file);
 	return true;
