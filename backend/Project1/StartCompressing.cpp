@@ -57,7 +57,7 @@ int startCompressing(string filePath, string dirPath, int order, Node** rootPtr)
 		std::cout << "->compressing using HuffmanTree...\n";
 
 		time(&start);
-		compressor.compressing(treeArr[treeArrI], filePath, tmpOut);
+		compressor.compressing(treeArr[treeArrI], tmpIn, tmpOut);
 		time(&end);
 		cout << "Done copmressing in " << end - start << "sec" << endl;
 
