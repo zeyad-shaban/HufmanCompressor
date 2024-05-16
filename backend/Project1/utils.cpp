@@ -19,7 +19,7 @@ Node* tregen(MinHeap* heap) {
 }
 
 bool genFreqTable(std::string filePath, int* freqTable) {
-	FILE* file; bool fileErr = fopen_s(&file, filePath.c_str(), "r");
+	FILE* file; bool fileErr = fopen_s(&file, filePath.c_str(), "rb");
 	if (fileErr) return false;
 
 
