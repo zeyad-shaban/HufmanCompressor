@@ -41,24 +41,6 @@ bool saveStringToFile(std::string path, std::string str) {
 	return true;
 }
 
-bool saveMapToFile(std::string filePath, std::unordered_map<std::string, std::string> map) {
-	std::ofstream file(filePath);
-	if (!file) return false;
-	file << "{";
-
-	for (auto& pair : map) {
-		file << "\"" + pair.first + "\":\"";
-		if (pair.second == "\n") file << "\\n";
-		else file << pair.second;
-		file << "\",";
-	}
-
-	file.seekp(-1, std::ios::end);
-
-	file << "}";
-	return true;
-}
-
 json nodeToJson(Node* node) {
 	if (node == nullptr)return nullptr;
 
@@ -77,7 +59,7 @@ void writeTreeArrToJsonFile(Node* treeArr[], int treeSize, const std::string& fi
 	for (int i = 0; i < treeSize; ++i) jsonArr.push_back(nodeToJson(treeArr[i]));
 
 	std::ofstream file(filename);
-	file << jsonArr.dump(4);
+	file << jsonArr.dump();
 	file.close();
 }
 

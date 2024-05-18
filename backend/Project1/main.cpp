@@ -14,11 +14,11 @@ int main(int argc, char** argv) {
 	bool devMode = true;
 	if (devMode) {
 		std::string dirpath = "C:/Users/zeyad/OneDrive/Desktop/test"; // please do not delete it instead create a new variable to override it if needed 
-		std::string filename = "fibonacci";
-		int compressionOrder = 10;
+		std::string filename = "small";
+		int compressionOrder = 100;
 
 		startCompressing(dirpath + "/" + filename + ".txt", dirpath, compressionOrder);
-		StartDecompressing(dirpath + "/" + filename + "_compressed.bin", dirpath + "/" + filename + "_tree.json", dirpath);
+		StartDecompressing(dirpath + "/" + filename + ".bin", dirpath + "/" + filename + "_tree.json", dirpath);
 		return 0;
 	}
 

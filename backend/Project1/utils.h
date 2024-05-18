@@ -12,6 +12,5 @@ using json = nlohmann::json;
 Node* tregen(MinHeap* heap);
 bool genFreqTable(std::string filePath, int* freqTable);
 bool saveStringToFile(std::string path, std::string str);
-bool saveMapToFile(std::string filePath, std::unordered_map<std::string, std::string> map);
 void writeTreeArrToJsonFile(Node* treeArr[], int treeSize, const std::string& filename);
 Node** readTreeArrFromJsonFile(const std::string& filename, int* size);

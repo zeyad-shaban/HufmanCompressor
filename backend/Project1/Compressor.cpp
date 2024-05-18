@@ -16,7 +16,7 @@ void generateAsciiTable(Node* root, string* charsTable, string code = "") {
 }
 
 
-bool Compressor::compressing(Node* root, string filePath, string outPath) {
+long long Compressor::compressing(Node* root, string filePath, string outPath) {
 	HANDLE inputFile = CreateFileA(filePath.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 	HANDLE inputFileMap = CreateFileMappingA(inputFile, NULL, PAGE_READONLY, 0, 0, NULL);
 	char* inputData = (char*)MapViewOfFile(inputFileMap, FILE_MAP_READ, 0, 0, 0);
@@ -27,7 +27,7 @@ bool Compressor::compressing(Node* root, string filePath, string outPath) {
 		UnmapViewOfFile(inputData);
 		CloseHandle(inputFile);
 		CloseHandle(inputFileMap);
-		return false;
+		return 0;
 	}
 
 	HANDLE outFile = CreateFileA(outPath.c_str(), GENERIC_READ | GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
@@ -35,7 +35,7 @@ bool Compressor::compressing(Node* root, string filePath, string outPath) {
 	if (!outFileMap) {
 		DWORD dwError = GetLastError();
 		std::cout << "Failed to create file mapping. Error: " << dwError << "\n";
-		return false;
+		return 0;
 	}
 	char* outData = (char*)MapViewOfFile(outFileMap, FILE_MAP_WRITE, 0, 0, inFileSize.QuadPart);
 	unsigned long long outIndex = 0;
@@ -83,7 +83,7 @@ bool Compressor::compressing(Node* root, string filePath, string outPath) {
 
 	CloseHandle(outFile);
 
-	return true;
+	return inFileSize.QuadPart;
 }
 
 

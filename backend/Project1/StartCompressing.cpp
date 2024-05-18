@@ -3,14 +3,14 @@
 #include <thread>
 #include <string>
 
-int startCompressing(string filePath, string dirPath, int order, Node** rootPtr) {
+int startCompressing(string filePath, string dirPath, int maxOrder, Node** rootPtr) {
 	std::string TMP_KEY = "tmp";
 
 	std::string base_filename = filePath.substr(filePath.find_last_of("/\\") + 1);
 	std::string::size_type const p(base_filename.find_last_of('.'));
 	std::string file_without_extension = base_filename.substr(0, p);
 
-	Node** treeArr = (Node**)malloc(sizeof(Node) * order);
+	Node** treeArr = (Node**)malloc(sizeof(Node) * maxOrder);
 	int treeArrI = 0;
 
 	if (!treeArr) {
@@ -20,11 +20,14 @@ int startCompressing(string filePath, string dirPath, int order, Node** rootPtr)
 
 
 	int tmpTurn = 1;
-	for (int i = 0; i < order; i++) {
-		std::string tmpIn = i == 0 ? filePath : dirPath + "/" + TMP_KEY + to_string(tmpTurn);
+	long long minSize = 9223372036854775807;
+	long long thisSize;
+	int order = 0;
+	for (; order < maxOrder; order++) {
+		std::string tmpIn = order == 0 ? filePath : dirPath + "/" + TMP_KEY + to_string(tmpTurn);
 		tmpTurn = tmpTurn == 1 ? 0 : 1;
 
-		std::string tmpOut = dirPath + "/" + (i == order - 1 ? file_without_extension + "_compressed.bin" : TMP_KEY + to_string(tmpTurn));
+		std::string tmpOut = dirPath + "/" + (order == maxOrder - 1 ? file_without_extension + ".bin" : TMP_KEY + to_string(tmpTurn));
 
 		// Generate frequency table
 		int freqTable[256] = { 0 };
@@ -58,14 +61,21 @@ int startCompressing(string filePath, string dirPath, int order, Node** rootPtr)
 		std::cout << "->compressing using HuffmanTree...\n";
 
 		time(&start);
-		compressor.compressing(treeArr[treeArrI], tmpIn, tmpOut);
+		thisSize = compressor.compressing(treeArr[treeArrI], tmpIn, tmpOut);
 		time(&end);
 		cout << "Done copmressing in " << end - start << "sec" << endl;
 
 		treeArr[treeArrI] = treeArr[treeArrI];
 		treeArrI++;
-	}
 
+
+		if (minSize - thisSize > 1000 && thisSize > 1000) minSize = thisSize;
+		else {
+			++order;
+			rename(tmpOut.c_str(), (dirPath + "/" + file_without_extension + ".bin").c_str());
+			break;
+		}
+	}
 
 	writeTreeArrToJsonFile(treeArr, order, dirPath + "/" + file_without_extension + "_tree.json");
 

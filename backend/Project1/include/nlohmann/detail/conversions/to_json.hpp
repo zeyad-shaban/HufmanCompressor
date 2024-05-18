@@ -426,7 +426,7 @@ struct to_json_fn
     auto operator()(BasicJsonType& j, T&& val) const noexcept(noexcept(to_json(j, std::forward<T>(val))))
     -> decltype(to_json(j, std::forward<T>(val)), void())
     {
-        return to_json(j, std::forward<T>(val));
+         return to_json(j, std::forward<T>(val));
     }
 };
 }  // namespace detail
