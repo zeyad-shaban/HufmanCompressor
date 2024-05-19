@@ -9,7 +9,7 @@ void MainFrame::onCompress(wxCommandEvent& event) {
 	Node* root = NULL;
 	string textPrev;
 
-	startCompressing(filePath, dirPath, 100, &root); // TODO TAKE THIS THE COMPRESSION ORDER (2) THROUGH GUI
+	startCompressing(filePath, dirPath, 1, &root); // TODO TAKE THIS THE COMPRESSION ORDER (2) THROUGH GUI
 
 	InfoFrame* infoFrame = new InfoFrame("Info", this, encoder, root, textPrev, true);
 	this->Show(false);
