@@ -12,11 +12,14 @@ private:
 	wxButton* startBtn;
 	wxTextCtrl* filePathCtrl;
 	wxTextCtrl* dirPathCtrl;
+	wxTextCtrl*  orderInputCtrl;
+	int order = 1;
 
 	wxTextCtrl* decoderPathCtrl;
 	wxButton* decoderBrowseBtn;
 	wxStaticText* decoderLabel;
 	wxStaticText* fileLabel;
+	wxStaticText* orderLabel;
 
 	void onToggleBtn(wxCommandEvent& event);
 

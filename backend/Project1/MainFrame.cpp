@@ -9,7 +9,7 @@ void MainFrame::onCompress(wxCommandEvent& event) {
 	Node* root = NULL;
 	string textPrev;
 
-	startCompressing(filePath, dirPath, 1, &root); // TODO TAKE THIS THE COMPRESSION ORDER (2) THROUGH GUI
+	startCompressing(filePath, dirPath, 2, &root); // TODO TAKE THIS THE COMPRESSION ORDER (2) THROUGH GUI
 
 	InfoFrame* infoFrame = new InfoFrame("Info", this, encoder, root, textPrev, true);
 	this->Show(false);
@@ -52,6 +52,8 @@ void MainFrame::onBrowseDecoderFile(wxCommandEvent& event) {
 	if (openFileDialog.ShowModal() == wxID_OK)
 		decoderPathCtrl->SetValue(openFileDialog.GetPath());
 }
+
+
 void MainFrame::onToggleBtn(wxCommandEvent& event) {
 	wxToggleButton* toggleButton = (wxToggleButton*)event.GetEventObject();
 
@@ -135,6 +137,19 @@ MainFrame::MainFrame(const wxString& title) : wxFrame(nullptr, wxID_ANY, title) 
 
 	Bind(wxEVT_BUTTON, &MainFrame::onBrowseCompressFile, this, fileBrowseBtn->GetId());
 
+	
+	// ======================== INTEGER INPUT AREA ===========================
+
+	orderLabel = new wxStaticText(this, wxID_ANY, "Max compression order");
+	orderLabel->SetFont(labelFont);
+	mainSizer->Add(orderLabel, 0, wxALL | wxLEFT, 5);
+
+	orderInputCtrl = new wxTextCtrl(this, wxID_ANY);
+	orderInputCtrl->SetMinSize(wxSize(-1, btnsHeight));
+
+	wxBoxSizer* hboxOrder = new wxBoxSizer(wxHORIZONTAL);
+	hboxOrder->Add(orderInputCtrl, 1, wxALL | wxEXPAND, 5);
+	mainSizer->Add(hboxOrder, 0, wxEXPAND);
 	// ========================  DECODER FILE AREA  ===========================
 
 	decoderLabel = new wxStaticText(this, wxID_ANY, "Tree File");

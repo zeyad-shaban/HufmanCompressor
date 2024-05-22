@@ -11,7 +11,7 @@ using namespace std;
 
 
 int main(int argc, char** argv) {
-	bool devMode = true;
+	bool devMode = false;
 	if (devMode) {
 		std::string dirpath = "C:/Users/zeyad/OneDrive/Desktop/test/scripts"; // please do not delete it instead create a new variable to override it if needed 
 		std::string filename = "10gbInput";
