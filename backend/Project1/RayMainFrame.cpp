@@ -64,10 +64,12 @@ int RayMainFrame() {
 		}
 
 		if (GuiButton(Rectangle{ winWidth / 2 - 150, winHeight - 60, 300, 40 }, "Start")) {
-			if (compressMode)
+			if (compressMode) {
 				startCompressing(textFilePath, dirPath, maxOrder <= 0 ? 1 : maxOrder);
-			else
+			}
+			else {
 				StartDecompressing(textFilePath, treeFilePath, dirPath);
+			}
 		}
 
 		EndDrawing();
