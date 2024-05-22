@@ -149,22 +149,15 @@
   <ItemGroup>
     <ClCompile Include="Compressor.cpp" />
     <ClCompile Include="GamesFrame.cpp" />
-    <ClCompile Include="InfoFrame.cpp" />
-    <ClCompile Include="LocalApp.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="MainFrame.cpp" />
-    <ClCompile Include="MainFrame.h" />
     <ClCompile Include="MinHeap.cpp" />
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="RayMainFrame.cpp" />
     <ClCompile Include="StartCompressing.cpp" />
     <ClCompile Include="StartDecmopressing.cpp" />
-    <ClCompile Include="TreeControl.cpp" />
     <ClCompile Include="utils.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GamesFrame.h" />
-    <ClInclude Include="InfoFrame.h" />
     <ClInclude Include="RayMainFrame.h" />
     <ClInclude Include="serverJsonMaker.h" />
     <ClInclude Include="StartServer.h" />
@@ -218,10 +211,8 @@
     <ClInclude Include="include\nlohmann\ordered_map.hpp" />
     <ClInclude Include="include\nlohmann\thirdparty\hedley\hedley.hpp" />
     <ClInclude Include="include\nlohmann\thirdparty\hedley\hedley_undef.hpp" />
-    <ClInclude Include="LocalApp.h" />
     <ClInclude Include="MinHeap.h" />
     <ClInclude Include="Node.h" />
-    <ClInclude Include="TreeControl.h" />
     <ClInclude Include="utils.h" />
   </ItemGroup>
   <ItemGroup>
