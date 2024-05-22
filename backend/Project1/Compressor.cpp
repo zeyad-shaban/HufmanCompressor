@@ -18,7 +18,7 @@ void generateAsciiTable(Node* root, std::string* charsTable, std::string code = 
 }
 
 
-long long Compressor::compressing(Node* root, std::string filePath, std::string outPath) {
+long long Compressor::compressing(Node* root, std::string filePath, std::string outPath, float* progress) {
 	HANDLE inputFile = CreateFileA(filePath.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 	HANDLE inputFileMap = CreateFileMappingA(inputFile, NULL, PAGE_READONLY, 0, 0, NULL);
 	char* inputData = (char*)MapViewOfFile(inputFileMap, FILE_MAP_READ, 0, 0, 0);
@@ -50,7 +50,9 @@ long long Compressor::compressing(Node* root, std::string filePath, std::string 
 	unsigned char bitBuffer = 0;
 	int currBit = 0;
 
-	for (LONGLONG i = 0; i < inFileSize.QuadPart; i++) {
+	double dblFileSize = (double)inFileSize.QuadPart;
+	for (long long i = 0; i < dblFileSize; i++) {
+		*progress = (i / dblFileSize);
 		for (char bit : charsTable[(unsigned char)inputData[i]]) {
 			bitBuffer = (bitBuffer << 1) | (bit - '0');
 			currBit++;

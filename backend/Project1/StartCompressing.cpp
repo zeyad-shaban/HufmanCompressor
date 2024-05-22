@@ -1,9 +1,9 @@
 #include "StartCompressing.h"
 #include "utils.h"
- #include "Compressor.h"
+#include "Compressor.h"
 #include <string>
 
-int startCompressing(std::string filePath, std::string dirPath, int maxOrder, Node** rootPtr) {
+void startCompressing(std::string filePath, std::string dirPath, int maxOrder, bool* done, int* state, float* progress) {
 	std::string TMP_KEY = "tmp";
 
 	std::string base_filename = filePath.substr(filePath.find_last_of("/\\") + 1);
@@ -15,7 +15,9 @@ int startCompressing(std::string filePath, std::string dirPath, int maxOrder, No
 
 	if (!treeArr) {
 		std::cout << "Failed to allocate memroy for your order, please try smaller number\n";
-		return -1;
+		*done = true;
+		*state = -1;
+		return;
 	}
 
 
@@ -61,7 +63,7 @@ int startCompressing(std::string filePath, std::string dirPath, int maxOrder, No
 		std::cout << "->compressing using HuffmanTree...\n";
 
 		time(&start);
-		thisSize = compressor.compressing(treeArr[treeArrI], tmpIn, tmpOut);
+		thisSize = compressor.compressing(treeArr[treeArrI], tmpIn, tmpOut, progress);
 		time(&end);
 		std::cout << "Done copmressing in " << end - start << "sec" << std::endl;
 
@@ -86,5 +88,7 @@ int startCompressing(std::string filePath, std::string dirPath, int maxOrder, No
 	remove((dirPath + "/" + TMP_KEY + "0").c_str());
 	remove((dirPath + "/" + TMP_KEY + "1").c_str());
 
-	return 0;
+	*state = 0;
+	*done = true;
+	return;
 }

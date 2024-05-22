@@ -3,4 +3,4 @@
 #include "Node.h"
 
 
-int startCompressing(std::string filePath, std::string dirPath, int maxOrder = 1, Node** rootPtr = nullptr);
+void startCompressing(std::string filePath, std::string dirPath, int maxOrder, bool* done, int* state, float* progress);
