@@ -15,9 +15,11 @@ int RayMainFrame() {
 	InitWindow(winWidth, winHeight, "3A-Z");
 
 
-	bool showMessageBox = false;
+	Texture2D animVsWither = LoadTexture("./assets/AnimationVsWither.png");
+	Rectangle gamePanel = { winWidth - 400, 0, 400, winHeight };
 
 	// input start
+	bool showGames = false;
 	bool compressMode = true;
 	int maxOrder = 0;
 
@@ -67,12 +69,23 @@ int RayMainFrame() {
 			strcpy(dirPath, "C:/Users/zeyad/OneDrive/Desktop/test"); // TODO OPEN DIALOG HERE INSTEAD
 		}
 
+		if (showGames) {
+			GuiPanel(gamePanel, "Play something while waiting");
+
+			if (GuiButton(Rectangle{ winWidth - 380, 30, 150, 150 }, "")) {
+				runExecutable(".\\games\\AnimationVsWither\\main.exe");
+			}
+			DrawTextureRec(animVsWither, Rectangle{ 0,0, 150, 150 }, Vector2{ winWidth - 380, 30 }, WHITE);
+
+
+		}
+		GuiToggle(Rectangle{ winWidth - 40, 0, 40, 40 }, showGames ? "#128#" : "#152#", &showGames);
+
+
 		if (GuiButton(Rectangle{ winWidth / 2 - 150, winHeight - 60, 300, 40 }, "Start")) {
 			if (compressMode) {
 				// thread this fucker first
 				startCompressing(textFilePath, dirPath, maxOrder <= 0 ? 1 : maxOrder);
-
-				runExecutable(".\\games\\AnimationVsWither\\main.exe");
 			}
 			else {
 				StartDecompressing(textFilePath, treeFilePath, dirPath);
