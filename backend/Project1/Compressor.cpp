@@ -1,11 +1,13 @@
 #include "Compressor.h"
 #include <Windows.h>
+#include "utils.h"
+#include "Node.h"
 
 void closeMMap() {
 	// todo to fircken make the memory map look nicer
 }
 
-void generateAsciiTable(Node* root, string* charsTable, string code = "") {
+void generateAsciiTable(Node* root, std::string* charsTable, std::string code = "") {
 	if (!root->left && !root->right) {
 		charsTable[root->letter] = code == "" ? "0" : code;
 		return;
@@ -16,7 +18,7 @@ void generateAsciiTable(Node* root, string* charsTable, string code = "") {
 }
 
 
-long long Compressor::compressing(Node* root, string filePath, string outPath) {
+long long Compressor::compressing(Node* root, std::string filePath, std::string outPath) {
 	HANDLE inputFile = CreateFileA(filePath.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 	HANDLE inputFileMap = CreateFileMappingA(inputFile, NULL, PAGE_READONLY, 0, 0, NULL);
 	char* inputData = (char*)MapViewOfFile(inputFileMap, FILE_MAP_READ, 0, 0, 0);
@@ -42,7 +44,7 @@ long long Compressor::compressing(Node* root, string filePath, string outPath) {
 
 	// TODO HANDLE FAILING FOR EITHER ORIGNAL OR OUT FILE
 
-	string charsTable[256];
+	std::string charsTable[256];
 	generateAsciiTable(root, charsTable);
 
 	unsigned char bitBuffer = 0;
@@ -87,7 +89,7 @@ long long Compressor::compressing(Node* root, string filePath, string outPath) {
 }
 
 
-bool Compressor::decompressing(Node* root, string compressedFilePath, string outputFilePath, int prevSize) {
+bool Compressor::decompressing(Node* root, std::string compressedFilePath, std::string outputFilePath, int prevSize) {
 	HANDLE compressedFile = CreateFileA(compressedFilePath.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 	HANDLE compressedFileMap = CreateFileMappingA(compressedFile, NULL, PAGE_READONLY, 0, 0, NULL);
 	char* compressedData = (char*)MapViewOfFile(compressedFileMap, FILE_MAP_READ, 0, 0, 0);

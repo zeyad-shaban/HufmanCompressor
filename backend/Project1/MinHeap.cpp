@@ -1,5 +1,7 @@
 #include "MinHeap.h"
 
+#include <sstream>
+
 MinHeap::MinHeap(int size) {
     this->size = size;
     arr = new Node[size];

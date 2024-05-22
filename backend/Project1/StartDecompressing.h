@@ -1,5 +1,4 @@
 #pragma once
-#include "Compressor.h"
-#include "utils.h"
+#include <iostream>
 
-bool StartDecompressing(string compressedFilePath, string treePath, string dirPath);
+bool StartDecompressing(std::string compressedFilePath, std::string treePath, std::string dirPath);

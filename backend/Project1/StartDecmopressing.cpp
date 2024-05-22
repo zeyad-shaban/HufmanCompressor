@@ -1,7 +1,9 @@
 #include "StartDecompressing.h"
+#include <string>
+#include "Compressor.h"
+#include "utils.h"
 
-
-bool StartDecompressing(string compressedFilePath, string treePath, string dirPath) {
+bool StartDecompressing(std::string compressedFilePath, std::string treePath, std::string dirPath) {
 	std::string TMP_KEY = "tmp";
 
 	std::string base_filename = compressedFilePath.substr(compressedFilePath.find_last_of("/\\") + 1);
@@ -15,10 +17,10 @@ bool StartDecompressing(string compressedFilePath, string treePath, string dirPa
 
 	int tmpTurn = 1;
 	for (int i = size - 1; i >= 0; --i) {
-		std::string tmpIn = i == size - 1 ? compressedFilePath : dirPath + "/" + TMP_KEY + to_string(tmpTurn);
+		std::string tmpIn = i == size - 1 ? compressedFilePath : dirPath + "/" + TMP_KEY + std::to_string(tmpTurn);
 		tmpTurn = tmpTurn == 1 ? 0 : 1;
 
-		std::string tmpOut = dirPath + "/" + (i == 0 ? file_without_extension + "_decompressed.txt" : TMP_KEY + to_string(tmpTurn));
+		std::string tmpOut = dirPath + "/" + (i == 0 ? file_without_extension + "_decompressed.txt" : TMP_KEY + std::to_string(tmpTurn));
 
 		compressor->decompressing(treeArr[i], tmpIn, tmpOut);
 	}

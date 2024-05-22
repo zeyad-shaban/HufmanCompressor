@@ -1,7 +1,7 @@
 #pragma once
+
+#include <iostream>
 #include "Node.h"
-#include <sstream>
-#include <string>
 
 class MinHeap {
 public:

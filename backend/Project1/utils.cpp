@@ -1,6 +1,12 @@
+#include <iostream>
+#include <nlohmann/json.hpp>
 #include "utils.h"
 #include "Windows.h"
 #include "direct.h"
+#include <fstream>
+
+
+ using json = nlohmann::json;
 
 
 Node* tregen(MinHeap* heap) {

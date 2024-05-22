@@ -1,5 +1,6 @@
 #include "Node.h"
 
+
 Node::Node(char letter, int freq, Node* left, Node* right) {
     this->letter = letter;
     this->freq = freq;

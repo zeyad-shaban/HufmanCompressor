@@ -1,14 +1,6 @@
 #pragma once
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <vector>
-#include <map>
-#include <queue>
-#include <algorithm>
-#include "utils.h"
-#include "Compressor.h"
-#include <thread>
-#include <future>
+ #include <iostream>
+#include "Node.h"
 
-int startCompressing(string filePath, string dirPath, int maxOrder = 1, Node** rootPtr = nullptr);
+
+int startCompressing(std::string filePath, std::string dirPath, int maxOrder = 1, Node** rootPtr = nullptr);

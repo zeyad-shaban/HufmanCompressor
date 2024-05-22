@@ -89,7 +89,6 @@ int RayMainFrame() {
 
 		if (GuiButton(Rectangle{ winWidth / 2 - 150, winHeight - 60, 300, 40 }, "Start")) {
 			if (compressMode) {
-				// thread this fucker first
 				startCompressing(textFilePath, dirPath, maxOrder <= 0 ? 1 : maxOrder);
 			}
 			else {

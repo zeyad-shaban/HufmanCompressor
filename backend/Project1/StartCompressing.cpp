@@ -1,9 +1,9 @@
 #include "StartCompressing.h"
-#include <chrono>
-#include <thread>
+#include "utils.h"
+ #include "Compressor.h"
 #include <string>
 
-int startCompressing(string filePath, string dirPath, int maxOrder, Node** rootPtr) {
+int startCompressing(std::string filePath, std::string dirPath, int maxOrder, Node** rootPtr) {
 	std::string TMP_KEY = "tmp";
 
 	std::string base_filename = filePath.substr(filePath.find_last_of("/\\") + 1);
@@ -24,10 +24,10 @@ int startCompressing(string filePath, string dirPath, int maxOrder, Node** rootP
 	long long thisSize;
 	int order = 0;
 	for (; order < maxOrder; order++) {
-		std::string tmpIn = order == 0 ? filePath : dirPath + "/" + TMP_KEY + to_string(tmpTurn);
+		std::string tmpIn = order == 0 ? filePath : dirPath + "/" + TMP_KEY + std::to_string(tmpTurn);
 		tmpTurn = tmpTurn == 1 ? 0 : 1;
 
-		std::string tmpOut = dirPath + "/" + (order == maxOrder - 1 ? file_without_extension + ".bin" : TMP_KEY + to_string(tmpTurn));
+		std::string tmpOut = dirPath + "/" + (order == maxOrder - 1 ? file_without_extension + ".bin" : TMP_KEY + std::to_string(tmpTurn));
 
 		// Generate frequency table
 		int freqTable[256] = { 0 };
@@ -36,7 +36,7 @@ int startCompressing(string filePath, string dirPath, int maxOrder, Node** rootP
 		time(&start);
 		if (genFreqTable(tmpIn, freqTable)) {
 			time(&end);
-			std::cout << "FreqTable Generated In: " << end - start << "sec" << endl;
+			std::cout << "FreqTable Generated In: " << end - start << "sec" << std::endl;
 		}
 		else
 			std::cout << "FreqTable faild:can't open file\n";
@@ -56,14 +56,14 @@ int startCompressing(string filePath, string dirPath, int maxOrder, Node** rootP
 
 
 		// Compress the file
-		Compressor compressor = Compressor(); // FUCK THIS WHY IS IT EVEN IN A CLASS JUST PUT IT IN A FUCKEN VOID FUNCTION LIEK ALL FUCKEN NORMAL PEOPLE DO
+		Compressor compressor = Compressor(); // WHY IS IT EVEN IN A CLASS JUST PUT IT IN A VOID FUNCTION LIEK ALL NORMAL PEOPLE DO
 		bool validPath = true;
 		std::cout << "->compressing using HuffmanTree...\n";
 
 		time(&start);
 		thisSize = compressor.compressing(treeArr[treeArrI], tmpIn, tmpOut);
 		time(&end);
-		cout << "Done copmressing in " << end - start << "sec" << endl;
+		std::cout << "Done copmressing in " << end - start << "sec" << std::endl;
 
 		treeArr[treeArrI] = treeArr[treeArrI];
 		treeArrI++;
