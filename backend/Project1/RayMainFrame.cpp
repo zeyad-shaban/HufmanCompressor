@@ -15,7 +15,8 @@ int RayMainFrame() {
 	InitWindow(winWidth, winHeight, "3A-Z");
 
 
-	Texture2D animVsWither = LoadTexture("./assets/AnimationVsWither.png");
+	Texture2D animVsWitherImg = LoadTexture("./assets/AnimationVsWither.png");
+	Texture2D geoSmashImg = LoadTexture("./assets/GeoSmash.png");
 	Rectangle gamePanel = { winWidth - 400, 0, 400, winHeight };
 
 	// input start
@@ -72,11 +73,15 @@ int RayMainFrame() {
 		if (showGames) {
 			GuiPanel(gamePanel, "Play something while waiting");
 
-			if (GuiButton(Rectangle{ winWidth - 380, 30, 150, 150 }, "")) {
+			if (GuiButton(Rectangle{ winWidth - 395, 40, 190, 190 }, "")) {
 				runExecutable(".\\games\\AnimationVsWither\\main.exe");
 			}
-			DrawTextureRec(animVsWither, Rectangle{ 0,0, 150, 150 }, Vector2{ winWidth - 380, 30 }, WHITE);
+			DrawTextureRec(animVsWitherImg, Rectangle{ 0,0, 190, 190 }, Vector2{ winWidth - 395, 40 }, WHITE);
 
+			if (GuiButton(Rectangle{ winWidth - 200, 40, 200, 200 }, "")) {
+				runExecutable(".\\games\\GeoSmash\\main.exe");
+			}
+			DrawTextureRec(geoSmashImg, Rectangle{ 0,0, 200, 200 }, Vector2{ winWidth - 200, 40 }, WHITE);
 
 		}
 		GuiToggle(Rectangle{ winWidth - 40, 0, 40, 40 }, showGames ? "#128#" : "#152#", &showGames);
