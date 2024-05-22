@@ -1,38 +1,43 @@
 #define _CRT_SECURE_NO_WARNINGS
 
 #include <iostream>
-#include "utils.h"
-#include "LocalApp.h"
-#include "StartServer.h"
+//#include "utils.h"
+//#include "LocalApp.h"
+//#include "StartServer.h"
+#include "RayMainFrame.h"
 
-using json = nlohmann::json;
+//using json = nlohmann::json;
 
 using namespace std;
 
 
 int main(int argc, char** argv) {
-	bool devMode = false;
-	if (devMode) {
-		std::string dirpath = "C:/Users/zeyad/OneDrive/Desktop/test/scripts"; // please do not delete it instead create a new variable to override it if needed 
-		std::string filename = "10gbInput";
-		int compressionOrder = 100;
+	//bool devMode = false;
+	//if (devMode) {
+	//	std::string dirpath = "C:/Users/zeyad/OneDrive/Desktop/test/scripts"; // please do not delete it instead create a new variable to override it if needed 
+	//	std::string filename = "10gbInput";
+	//	int compressionOrder = 100;
 
-		startCompressing(dirpath + "/" + filename + ".txt", dirpath, compressionOrder);
-		StartDecompressing(dirpath + "/" + filename + ".bin", dirpath + "/" + filename + "_tree.json", dirpath);
-		return 0;
-	}
+	//	startCompressing(dirpath + "/" + filename + ".txt", dirpath, compressionOrder);
+	//	StartDecompressing(dirpath + "/" + filename + ".bin", dirpath + "/" + filename + "_tree.json", dirpath);
+	//	return 0;
+	//}
 
-	std::string userInput2;
+	//std::string userInput;
 
-	std::cout << "would you like to use this program \n [1]as a server (Not recommended for larger files) \n [2]locally (looks ugly..) \n type your answer (1 or 2): ";
-	std::cin >> userInput2;
+	//std::cout << "would you like to use this program \n [1]as a server (Not recommended for larger files) \n [2]\n Choice: ";
+	//// std::cin >> userInput2;
+	//userInput = "3";
 
-	if (userInput2 == "1")
-		StartServer();
-	else if (userInput2 == "2")
-		wxEntry(argc, argv);
-	else
-		std::cout << "Invalid input";
+	//if (userInput == "1")
+	//	StartServer();
+	//else if (userInput == "2") {
+	//	wxEntry(argc, argv);
+	//}
+	//else if (userInput == "3")
+		RayMainFrame();
+	//else
+		//std::cout << "Invalid input";
 }
 
 

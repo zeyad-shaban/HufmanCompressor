@@ -34,6 +34,12 @@
     <Filter Include="Source Files\BackendServer">
       <UniqueIdentifier>{612d5b7b-0cb5-4681-bfe4-111f032c7929}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\RayFrames">
+      <UniqueIdentifier>{2cdbb8b2-d3dd-4caf-88fd-2210c801e03b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\RayFrames">
+      <UniqueIdentifier>{46b76862-50e8-4c10-86b6-a4b600b6e119}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -71,6 +77,9 @@
     </ClCompile>
     <ClCompile Include="StartDecmopressing.cpp">
       <Filter>Source Files\MainLogic</Filter>
+    </ClCompile>
+    <ClCompile Include="RayMainFrame.cpp">
+      <Filter>Source Files\RayFrames</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -247,6 +256,9 @@
     </ClInclude>
     <ClInclude Include="serverJsonMaker.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RayMainFrame.h">
+      <Filter>Header Files\RayFrames</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
