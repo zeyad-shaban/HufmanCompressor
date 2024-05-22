@@ -11,4 +11,4 @@
 #include <thread>
 #include <future>
 
-int startCompressing(string filePath, string dirPath, int order = 1, Node** rootPtr = nullptr);
+int startCompressing(string filePath, string dirPath, int maxOrder = 1, Node** rootPtr = nullptr);

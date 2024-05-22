@@ -78,6 +78,9 @@
     <ClCompile Include="StartDecmopressing.cpp">
       <Filter>Source Files\MainLogic</Filter>
     </ClCompile>
+    <ClCompile Include="RayMainFrame.cpp">
+      <Filter>Source Files\RayFrames</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="utils.h">
