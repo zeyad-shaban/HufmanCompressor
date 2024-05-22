@@ -81,6 +81,9 @@
     <ClCompile Include="RayMainFrame.cpp">
       <Filter>Source Files\RayFrames</Filter>
     </ClCompile>
+    <ClCompile Include="GamesFrame.cpp">
+      <Filter>Source Files\RayFrames</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="utils.h">
@@ -258,6 +261,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RayMainFrame.h">
+      <Filter>Header Files\RayFrames</Filter>
+    </ClInclude>
+    <ClInclude Include="GamesFrame.h">
       <Filter>Header Files\RayFrames</Filter>
     </ClInclude>
   </ItemGroup>

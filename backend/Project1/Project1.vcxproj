@@ -148,6 +148,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Compressor.cpp" />
+    <ClCompile Include="GamesFrame.cpp" />
     <ClCompile Include="InfoFrame.cpp" />
     <ClCompile Include="LocalApp.cpp" />
     <ClCompile Include="main.cpp" />
@@ -162,6 +163,7 @@
     <ClCompile Include="utils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GamesFrame.h" />
     <ClInclude Include="InfoFrame.h" />
     <ClInclude Include="RayMainFrame.h" />
     <ClInclude Include="serverJsonMaker.h" />

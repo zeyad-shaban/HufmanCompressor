@@ -1,4 +1,9 @@
 #include "RayMainFrame.h"
+#include <direct.h>
+#include "raylib.h"
+#include "StartCompressing.h"
+#include "StartDecompressing.h"
+#include "utils.h"
 
 #define RAYGUI_IMPLEMENTATION
 #include "raygui.h"
@@ -35,8 +40,7 @@ int RayMainFrame() {
 		GuiLabel(Rectangle{ 20, 60, winWidth,100 }, compressMode ? "#18# File to Compress" : "#200# File to Decompress");
 		if (GuiTextBox(Rectangle{ 50, 160, winWidth * 3 / 4, 40 }, textFilePath, sizeof(textFilePath), false)
 			|| GuiButton(Rectangle{ (winWidth * 3 / 4) + 50, 160, 40, 40 }, "#5#")) {
-			//strcpy(textFilePath, "C:/Users/zeyad/OneDrive/Desktop/test/test.txt"); // TODO OPEN DIALOG HERE INSTEAD
-			strcpy(textFilePath, "C:/Users/zeyad/OneDrive/Desktop/test/test.bin"); // TODO OPEN DIALOG HERE INSTEAD
+			strcpy(textFilePath, "C:/Users/zeyad/OneDrive/Desktop/test/test.txt"); // TODO OPEN DIALOG HERE INSTEAD
 		}
 
 		if (compressMode) {
@@ -65,7 +69,10 @@ int RayMainFrame() {
 
 		if (GuiButton(Rectangle{ winWidth / 2 - 150, winHeight - 60, 300, 40 }, "Start")) {
 			if (compressMode) {
+				// thread this fucker first
 				startCompressing(textFilePath, dirPath, maxOrder <= 0 ? 1 : maxOrder);
+
+				runExecutable(".\\games\\AnimationVsWither\\main.exe");
 			}
 			else {
 				StartDecompressing(textFilePath, treeFilePath, dirPath);

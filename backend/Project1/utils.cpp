@@ -1,4 +1,6 @@
 #include "utils.h"
+#include "Windows.h"
+#include "direct.h"
 
 
 Node* tregen(MinHeap* heap) {
@@ -92,4 +94,37 @@ Node** readTreeArrFromJsonFile(const std::string& filename, int* size) {
 	}
 
 	return treeArr;
+}
+
+void runExecutable(const char* filePath) {
+	int size_needed = MultiByteToWideChar(CP_UTF8, 0, filePath, -1, NULL, 0);
+	wchar_t* wpath = new wchar_t[size_needed];
+	MultiByteToWideChar(CP_UTF8, 0, filePath, -1, wpath, size_needed);
+
+	char currentDirectory[MAX_PATH];
+	_getcwd(currentDirectory, sizeof(currentDirectory));
+
+	std::string targetDir;
+	const size_t last_slash_idx = std::string(filePath).rfind('\\');
+	if (std::string::npos != last_slash_idx)
+	{
+		targetDir = std::string(filePath).substr(0, last_slash_idx);
+	}
+
+	_chdir(targetDir.c_str());
+
+	std::string base_filename = std::string(filePath).substr(std::string(filePath).find_last_of("/\\") + 1);
+	std::string::size_type const p(base_filename.find_last_of('.'));
+	std::string file_without_extension = base_filename.substr(0, p);
+
+	int sizeNeededFileName = MultiByteToWideChar(CP_UTF8, 0, file_without_extension.c_str(), -1, NULL, 0);
+	wchar_t* wFileName = new wchar_t[sizeNeededFileName];
+	MultiByteToWideChar(CP_UTF8, 0, file_without_extension.c_str(), -1, wFileName, sizeNeededFileName);
+
+
+	ShellExecute(NULL, L"open", wFileName, NULL, NULL, SW_SHOW);
+
+	_chdir(currentDirectory);
+
+	delete[] wpath;
 }

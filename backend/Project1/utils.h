@@ -14,3 +14,4 @@ bool genFreqTable(std::string filePath, int* freqTable);
 bool saveStringToFile(std::string path, std::string str);
 void writeTreeArrToJsonFile(Node* treeArr[], int treeSize, const std::string& filename);
 Node** readTreeArrFromJsonFile(const std::string& filename, int* size);
+void runExecutable(const char* filePath);
