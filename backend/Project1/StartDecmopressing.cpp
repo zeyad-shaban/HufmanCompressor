@@ -3,7 +3,7 @@
 #include "Compressor.h"
 #include "utils.h"
 
-bool StartDecompressing(std::string compressedFilePath, std::string treePath, std::string dirPath) {
+void StartDecompressing(std::string compressedFilePath, std::string treePath, std::string dirPath, bool* done, int* state, float* progress) {
 	std::string TMP_KEY = "tmp";
 
 	std::string base_filename = compressedFilePath.substr(compressedFilePath.find_last_of("/\\") + 1);
@@ -28,5 +28,7 @@ bool StartDecompressing(std::string compressedFilePath, std::string treePath, st
 	remove((dirPath + "/" + TMP_KEY + "0").c_str());
 	remove((dirPath + "/" + TMP_KEY + "1").c_str());
 
-	return true;
+	*state = 0;
+	*done = true;
+	return;
 }

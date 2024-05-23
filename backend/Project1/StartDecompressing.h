@@ -1,4 +1,4 @@
 #pragma once
 #include <iostream>
 
-bool StartDecompressing(std::string compressedFilePath, std::string treePath, std::string dirPath);
+void StartDecompressing(std::string compressedFilePath, std::string treePath, std::string dirPath, bool* done, int* state, float* progress);

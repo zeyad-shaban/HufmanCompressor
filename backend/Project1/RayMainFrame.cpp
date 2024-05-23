@@ -71,6 +71,11 @@ int RayMainFrame() {
 	char dirPath[300] = { '\0' };
 	// input end
 
+	const char* filterTreePatterns[1] = { "*.json" };
+	const char* filterBinPatterns[1] = { "*.bin" };
+	const char* filterTextPatterns[1] = { "*.txt" };
+	const char* selectedTextFile = nullptr;
+
 	SetTargetFPS(60);
 	GuiLoadStyle("style_terminal.rgs");
 	GuiSetStyle(DEFAULT, TEXT_SIZE, fontSize);
@@ -83,32 +88,31 @@ int RayMainFrame() {
 		GuiToggle(Rectangle{ 20, 20, 120, 30 }, "Mode: ", &compressMode);
 		if (oldCompressMode != compressMode) {
 			strcpy(textFilePath, "\0");
-			oldCompressMode =compressMode;
+			oldCompressMode = compressMode;
 		}
-		
+
 
 		GuiLabel(Rectangle{ 20, 60, winWidth,100 }, compressMode ? "#18# File to Compress" : "#200# File to Decompress");
 		if (GuiTextBox(Rectangle{ 50, 160, winWidth * 3 / 4, 40 }, textFilePath, sizeof(textFilePath), false)
 			|| GuiButton(Rectangle{ (winWidth * 3 / 4) + 50, 160, 40, 40 }, "#5#")) {
 			if (compressMode) {
-				const char* filterTextPatterns[1] = { "*.txt" };
-				const char* selectedTextFile = selectFileDialog("Select a file", NULL, 1, filterTextPatterns, "Text Files");
+				selectedTextFile = selectFileDialog("Select a file", NULL, 1, filterTextPatterns, "Text Files");
+
 				if (selectedTextFile != NULL) {
 					strncpy(textFilePath, selectedTextFile, sizeof(textFilePath) - 1);
 
-					// Replace backslashes with forward slashes
 					for (int i = 0; textFilePath[i] != '\0'; i++) {
 						if (textFilePath[i] == '\\') {
 							textFilePath[i] = '/';
 						}
 					}
 				}
+				selectedTextFile = nullptr;
 			}
 			else {
-				const char* filterBinPatterns[1] = { "*.bin" };
-				const char* selectedBinFile = selectFileDialog("Select a file", NULL, 1, filterBinPatterns, "Text Files");
-				if (selectedBinFile != NULL) {
-					strncpy(textFilePath, selectedBinFile, sizeof(textFilePath) - 1);
+				selectedTextFile = selectFileDialog("Select a file", NULL, 1, filterBinPatterns, "Text Files");
+				if (selectedTextFile != NULL) {
+					strncpy(textFilePath, selectedTextFile, sizeof(textFilePath) - 1);
 					textFilePath[sizeof(textFilePath) - 1] = '\0';
 
 					for (int i = 0; textFilePath[i] != '\0'; i++) {
@@ -117,6 +121,7 @@ int RayMainFrame() {
 						}
 					}
 				}
+				selectedTextFile = nullptr;
 			}
 		}
 
@@ -134,20 +139,18 @@ int RayMainFrame() {
 			GuiLabel(Rectangle{ 20, 230, winWidth,100 }, "#138# Tree Path");
 			if (GuiTextBox(Rectangle{ 50, 330, winWidth * 3 / 4, 40 }, treeFilePath, sizeof(treeFilePath), false)
 				|| GuiButton(Rectangle{ (winWidth * 3 / 4) + 50, 330, 40, 40 }, "#5#")) {
-				const char* filterTreePatterns[1] = { "*.json" };
-				const char* selectedTreeFile = selectFileDialog("Select a file", NULL, 1, filterTreePatterns, "Text Files");
-				if (selectedTreeFile != NULL) {
-					strncpy(treeFilePath, selectedTreeFile, sizeof(treeFilePath) - 1);
-					treeFilePath[sizeof(treeFilePath) - 1] = '\0'; // Ensure null termination
+				selectedTextFile = selectFileDialog("Select a file", NULL, 1, filterTreePatterns, "Text Files");
+				if (selectedTextFile != NULL) {
+					strncpy(treeFilePath, selectedTextFile, sizeof(treeFilePath) - 1);
+					treeFilePath[sizeof(treeFilePath) - 1] = '\0';
 
-					// Replace backslashes with forward slashes
 					for (int i = 0; treeFilePath[i] != '\0'; i++) {
 						if (treeFilePath[i] == '\\') {
 							treeFilePath[i] = '/';
 						}
 					}
-
 				}
+				selectedTextFile = nullptr;
 			}
 		}
 
@@ -174,26 +177,26 @@ int RayMainFrame() {
 
 
 		if (GuiButton(Rectangle{ winWidth / 2 - 150, winHeight - 60, 300, 40 }, "Start")) {
-			if (compressMode) {
-				std::thread compressionThread(startCompressing, textFilePath, dirPath, maxOrder <= 0 ? 1 : maxOrder, &done, &state, &progress);
+			std::thread workThread;
 
-				while (!done) {
-					BeginDrawing();
-					ClearBackground(GetColor(GuiGetStyle(DEFAULT, BACKGROUND_COLOR)));
-					GuiProgressBar(Rectangle{ winWidth / 2 - 200, winHeight / 2 - 20, 400, 40 }, NULL, NULL, &progress, 0, 1);
-					panelViewer(&showGames, &showServer, gamePanel, winWidth, animVsWitherImg, geoSmashImg, riskOfImg);
-					EndDrawing();
-				}
+			if (compressMode)
+				workThread = std::thread(startCompressing, std::string(textFilePath), dirPath, maxOrder <= 0 ? 1 : maxOrder, &done, &state, &progress);
+			else
+				workThread = std::thread(StartDecompressing, std::string(textFilePath), treeFilePath, dirPath, &done, &state, &progress);
 
-				compressionThread.join();
-				popupActive = true;
-				done = false;
-				progress = 0;
-				state = 0;
+			while (!done) {
+				BeginDrawing();
+				ClearBackground(GetColor(GuiGetStyle(DEFAULT, BACKGROUND_COLOR)));
+				GuiProgressBar(Rectangle{ winWidth / 2 - 200, winHeight / 2 - 20, 400, 40 }, NULL, NULL, &progress, 0, 1);
+				panelViewer(&showGames, &showServer, gamePanel, winWidth, animVsWitherImg, geoSmashImg, riskOfImg);
+				EndDrawing();
 			}
-			else {
-				StartDecompressing(textFilePath, treeFilePath, dirPath);
-			}
+
+			workThread.join();
+			popupActive = true;
+			done = false;
+			progress = 0;
+			state = 0;
 		}
 
 		if (popupActive) {

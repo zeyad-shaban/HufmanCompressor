@@ -17,80 +17,110 @@ void generateAsciiTable(Node* root, std::string* charsTable, std::string code = 
 	generateAsciiTable(root->right, charsTable, code + '1');
 }
 
-
 long long Compressor::compressing(Node* root, std::string filePath, std::string outPath, float* progress) {
-	HANDLE inputFile = CreateFileA(filePath.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-	HANDLE inputFileMap = CreateFileMappingA(inputFile, NULL, PAGE_READONLY, 0, 0, NULL);
-	char* inputData = (char*)MapViewOfFile(inputFileMap, FILE_MAP_READ, 0, 0, 0);
+    HANDLE inputFile = CreateFileA(filePath.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+    if (inputFile == INVALID_HANDLE_VALUE) {
+        std::cout << "Failed to open input file\n";
+        return 0;
+    }
 
-	LARGE_INTEGER inFileSize;
-	if (!GetFileSizeEx(inputFile, &inFileSize)) {
-		std::cout << "Failed to get file size\n";
-		UnmapViewOfFile(inputData);
-		CloseHandle(inputFile);
-		CloseHandle(inputFileMap);
-		return 0;
-	}
+    HANDLE inputFileMap = CreateFileMappingA(inputFile, NULL, PAGE_READONLY, 0, 0, NULL);
+    if (!inputFileMap) {
+        std::cout << "Failed to create file mapping for input file\n";
+        CloseHandle(inputFile);
+        return 0;
+    }
 
-	HANDLE outFile = CreateFileA(outPath.c_str(), GENERIC_READ | GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
-	HANDLE outFileMap = CreateFileMappingA(outFile, NULL, PAGE_READWRITE, 0, inFileSize.QuadPart, NULL);
-	if (!outFileMap) {
-		DWORD dwError = GetLastError();
-		std::cout << "Failed to create file mapping. Error: " << dwError << "\n";
-		return 0;
-	}
-	char* outData = (char*)MapViewOfFile(outFileMap, FILE_MAP_WRITE, 0, 0, inFileSize.QuadPart);
-	unsigned long long outIndex = 0;
+    char* inputData = (char*)MapViewOfFile(inputFileMap, FILE_MAP_READ, 0, 0, 0);
+    if (!inputData) {
+        std::cout << "Failed to map view of input file\n";
+        CloseHandle(inputFileMap);
+        CloseHandle(inputFile);
+        return 0;
+    }
 
-	// TODO HANDLE FAILING FOR EITHER ORIGNAL OR OUT FILE
+    LARGE_INTEGER inFileSize;
+    if (!GetFileSizeEx(inputFile, &inFileSize)) {
+        std::cout << "Failed to get file size\n";
+        UnmapViewOfFile(inputData);
+        CloseHandle(inputFileMap);
+        CloseHandle(inputFile);
+        return 0;
+    }
 
-	std::string charsTable[256];
-	generateAsciiTable(root, charsTable);
+    HANDLE outFile = CreateFileA(outPath.c_str(), GENERIC_READ | GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+    if (outFile == INVALID_HANDLE_VALUE) {
+        std::cout << "Failed to open output file\n";
+        UnmapViewOfFile(inputData);
+        CloseHandle(inputFileMap);
+        CloseHandle(inputFile);
+        return 0;
+    }
 
-	unsigned char bitBuffer = 0;
-	int currBit = 0;
+    HANDLE outFileMap = CreateFileMappingA(outFile, NULL, PAGE_READWRITE, 0, inFileSize.QuadPart, NULL);
+    if (!outFileMap) {
+        std::cout << "Failed to create file mapping for output file\n";
+        UnmapViewOfFile(inputData);
+        CloseHandle(inputFileMap);
+        CloseHandle(inputFile);
+        CloseHandle(outFile);
+        return 0;
+    }
 
-	double dblFileSize = (double)inFileSize.QuadPart;
-	for (long long i = 0; i < dblFileSize; i++) {
-		*progress = (i / dblFileSize);
-		for (char bit : charsTable[(unsigned char)inputData[i]]) {
-			bitBuffer = (bitBuffer << 1) | (bit - '0');
-			currBit++;
-			if (currBit >= 8) {
-				outData[outIndex++] = bitBuffer;
-				currBit = 0;
-				bitBuffer = 0;
-			}
-		}
-	}
+    char* outData = (char*)MapViewOfFile(outFileMap, FILE_MAP_WRITE, 0, 0, inFileSize.QuadPart);
+    if (!outData) {
+        std::cout << "Failed to map view of output file\n";
+        CloseHandle(outFileMap);
+        CloseHandle(outFile);
+        UnmapViewOfFile(inputData);
+        CloseHandle(inputFileMap);
+        CloseHandle(inputFile);
+        return 0;
+    }
 
-	if (currBit > 0) {
-		bitBuffer <<= (8 - currBit);
-		outData[outIndex++] = bitBuffer;
+    unsigned long long outIndex = 0;
+    std::string charsTable[256];
+    generateAsciiTable(root, charsTable);
 
-		outData[outIndex++] = currBit;
-	}
-	else
-		outData[outIndex++] = 8;
+    unsigned char bitBuffer = 0;
+    int currBit = 0;
+    double dblFileSize = (double)inFileSize.QuadPart;
 
+    for (long long i = 0; i < dblFileSize; i++) {
+        *progress = (i / dblFileSize);
+        for (char bit : charsTable[(unsigned char)inputData[i]]) {
+            bitBuffer = (bitBuffer << 1) | (bit - '0');
+            currBit++;
+            if (currBit >= 8) {
+                outData[outIndex++] = bitBuffer;
+                currBit = 0;
+                bitBuffer = 0;
+            }
+        }
+    }
 
-	UnmapViewOfFile(inputData);
-	CloseHandle(inputFileMap);
-	CloseHandle(inputFile);
+    if (currBit > 0) {
+        bitBuffer <<= (8 - currBit);
+        outData[outIndex++] = bitBuffer;
+        outData[outIndex++] = currBit;
+    }
+    else {
+        outData[outIndex++] = 8;
+    }
 
+    UnmapViewOfFile(inputData);
+    CloseHandle(inputFileMap);
+    CloseHandle(inputFile);
 
-	UnmapViewOfFile(outData);
-	CloseHandle(outFileMap);
+    UnmapViewOfFile(outData);
+    CloseHandle(outFileMap);
 
-	SetFilePointer(outFile, outIndex, NULL, FILE_BEGIN);
-	SetEndOfFile(outFile);
+    SetFilePointer(outFile, outIndex, NULL, FILE_BEGIN);
+    SetEndOfFile(outFile);
+    CloseHandle(outFile);
 
-	CloseHandle(outFile);
-
-	return inFileSize.QuadPart;
+    return inFileSize.QuadPart;
 }
-
-
 bool Compressor::decompressing(Node* root, std::string compressedFilePath, std::string outputFilePath, int prevSize) {
 	HANDLE compressedFile = CreateFileA(compressedFilePath.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 	HANDLE compressedFileMap = CreateFileMappingA(compressedFile, NULL, PAGE_READONLY, 0, 0, NULL);

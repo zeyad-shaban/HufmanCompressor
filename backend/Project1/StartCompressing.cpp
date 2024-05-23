@@ -54,7 +54,7 @@ void startCompressing(std::string filePath, std::string dirPath, int maxOrder, b
 
 		// Generate Huffman tree
 		treeArr[treeArrI] = tregen(heap);
-		delete heap;
+		//delete heap;
 
 
 		// Compress the file
