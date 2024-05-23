@@ -11,7 +11,7 @@
 #define RAYGUI_IMPLEMENTATION
 #include "raygui.h"
 
-void gameViewer(bool* showGames, Rectangle gamePanel, float winWidth, Texture2D animVsWitherImg, Texture2D geoSmashImg, Texture2D riskOfImg) {
+void panelViewer(bool* showGames, bool* showServer, Rectangle gamePanel, float winWidth, Texture2D animVsWitherImg, Texture2D geoSmashImg, Texture2D riskOfImg) {
 	if (*showGames) {
 		GuiPanel(gamePanel, "Play something while waiting");
 
@@ -89,7 +89,7 @@ int RayMainFrame() {
 				const char* selectedTextFile = selectFileDialog("Select a file", NULL, 1, filterTextPatterns, "Text Files");
 				if (selectedTextFile != NULL) {
 					strncpy(textFilePath, selectedTextFile, sizeof(textFilePath) - 1);
-					textFilePath[sizeof(textFilePath) - 1] = '\0'; // Ensure null termination
+					textFilePath[sizeof(textFilePath) - 1] = '\0';
 
 					// Replace backslashes with forward slashes
 					for (int i = 0; textFilePath[i] != '\0'; i++) {
@@ -104,9 +104,8 @@ int RayMainFrame() {
 				const char* selectedBinFile = selectFileDialog("Select a file", NULL, 1, filterBinPatterns, "Text Files");
 				if (selectedBinFile != NULL) {
 					strncpy(textFilePath, selectedBinFile, sizeof(textFilePath) - 1);
-					textFilePath[sizeof(textFilePath) - 1] = '\0'; // Ensure null termination
+					textFilePath[sizeof(textFilePath) - 1] = '\0';
 
-					// Replace backslashes with forward slashes
 					for (int i = 0; textFilePath[i] != '\0'; i++) {
 						if (textFilePath[i] == '\\') {
 							textFilePath[i] = '/';
@@ -169,7 +168,7 @@ int RayMainFrame() {
 			}
 		}
 
-		gameViewer(&showGames, gamePanel, winWidth, animVsWitherImg, geoSmashImg, riskOfImg);
+		panelViewer(&showGames, &showServer, gamePanel, winWidth, animVsWitherImg, geoSmashImg, riskOfImg);
 
 
 		if (GuiButton(Rectangle{ winWidth / 2 - 150, winHeight - 60, 300, 40 }, "Start")) {
@@ -180,7 +179,7 @@ int RayMainFrame() {
 					BeginDrawing();
 					ClearBackground(GetColor(GuiGetStyle(DEFAULT, BACKGROUND_COLOR)));
 					GuiProgressBar(Rectangle{ winWidth / 2 - 200, winHeight / 2 - 20, 400, 40 }, NULL, NULL, &progress, 0, 1);
-					gameViewer(&showGames, gamePanel, winWidth, animVsWitherImg, geoSmashImg, riskOfImg);
+					panelViewer(&showGames, &showServer, gamePanel, winWidth, animVsWitherImg, geoSmashImg, riskOfImg);
 
 					if (done) {
 						compressionThread.join();
