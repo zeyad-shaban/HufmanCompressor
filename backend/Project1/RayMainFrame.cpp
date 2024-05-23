@@ -88,6 +88,7 @@ int RayMainFrame() {
 		GuiToggle(Rectangle{ 20, 20, 120, 30 }, "Mode: ", &compressMode);
 		if (oldCompressMode != compressMode) {
 			strcpy(textFilePath, "\0");
+			strcpy(treeFilePath, "\0");
 			oldCompressMode = compressMode;
 		}
 
@@ -107,7 +108,6 @@ int RayMainFrame() {
 						}
 					}
 				}
-				selectedTextFile = nullptr;
 			}
 			else {
 				selectedTextFile = selectFileDialog("Select a file", NULL, 1, filterBinPatterns, "Text Files");
@@ -121,7 +121,6 @@ int RayMainFrame() {
 						}
 					}
 				}
-				selectedTextFile = nullptr;
 			}
 		}
 
@@ -150,7 +149,6 @@ int RayMainFrame() {
 						}
 					}
 				}
-				selectedTextFile = nullptr;
 			}
 		}
 
@@ -193,16 +191,27 @@ int RayMainFrame() {
 			}
 
 			workThread.join();
+			selectedTextFile = nullptr;
+			strcpy(textFilePath, "\0");
+			strcpy(treeFilePath, "\0");
 			popupActive = true;
 			done = false;
 			progress = 0;
-			state = 0;
 		}
 
 		if (popupActive) {
-			if (state == 0) if (GuiMessageBox(Rectangle{ winWidth / 2 - 210, winHeight / 2 - 100, 420, 200 }, "SUCCESS", "Done!", "OK") >= 0) { popupActive = false; }
-			else if (state == 1) if (GuiMessageBox(Rectangle{ winWidth / 2 - 210, winHeight / 2 - 100, 420, 200 }, "ERROR", "Failed to read/create file, please validate path", "OK") >= 0) { popupActive = false; }
-			else if (state == -1) if (GuiMessageBox(Rectangle{ winWidth / 2 - 210, winHeight / 2 - 100, 420, 200 }, "ERROR", "Fatal Error", "Crap") >= 0) { popupActive = false; }
+			if (state == 0){
+				if (GuiMessageBox(Rectangle{ winWidth / 2 - 210, winHeight / 2 - 100, 420, 200 }, "SUCCESS", "Done!", "OK") >= 0)
+					popupActive = false;
+			}
+			else if (state == 1) {
+				if (GuiMessageBox(Rectangle{ winWidth / 2 - 210, winHeight / 2 - 100, 420, 200 }, "ERROR", "Failed to read/create file", "OK") >= 0)
+					popupActive = false;
+			}
+			else if (state == -1) {
+				if (GuiMessageBox(Rectangle{ winWidth / 2 - 210, winHeight / 2 - 100, 420, 200 }, "ERROR", "Fatal Error", "Crap") >= 0)
+					popupActive = false;
+			}
 		}
 
 		EndDrawing();

@@ -15,8 +15,8 @@ void startCompressing(std::string filePath, std::string dirPath, int maxOrder, b
 
 	if (!treeArr) {
 		std::cout << "Failed to allocate memroy for your order, please try smaller number\n";
-		*done = true;
 		*state = -1;
+		*done = true;
 		return;
 	}
 
@@ -40,8 +40,11 @@ void startCompressing(std::string filePath, std::string dirPath, int maxOrder, b
 			time(&end);
 			std::cout << "FreqTable Generated In: " << end - start << "sec" << std::endl;
 		}
-		else
-			std::cout << "FreqTable faild:can't open file\n";
+		else {
+			*state = 1;
+			*done = true;
+			return;
+		}
 
 
 		// Create min heap for Huffman tree
@@ -64,6 +67,11 @@ void startCompressing(std::string filePath, std::string dirPath, int maxOrder, b
 
 		time(&start);
 		thisSize = compressor.compressing(treeArr[treeArrI], tmpIn, tmpOut, progress);
+		if (thisSize < 0) {
+			*state = 1;
+			*done = true;
+			return;
+		}
 		time(&end);
 		std::cout << "Done copmressing in " << end - start << "sec" << std::endl;
 

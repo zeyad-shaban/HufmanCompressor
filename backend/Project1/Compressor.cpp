@@ -19,33 +19,28 @@ void generateAsciiTable(Node* root, std::string* charsTable, std::string code = 
 
 long long Compressor::compressing(Node* root, std::string filePath, std::string outPath, float* progress) {
     HANDLE inputFile = CreateFileA(filePath.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-    if (inputFile == INVALID_HANDLE_VALUE) {
-        std::cout << "Failed to open input file\n";
-        return 0;
-    }
+    if (inputFile == INVALID_HANDLE_VALUE)
+        return -1;
 
     HANDLE inputFileMap = CreateFileMappingA(inputFile, NULL, PAGE_READONLY, 0, 0, NULL);
     if (!inputFileMap) {
-        std::cout << "Failed to create file mapping for input file\n";
         CloseHandle(inputFile);
-        return 0;
+        return -1;
     }
 
     char* inputData = (char*)MapViewOfFile(inputFileMap, FILE_MAP_READ, 0, 0, 0);
     if (!inputData) {
-        std::cout << "Failed to map view of input file\n";
         CloseHandle(inputFileMap);
         CloseHandle(inputFile);
-        return 0;
+        return -1;
     }
 
     LARGE_INTEGER inFileSize;
     if (!GetFileSizeEx(inputFile, &inFileSize)) {
-        std::cout << "Failed to get file size\n";
         UnmapViewOfFile(inputData);
         CloseHandle(inputFileMap);
         CloseHandle(inputFile);
-        return 0;
+        return -1;
     }
 
     HANDLE outFile = CreateFileA(outPath.c_str(), GENERIC_READ | GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
@@ -54,7 +49,7 @@ long long Compressor::compressing(Node* root, std::string filePath, std::string 
         UnmapViewOfFile(inputData);
         CloseHandle(inputFileMap);
         CloseHandle(inputFile);
-        return 0;
+        return -1;
     }
 
     HANDLE outFileMap = CreateFileMappingA(outFile, NULL, PAGE_READWRITE, 0, inFileSize.QuadPart, NULL);
@@ -64,7 +59,7 @@ long long Compressor::compressing(Node* root, std::string filePath, std::string 
         CloseHandle(inputFileMap);
         CloseHandle(inputFile);
         CloseHandle(outFile);
-        return 0;
+        return -1;
     }
 
     char* outData = (char*)MapViewOfFile(outFileMap, FILE_MAP_WRITE, 0, 0, inFileSize.QuadPart);
@@ -75,7 +70,7 @@ long long Compressor::compressing(Node* root, std::string filePath, std::string 
         UnmapViewOfFile(inputData);
         CloseHandle(inputFileMap);
         CloseHandle(inputFile);
-        return 0;
+        return -1;
     }
 
     unsigned long long outIndex = 0;
@@ -122,87 +117,136 @@ long long Compressor::compressing(Node* root, std::string filePath, std::string 
     return inFileSize.QuadPart;
 }
 bool Compressor::decompressing(Node* root, std::string compressedFilePath, std::string outputFilePath, int prevSize) {
-	HANDLE compressedFile = CreateFileA(compressedFilePath.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-	HANDLE compressedFileMap = CreateFileMappingA(compressedFile, NULL, PAGE_READONLY, 0, 0, NULL);
-	char* compressedData = (char*)MapViewOfFile(compressedFileMap, FILE_MAP_READ, 0, 0, 0);
+    HANDLE compressedFile = CreateFileA(compressedFilePath.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+    if (compressedFile == INVALID_HANDLE_VALUE) {
+        std::cout << "Failed to open compressed file\n";
+        return false;
+    }
 
-	LARGE_INTEGER compressedFileSize;
-	if (!GetFileSizeEx(compressedFile, &compressedFileSize)) {
-		std::cout << "Failed to get file size\n";
-		UnmapViewOfFile(compressedData);
-		CloseHandle(compressedFile);
-		CloseHandle(compressedFileMap);
-		return false;
-	}
+    HANDLE compressedFileMap = CreateFileMappingA(compressedFile, NULL, PAGE_READONLY, 0, 0, NULL);
+    if (!compressedFileMap) {
+        std::cout << "Failed to create file mapping for compressed file\n";
+        CloseHandle(compressedFile);
+        return false;
+    }
 
-	LONGLONG allocatedFileSize = compressedFileSize.QuadPart;
+    char* compressedData = (char*)MapViewOfFile(compressedFileMap, FILE_MAP_READ, 0, 0, 0);
+    if (!compressedData) {
+        std::cout << "Failed to map view of compressed file\n";
+        CloseHandle(compressedFileMap);
+        CloseHandle(compressedFile);
+        return false;
+    }
 
+    LARGE_INTEGER compressedFileSize;
+    if (!GetFileSizeEx(compressedFile, &compressedFileSize)) {
+        std::cout << "Failed to get file size\n";
+        UnmapViewOfFile(compressedData);
+        CloseHandle(compressedFileMap);
+        CloseHandle(compressedFile);
+        return false;
+    }
 
-	HANDLE outFile = CreateFileA(outputFilePath.c_str(), GENERIC_READ | GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
-	HANDLE outFileMap = CreateFileMappingA(outFile, NULL, PAGE_READWRITE, 0, allocatedFileSize, NULL);
-	if (!outFileMap) {
-		DWORD dwError = GetLastError();
-		std::cout << "Failed to create file mapping. Error: " << dwError << "\n";
-		return false;
-	}
-	char* outData = (char*)MapViewOfFile(outFileMap, FILE_MAP_WRITE, 0, 0, allocatedFileSize);
-	LONGLONG compressedIndex = 0;
-	unsigned long long outIndex = -1;
+    LONGLONG allocatedFileSize = compressedFileSize.QuadPart;
 
-	// TODO HANDLE OPENING FILE ERRS
+    HANDLE outFile = CreateFileA(outputFilePath.c_str(), GENERIC_READ | GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+    if (outFile == INVALID_HANDLE_VALUE) {
+        std::cout << "Failed to open output file\n";
+        UnmapViewOfFile(compressedData);
+        CloseHandle(compressedFileMap);
+        CloseHandle(compressedFile);
+        return false;
+    }
 
-	time_t start, end;
-	time(&start);
+    HANDLE outFileMap = CreateFileMappingA(outFile, NULL, PAGE_READWRITE, 0, allocatedFileSize, NULL);
+    if (!outFileMap) {
+        std::cout << "Failed to create file mapping for output file\n";
+        CloseHandle(outFile);
+        UnmapViewOfFile(compressedData);
+        CloseHandle(compressedFileMap);
+        CloseHandle(compressedFile);
+        return false;
+    }
 
-	Node* nodeIt = root;
-	bool rootOnly = false;
-	if (!nodeIt->left && !nodeIt->right) rootOnly = true;
+    char* outData = (char*)MapViewOfFile(outFileMap, FILE_MAP_WRITE, 0, 0, allocatedFileSize);
+    if (!outData) {
+        std::cout << "Failed to map view of output file\n";
+        CloseHandle(outFileMap);
+        CloseHandle(outFile);
+        UnmapViewOfFile(compressedData);
+        CloseHandle(compressedFileMap);
+        CloseHandle(compressedFile);
+        return false;
+    }
 
-	for (compressedIndex = 0; compressedIndex < compressedFileSize.QuadPart - 2; ++compressedIndex) {
-		for (int j = 7; j >= 0; --j) {
-			if (!rootOnly) nodeIt = (compressedData[compressedIndex] >> j) & 1 ? nodeIt->right : nodeIt->left;
+    LONGLONG compressedIndex = 0;
+    unsigned long long outIndex = -1;
 
-			if (!nodeIt->left && !nodeIt->right) {
-				if (outIndex + 1 >= allocatedFileSize) {
-					CloseHandle(outFileMap);
-					UnmapViewOfFile(outData);
+    time_t start, end;
+    time(&start);
 
-					allocatedFileSize *= 2;
-					outFileMap = CreateFileMappingA(outFile, NULL, PAGE_READWRITE, 0, allocatedFileSize, NULL);
-					outData = (char*)MapViewOfFile(outFileMap, FILE_MAP_WRITE, 0, 0, allocatedFileSize);
-				}
+    Node* nodeIt = root;
+    bool rootOnly = (!nodeIt->left && !nodeIt->right);
 
-				outData[++outIndex] = nodeIt->letter;
-				nodeIt = root;
-			}
-		}
-	}
+    for (compressedIndex = 0; compressedIndex < compressedFileSize.QuadPart - 2; ++compressedIndex) {
+        for (int j = 7; j >= 0; --j) {
+            if (!rootOnly) nodeIt = (compressedData[compressedIndex] >> j) & 1 ? nodeIt->right : nodeIt->left;
 
-	// compressed index now standing at the before last bit
-	unsigned char validBits = compressedData[compressedIndex + 1];
+            if (!nodeIt->left && !nodeIt->right) {
+                if (outIndex + 1 >= allocatedFileSize) {
+                    UnmapViewOfFile(outData);
+                    CloseHandle(outFileMap);
 
-	for (int j = 7; j >= 8 - validBits; j--) {
-		if (!rootOnly) nodeIt = (compressedData[compressedIndex] >> j) & 1 ? nodeIt->right : nodeIt->left;
-		if (!nodeIt->left && !nodeIt->right) {
-			outData[++outIndex] = nodeIt->letter;
-			nodeIt = root;
-		}
-	}
+                    allocatedFileSize *= 2;
+                    outFileMap = CreateFileMappingA(outFile, NULL, PAGE_READWRITE, 0, allocatedFileSize, NULL);
+                    if (!outFileMap) {
+                        std::cout << "Failed to create file mapping for expanded output file\n";
+                        UnmapViewOfFile(compressedData);
+                        CloseHandle(compressedFileMap);
+                        CloseHandle(compressedFile);
+                        CloseHandle(outFile);
+                        return false;
+                    }
+                    outData = (char*)MapViewOfFile(outFileMap, FILE_MAP_WRITE, 0, 0, allocatedFileSize);
+                    if (!outData) {
+                        std::cout << "Failed to map view of expanded output file\n";
+                        CloseHandle(outFileMap);
+                        CloseHandle(outFile);
+                        UnmapViewOfFile(compressedData);
+                        CloseHandle(compressedFileMap);
+                        CloseHandle(compressedFile);
+                        return false;
+                    }
+                }
 
-	time(&end);
-	std::cout << "TIME TAKEN TO DECOMPRESS: " << end - start << "\n";
+                outData[++outIndex] = nodeIt->letter;
+                nodeIt = root;
+            }
+        }
+    }
 
+    unsigned char validBits = compressedData[compressedIndex + 1];
+    for (int j = 7; j >= 8 - validBits; j--) {
+        if (!rootOnly) nodeIt = (compressedData[compressedIndex] >> j) & 1 ? nodeIt->right : nodeIt->left;
+        if (!nodeIt->left && !nodeIt->right) {
+            outData[++outIndex] = nodeIt->letter;
+            nodeIt = root;
+        }
+    }
 
-	UnmapViewOfFile(compressedData);
-	CloseHandle(compressedFile);
-	CloseHandle(compressedFileMap);
+    time(&end);
+    std::cout << "TIME TAKEN TO DECOMPRESS: " << end - start << " seconds\n";
 
+    UnmapViewOfFile(compressedData);
+    CloseHandle(compressedFileMap);
+    CloseHandle(compressedFile);
 
-	UnmapViewOfFile(outData);
-	CloseHandle(outFileMap);
-	SetFilePointer(outFile, outIndex + 1, NULL, FILE_BEGIN);
-	SetEndOfFile(outFile);
-	CloseHandle(outFile);
+    UnmapViewOfFile(outData);
+    CloseHandle(outFileMap);
 
-	return true;
+    SetFilePointer(outFile, outIndex + 1, NULL, FILE_BEGIN);
+    SetEndOfFile(outFile);
+    CloseHandle(outFile);
+
+    return true;
 }

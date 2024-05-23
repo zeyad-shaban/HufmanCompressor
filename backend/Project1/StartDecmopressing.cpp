@@ -22,7 +22,11 @@ void StartDecompressing(std::string compressedFilePath, std::string treePath, st
 
 		std::string tmpOut = dirPath + "/" + (i == 0 ? file_without_extension + "_decompressed.txt" : TMP_KEY + std::to_string(tmpTurn));
 
-		compressor->decompressing(treeArr[i], tmpIn, tmpOut);
+		if (!compressor->decompressing(treeArr[i], tmpIn, tmpOut)) {
+			*state = 1;
+			*done = true;
+			return;
+		}
 	}
 
 	remove((dirPath + "/" + TMP_KEY + "0").c_str());
