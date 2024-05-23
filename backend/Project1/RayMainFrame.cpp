@@ -63,6 +63,7 @@ int RayMainFrame() {
 	bool popupActive = false;
 
 	bool compressMode = true;
+	bool oldCompressMode = true;
 	int maxOrder = 0;
 
 	char textFilePath[300] = { '\0' };
@@ -80,6 +81,11 @@ int RayMainFrame() {
 		ClearBackground(GetColor(GuiGetStyle(DEFAULT, BACKGROUND_COLOR)));
 
 		GuiToggle(Rectangle{ 20, 20, 120, 30 }, "Mode: ", &compressMode);
+		if (oldCompressMode != compressMode) {
+			strcpy(textFilePath, "\0");
+			oldCompressMode =compressMode;
+		}
+		
 
 		GuiLabel(Rectangle{ 20, 60, winWidth,100 }, compressMode ? "#18# File to Compress" : "#200# File to Decompress");
 		if (GuiTextBox(Rectangle{ 50, 160, winWidth * 3 / 4, 40 }, textFilePath, sizeof(textFilePath), false)
@@ -89,7 +95,6 @@ int RayMainFrame() {
 				const char* selectedTextFile = selectFileDialog("Select a file", NULL, 1, filterTextPatterns, "Text Files");
 				if (selectedTextFile != NULL) {
 					strncpy(textFilePath, selectedTextFile, sizeof(textFilePath) - 1);
-					textFilePath[sizeof(textFilePath) - 1] = '\0';
 
 					// Replace backslashes with forward slashes
 					for (int i = 0; textFilePath[i] != '\0'; i++) {
@@ -113,8 +118,6 @@ int RayMainFrame() {
 					}
 				}
 			}
-
-			//strcpy(textFilePath, "E:/gam3a2/tesFileMaker/1GB.txt"); // TODO OPEN DIALOG HERE INSTEAD
 		}
 
 		if (compressMode) {
@@ -145,7 +148,6 @@ int RayMainFrame() {
 					}
 
 				}
-				//strcpy(treeFilePath, "C:/Users/zeyad/OneDrive/Desktop/test/test_tree.json"); // TODO OPEN DIALOG HERE INSTEAD
 			}
 		}
 
@@ -175,19 +177,15 @@ int RayMainFrame() {
 			if (compressMode) {
 				std::thread compressionThread(startCompressing, textFilePath, dirPath, maxOrder <= 0 ? 1 : maxOrder, &done, &state, &progress);
 
-				while (true) {
+				while (!done) {
 					BeginDrawing();
 					ClearBackground(GetColor(GuiGetStyle(DEFAULT, BACKGROUND_COLOR)));
 					GuiProgressBar(Rectangle{ winWidth / 2 - 200, winHeight / 2 - 20, 400, 40 }, NULL, NULL, &progress, 0, 1);
 					panelViewer(&showGames, &showServer, gamePanel, winWidth, animVsWitherImg, geoSmashImg, riskOfImg);
-
-					if (done) {
-						compressionThread.join();
-						break;
-					}
 					EndDrawing();
 				}
 
+				compressionThread.join();
 				popupActive = true;
 				done = false;
 				progress = 0;
