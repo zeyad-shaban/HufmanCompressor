@@ -11,7 +11,7 @@
 #define RAYGUI_IMPLEMENTATION
 #include "raygui.h"
 
-void gameViewer(bool* showGames, Rectangle gamePanel, float winWidth, Texture2D animVsWitherImg, Texture2D geoSmashImg) {
+void gameViewer(bool* showGames, Rectangle gamePanel, float winWidth, Texture2D animVsWitherImg, Texture2D geoSmashImg, Texture2D riskOfImg) {
 	if (*showGames) {
 		GuiPanel(gamePanel, "Play something while waiting");
 
@@ -24,6 +24,11 @@ void gameViewer(bool* showGames, Rectangle gamePanel, float winWidth, Texture2D 
 			runExecutable(".\\games\\GeoSmash\\main.exe");
 		}
 		DrawTextureRec(geoSmashImg, Rectangle{ 0,0, 200, 200 }, Vector2{ winWidth - 200, 40 }, WHITE);
+
+		if (GuiButton(Rectangle{ winWidth - 395, 200, 200, 200 }, "")) {
+			runExecutable(".\\games\\RiskOfGettingTrailblaze\\Risk of getting Railed.exe");
+		}
+		DrawTextureRec(riskOfImg, Rectangle{ 0,0, 200, 200 }, Vector2{ winWidth - 395, 200 }, WHITE);
 
 	}
 	GuiToggle(Rectangle{ winWidth - 40, 0, 40, 40 }, *showGames ? "#128#" : "#152#", showGames);
@@ -39,6 +44,7 @@ int RayMainFrame() {
 
 	Texture2D animVsWitherImg = LoadTexture("./assets/AnimationVsWither.png");
 	Texture2D geoSmashImg = LoadTexture("./assets/GeoSmash.png");
+	Texture2D riskOfImg = LoadTexture("./assets/RiskOfGettingTrailblaze.png");
 	Rectangle gamePanel = { winWidth - 400, 0, 400, winHeight };
 
 	// input start
@@ -97,7 +103,7 @@ int RayMainFrame() {
 			strcpy(dirPath, "C:/Users/zeyad/OneDrive/Desktop/test"); // TODO OPEN DIALOG HERE INSTEAD
 		}
 
-		gameViewer(&showGames, gamePanel, winWidth, animVsWitherImg, geoSmashImg);
+		gameViewer(&showGames, gamePanel, winWidth, animVsWitherImg, geoSmashImg, riskOfImg);
 
 
 		if (GuiButton(Rectangle{ winWidth / 2 - 150, winHeight - 60, 300, 40 }, "Start")) {
@@ -108,7 +114,7 @@ int RayMainFrame() {
 					BeginDrawing();
 					ClearBackground(GetColor(GuiGetStyle(DEFAULT, BACKGROUND_COLOR)));
 					GuiProgressBar(Rectangle{ winWidth / 2 - 200, winHeight / 2 - 20, 400, 40 }, NULL, NULL, &progress, 0, 1);
-					gameViewer(&showGames, gamePanel, winWidth, animVsWitherImg, geoSmashImg);
+					gameViewer(&showGames, gamePanel, winWidth, animVsWitherImg, geoSmashImg, riskOfImg);
 
 					if (done) {
 						compressionThread.join();
