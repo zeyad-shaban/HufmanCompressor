@@ -14,6 +14,11 @@ void StartDecompressing(std::string compressedFilePath, std::string treePath, st
 
 	int size = 0;
 	Node** treeArr = readTreeArrFromJsonFile(treePath, &size);
+	if (!treeArr) {
+		*state = 1;
+		*done = true;
+		return;
+	}
 
 	int tmpTurn = 1;
 	for (int i = size - 1; i >= 0; --i) {

@@ -86,6 +86,8 @@ Node* jsonToNode(const json& j) {
 
 Node** readTreeArrFromJsonFile(const std::string& filename, int* size) {
 	std::ifstream file(filename);
+	if (!file.is_open()) return nullptr;
+
 	json jsonArr;
 	file >> jsonArr;
 	file.close();
