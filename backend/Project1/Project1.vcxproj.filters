@@ -45,26 +45,11 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MainFrame.h">
-      <Filter>Header Files\LocalFrames</Filter>
-    </ClCompile>
     <ClCompile Include="utils.cpp">
       <Filter>Source Files\MainLogic</Filter>
     </ClCompile>
     <ClCompile Include="StartCompressing.cpp">
       <Filter>Source Files\MainLogic</Filter>
-    </ClCompile>
-    <ClCompile Include="InfoFrame.cpp">
-      <Filter>Source Files\LocalFrames</Filter>
-    </ClCompile>
-    <ClCompile Include="MainFrame.cpp">
-      <Filter>Source Files\LocalFrames</Filter>
-    </ClCompile>
-    <ClCompile Include="LocalApp.cpp">
-      <Filter>Source Files\LocalFrames</Filter>
-    </ClCompile>
-    <ClCompile Include="TreeControl.cpp">
-      <Filter>Source Files\LocalFrames</Filter>
     </ClCompile>
     <ClCompile Include="Compressor.cpp">
       <Filter>Source Files\MainLogic</Filter>
@@ -83,6 +68,9 @@
     </ClCompile>
     <ClCompile Include="GamesFrame.cpp">
       <Filter>Source Files\RayFrames</Filter>
+    </ClCompile>
+    <ClCompile Include="filedialogs.c">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -245,15 +233,6 @@
     <ClInclude Include="include\nlohmann\detail\meta\void_t.hpp">
       <Filter>Header Files\Include</Filter>
     </ClInclude>
-    <ClInclude Include="LocalApp.h">
-      <Filter>Header Files\LocalFrames</Filter>
-    </ClInclude>
-    <ClInclude Include="InfoFrame.h">
-      <Filter>Header Files\LocalFrames</Filter>
-    </ClInclude>
-    <ClInclude Include="TreeControl.h">
-      <Filter>Header Files\LocalFrames</Filter>
-    </ClInclude>
     <ClInclude Include="StartServer.h">
       <Filter>Header Files\BackendServer</Filter>
     </ClInclude>
@@ -263,8 +242,8 @@
     <ClInclude Include="RayMainFrame.h">
       <Filter>Header Files\RayFrames</Filter>
     </ClInclude>
-    <ClInclude Include="GamesFrame.h">
-      <Filter>Header Files\RayFrames</Filter>
+    <ClInclude Include="filedialogs.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -274,5 +253,6 @@
     <None Include="serverData\input_compressed.bin">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

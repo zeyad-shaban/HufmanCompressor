@@ -7,7 +7,7 @@
 #include <thread>
 #include <future>
 
-
+#include "filedialogs.h"
 #define RAYGUI_IMPLEMENTATION
 #include "raygui.h"
 
@@ -32,7 +32,14 @@ void gameViewer(bool* showGames, Rectangle gamePanel, float winWidth, Texture2D 
 
 	}
 	GuiToggle(Rectangle{ winWidth - 40, 0, 40, 40 }, *showGames ? "#128#" : "#152#", showGames);
+
+	if (*showServer) {
+		GuiPanel(gamePanel, "Open Server");
+		// Add your server related code here
+	}
+	GuiToggle(Rectangle{ winWidth - 80, 0, 40, 40 }, *showServer ? "#128#" : "#198#", showServer);
 }
+
 
 
 int RayMainFrame() {
@@ -52,6 +59,7 @@ int RayMainFrame() {
 	float progress = 0;
 	int state = 0;
 	bool showGames = false;
+	bool showServer = false;
 	bool popupActive = false;
 
 	bool compressMode = true;
@@ -76,7 +84,38 @@ int RayMainFrame() {
 		GuiLabel(Rectangle{ 20, 60, winWidth,100 }, compressMode ? "#18# File to Compress" : "#200# File to Decompress");
 		if (GuiTextBox(Rectangle{ 50, 160, winWidth * 3 / 4, 40 }, textFilePath, sizeof(textFilePath), false)
 			|| GuiButton(Rectangle{ (winWidth * 3 / 4) + 50, 160, 40, 40 }, "#5#")) {
-			strcpy(textFilePath, "C:/Users/zeyad/OneDrive/Desktop/test/test.txt"); // TODO OPEN DIALOG HERE INSTEAD
+			if (compressMode) {
+				const char* filterTextPatterns[1] = { "*.txt" };
+				const char* selectedTextFile = selectFileDialog("Select a file", NULL, 1, filterTextPatterns, "Text Files");
+				if (selectedTextFile != NULL) {
+					strncpy(textFilePath, selectedTextFile, sizeof(textFilePath) - 1);
+					textFilePath[sizeof(textFilePath) - 1] = '\0'; // Ensure null termination
+
+					// Replace backslashes with forward slashes
+					for (int i = 0; textFilePath[i] != '\0'; i++) {
+						if (textFilePath[i] == '\\') {
+							textFilePath[i] = '/';
+						}
+					}
+				}
+			}
+			else {
+				const char* filterBinPatterns[1] = { "*.bin" };
+				const char* selectedBinFile = selectFileDialog("Select a file", NULL, 1, filterBinPatterns, "Text Files");
+				if (selectedBinFile != NULL) {
+					strncpy(textFilePath, selectedBinFile, sizeof(textFilePath) - 1);
+					textFilePath[sizeof(textFilePath) - 1] = '\0'; // Ensure null termination
+
+					// Replace backslashes with forward slashes
+					for (int i = 0; textFilePath[i] != '\0'; i++) {
+						if (textFilePath[i] == '\\') {
+							textFilePath[i] = '/';
+						}
+					}
+				}
+			}
+
+			//strcpy(textFilePath, "E:/gam3a2/tesFileMaker/1GB.txt"); // TODO OPEN DIALOG HERE INSTEAD
 		}
 
 		if (compressMode) {
@@ -93,14 +132,41 @@ int RayMainFrame() {
 			GuiLabel(Rectangle{ 20, 230, winWidth,100 }, "#138# Tree Path");
 			if (GuiTextBox(Rectangle{ 50, 330, winWidth * 3 / 4, 40 }, treeFilePath, sizeof(treeFilePath), false)
 				|| GuiButton(Rectangle{ (winWidth * 3 / 4) + 50, 330, 40, 40 }, "#5#")) {
-				strcpy(treeFilePath, "C:/Users/zeyad/OneDrive/Desktop/test/test_tree.json"); // TODO OPEN DIALOG HERE INSTEAD
+				const char* filterTreePatterns[1] = { "*.json" };
+				const char* selectedTreeFile = selectFileDialog("Select a file", NULL, 1, filterTreePatterns, "Text Files");
+				if (selectedTreeFile != NULL) {
+					strncpy(treeFilePath, selectedTreeFile, sizeof(treeFilePath) - 1);
+					treeFilePath[sizeof(treeFilePath) - 1] = '\0'; // Ensure null termination
+
+					// Replace backslashes with forward slashes
+					for (int i = 0; treeFilePath[i] != '\0'; i++) {
+						if (treeFilePath[i] == '\\') {
+							treeFilePath[i] = '/';
+						}
+					}
+
+				}
+				//strcpy(treeFilePath, "C:/Users/zeyad/OneDrive/Desktop/test/test_tree.json"); // TODO OPEN DIALOG HERE INSTEAD
 			}
 		}
 
 		GuiLabel(Rectangle{ 20, 400, winWidth,100 }, "#217# Output Directory");
 		if (GuiTextBox(Rectangle{ 50, 500, winWidth * 3 / 4, 40 }, dirPath, sizeof(dirPath), false)
 			|| GuiButton(Rectangle{ (winWidth * 3 / 4) + 50, 500, 40, 40 }, "#5#")) {
-			strcpy(dirPath, "C:/Users/zeyad/OneDrive/Desktop/test"); // TODO OPEN DIALOG HERE INSTEAD
+			const char* selectedPath = selectFolderDialog("Select a folder", NULL);
+			if (selectedPath != NULL) {
+				strncpy(dirPath, selectedPath, sizeof(dirPath) - 1);
+				dirPath[sizeof(dirPath) - 1] = '\0'; // Ensure null termination
+
+				// Replace backslashes with forward slashes
+				for (int i = 0; dirPath[i] != '\0'; i++) {
+					if (dirPath[i] == '\\') {
+						dirPath[i] = '/';
+					}
+				}
+
+				printf("%s", dirPath);
+			}
 		}
 
 		gameViewer(&showGames, gamePanel, winWidth, animVsWitherImg, geoSmashImg, riskOfImg);
