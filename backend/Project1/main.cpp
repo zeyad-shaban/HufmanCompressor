@@ -8,7 +8,7 @@
 #define RAYGUI_IMPLEMENTATION
 #include "raygui.h"
 
-void panelViewer(bool* popupActive, int* state, bool* showGames, bool* showServer, char* generatedFileName, float* generatedVal, bool* orderInputActive, Rectangle gamePanel, float winWidth, Texture2D animVsWitherImg, Texture2D geoSmashImg, Texture2D riskOfImg) {
+void panelViewer(bool* popupActive, int* state, bool* showGames, bool* showServer, char* generatedFileName, float* generatedVal, char* pathA, char* pathB, bool* orderInputActive, Rectangle gamePanel, float winWidth, Texture2D animVsWitherImg, Texture2D geoSmashImg, Texture2D riskOfImg) {
 	if (*showGames && *showServer) *showGames = *showServer = false;
 
 	if (*showGames) {
@@ -30,7 +30,8 @@ void panelViewer(bool* popupActive, int* state, bool* showGames, bool* showServe
 		*orderInputActive = false;
 		GuiPanel(gamePanel, "Tools");
 
-		GuiLabel(Rectangle{ winWidth - 395, 40, winWidth, 100 }, "#8# File Filler");
+		// =========== FILE FILLER =============
+		GuiLabel(Rectangle{ winWidth - 395, 30, winWidth, 100 }, "#8# File Filler");
 		GuiLabel(Rectangle{ winWidth - 375, 80, winWidth, 100 }, "#217# Path: ");
 		if (GuiTextBox(Rectangle{ winWidth - 230, 115, 150, 40 }, generatedFileName, sizeof(generatedFileName), false)
 			|| GuiButton(Rectangle{ winWidth - 230 + 150, 115, 40, 40 }, "#5#")) {
@@ -42,9 +43,9 @@ void panelViewer(bool* popupActive, int* state, bool* showGames, bool* showServe
 		sprintf(label, "#218# Size in GB: %.2f", *generatedVal);
 		GuiLabel(Rectangle{ winWidth - 375, 130, winWidth, 100 }, label);
 
-		GuiSliderBar(Rectangle{ winWidth - 375, 200, 350, 20 }, "", NULL, generatedVal, 0.0f, 100.0f);
+		GuiSliderBar(Rectangle{ winWidth - 375, 220, 350, 20 }, "", NULL, generatedVal, 0.0f, 100.0f);
 
-		if (GuiButton(Rectangle{ winWidth - 350, 250, 300, 40 }, "Fill")) {
+		if (GuiButton(Rectangle{ winWidth - 350, 270, 300, 40 }, "Fill")) {
 			bool done = false;
 			float progress = 0;
 
@@ -61,6 +62,40 @@ void panelViewer(bool* popupActive, int* state, bool* showGames, bool* showServe
 
 			*popupActive = true;
 		}
+
+		// ========== IDENTICAL CHECKER =============
+		GuiLabel(Rectangle{ winWidth - 395, 380, winWidth, 100 }, "#8# File Identical Checker");
+		GuiLabel(Rectangle{ winWidth - 375, 440, winWidth, 100 }, "#217# Path A: ");
+		if (GuiTextBox(Rectangle{ winWidth - 230, 475, 150, 40 }, pathA, sizeof(pathA), false)
+			|| GuiButton(Rectangle{ winWidth - 230 + 150, 475, 40, 40 }, "#5#")) {
+
+			OpenFileDialog(L"Text Files\0*.txt\0\0", pathA);
+		}
+
+		GuiLabel(Rectangle{ winWidth - 375, 510, winWidth, 100 }, "#217# Path B: ");
+		if (GuiTextBox(Rectangle{ winWidth - 230, 545, 150, 40 }, pathB, sizeof(pathB), false)
+			|| GuiButton(Rectangle{ winWidth - 230 + 150, 545, 40, 40 }, "#5#")) {
+
+			OpenFileDialog(L"Text Files\0*.txt\0\0", pathB);
+		}
+
+		if (GuiButton(Rectangle{ winWidth - 350, 630, 300, 40 }, "Check")) {
+			bool done = false;
+			float progress = 0;
+
+			std::thread worker(threadFileComparator, pathA, pathB, &done, state, &progress);
+			worker.detach();
+
+			while (!done) {
+				BeginDrawing();
+				ClearBackground(GetColor(GuiGetStyle(DEFAULT, BACKGROUND_COLOR)));
+				GuiProgressBar(Rectangle{ winWidth / 2 - 200, 720 / 2 - 20, 400, 40 }, NULL, NULL, &progress, 0, 1);
+				EndDrawing();
+			}
+
+			*popupActive = true;
+		}
+
 	}
 
 	GuiToggle(Rectangle{ winWidth - 40, 0, 40, 40 }, *showGames ? "#128#" : "#152#", showGames);
@@ -98,6 +133,8 @@ int WinMain() {
 
 	char generatedFilePath[300] = { '\0' };
 	char generatedFileName[300] = { '\0' };
+	char pathA[300] = { '\0' };
+	char pathB[300] = { '\0' };
 	float generatedFileValue = 0;
 	bool orderInputActive = false;
 	// input end
@@ -155,7 +192,7 @@ int WinMain() {
 			OpenDirectoryDialog(dirPath);
 		}
 
-		panelViewer(&popupActive, &state, &showGames, &showServer, generatedFilePath, &generatedFileValue, &orderInputActive, gamePanel, winWidth, animVsWitherImg, geoSmashImg, riskOfImg);
+		panelViewer(&popupActive, &state, &showGames, &showServer, generatedFilePath, &generatedFileValue, pathA, pathB, &orderInputActive, gamePanel, winWidth, animVsWitherImg, geoSmashImg, riskOfImg);
 
 		if (GuiButton(Rectangle{ winWidth / 2 - 150, winHeight - 60, 300, 40 }, "Start")) {
 			std::thread workThread;
@@ -171,7 +208,7 @@ int WinMain() {
 				BeginDrawing();
 				ClearBackground(GetColor(GuiGetStyle(DEFAULT, BACKGROUND_COLOR)));
 				GuiProgressBar(Rectangle{ winWidth / 2 - 200, winHeight / 2 - 20, 400, 40 }, NULL, NULL, &progress, 0, 1);
-				panelViewer(&popupActive, &state, &showGames, &showServer, generatedFilePath, &generatedFileValue, &orderInputActive, gamePanel, winWidth, animVsWitherImg, geoSmashImg, riskOfImg);
+				panelViewer(&popupActive, &state, &showGames, &showServer, generatedFilePath, &generatedFileValue, pathA, pathB, &orderInputActive, gamePanel, winWidth, animVsWitherImg, geoSmashImg, riskOfImg);
 				EndDrawing();
 			}
 
@@ -192,7 +229,15 @@ int WinMain() {
 					popupActive = false;
 			}
 			else if (state == -1) {
-				if (GuiMessageBox(Rectangle{ winWidth / 2 - 210, winHeight / 2 - 100, 420, 200 }, "ERROR", "Fatal Error", "Crap") >= 0)
+				if (GuiMessageBox(Rectangle{ winWidth / 2 - 210, winHeight / 2 - 100, 420, 200 }, "ERROR", "Fatal Memory Error", "Crap") >= 0)
+					popupActive = false;
+			}
+			else if (state == 2) { // files equal during comparison
+				if (GuiMessageBox(Rectangle{ winWidth / 2 - 210, winHeight / 2 - 100, 420, 200 }, "SUCCESS", "Files are identical", "LETS GOO") >= 0)
+					popupActive = false;
+			}
+			else if (state == 3) { // files were not identical during comparison
+				if (GuiMessageBox(Rectangle{ winWidth / 2 - 210, winHeight / 2 - 100, 420, 200 }, "ERROR", "Files are NOT identical", "Crap") >= 0)
 					popupActive = false;
 			}
 		}

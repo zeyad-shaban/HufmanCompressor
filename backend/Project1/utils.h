@@ -13,3 +13,4 @@ void runExecutable(const char* filePath);
 void threadFileGenerator(bool* done, int* state, float* progress, float generatedVal, char* filename);
 void OpenFileDialog(const wchar_t* filter, char* editMe);
 void OpenDirectoryDialog(char* editMe);
+void threadFileComparator(char* pathA, char* pathB, bool* done, int* state, float* progress);

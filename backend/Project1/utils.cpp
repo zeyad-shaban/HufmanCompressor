@@ -160,6 +160,72 @@ void threadFileGenerator(bool* done, int* state, float* progress, float generate
 	return;
 }
 
+void threadFileComparator(char* pathA, char* pathB, bool* done, int* state, float* progress) { // state 2 equal , state 3 inequal, 1 for file fail as usual
+	const size_t BUFFER_SIZE = 5 * 1024;
+
+	FILE* file1, * file2;
+	char* buffer1, * buffer2;
+	size_t bytesRead1, bytesRead2;
+
+	file1 = fopen(pathA, "rb");
+	file2 = fopen("test_decompressed.txt", "rb");
+
+	if (file1 == NULL || file2 == NULL) {
+		printf("Error opening file.\n");
+		*state = 1;
+		*done = true;
+		return;
+	}
+
+	buffer1 = (char*)malloc(BUFFER_SIZE);
+	buffer2 = (char*)malloc(BUFFER_SIZE);
+
+	if (buffer1 == NULL || buffer2 == NULL) {
+		*state = -1;
+		*done = true;
+
+		return;
+	}
+
+	unsigned long totSize = 0;
+	double totRead = 0;
+	fseek(file1, 0, SEEK_END);
+	totSize += ftell(file1);
+	fseek(file1, 0, SEEK_SET);
+
+	fseek(file2, 0, SEEK_END);
+	totSize += ftell(file2);
+	fseek(file2, 0, SEEK_SET);
+
+
+	do {
+		bytesRead1 = fread(buffer1, 1, BUFFER_SIZE, file1);
+		bytesRead2 = fread(buffer2, 1, BUFFER_SIZE, file2);
+		totRead += bytesRead1 + bytesRead2;
+		*progress = totRead / totSize;
+
+			if (bytesRead1 != bytesRead2 || memcmp(buffer1, buffer2, bytesRead1) != 0) {
+				*state = 3; // hmm i could be evil and always return 2 the success state
+				*done = true;
+				free(buffer1);
+				free(buffer2);
+				fclose(file1);
+				fclose(file2);
+				return;
+			}
+	} while (bytesRead1 == BUFFER_SIZE);
+
+
+	free(buffer1);
+	free(buffer2);
+	fclose(file1);
+	fclose(file2);
+
+	*state = 2;
+	*done = true;
+	return;
+}
+
 
 void OpenFileDialog(const wchar_t* filter, char* editMe) {
 	static wchar_t filename[MAX_PATH];
