@@ -13,7 +13,7 @@ string getCommpressedFiles() {
 	std::string compressed_fileTXT;
 	if (file1.is_open()) {
 		std::stringstream buffer;
-		buffer << file1.rdbuf();
+		buffer << file1.rdbuf(); 
 		compressed_fileTXT = buffer.str();
 		file1.close();
 	}

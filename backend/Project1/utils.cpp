@@ -121,16 +121,9 @@ void runExecutable(const char* filePath) {
 
 	_chdir(targetDir.c_str());
 
-	std::string base_filename = std::string(filePath).substr(std::string(filePath).find_last_of("/\\") + 1);
-	std::string::size_type const p(base_filename.find_last_of('.'));
-	std::string file_without_extension = base_filename.substr(0, p);
+		std::string base_filename = std::string(filePath).substr(std::string(filePath).find_last_of("/\\") + 1);
 
-	int sizeNeededFileName = MultiByteToWideChar(CP_UTF8, 0, file_without_extension.c_str(), -1, NULL, 0);
-	wchar_t* wFileName = new wchar_t[sizeNeededFileName];
-	MultiByteToWideChar(CP_UTF8, 0, file_without_extension.c_str(), -1, wFileName, sizeNeededFileName);
-
-
-	ShellExecute(NULL, L"open", wFileName, NULL, NULL, SW_SHOW);
+	system(("\"" + base_filename + "\"").c_str());
 
 	_chdir(currentDirectory);
 
