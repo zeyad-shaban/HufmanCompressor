@@ -154,7 +154,6 @@
     <ClCompile Include="utils.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="filedialogs.h" />
     <ClInclude Include="serverJsonMaker.h" />
     <ClInclude Include="StartServer.h" />
     <ClInclude Include="StartCompressing.h" />

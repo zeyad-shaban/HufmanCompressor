@@ -8,7 +8,7 @@
 #include <fstream>
 
 
- using json = nlohmann::json;
+using json = nlohmann::json;
 
 
 Node* tregen(MinHeap* heap) {
@@ -32,7 +32,7 @@ bool genFreqTable(std::string filePath, int* freqTable) {
 	FILE* file; bool fileErr = fopen_s(&file, filePath.c_str(), "rb");
 	if (fileErr) return false;
 
-	const size_t chunk_size = 1024 * 1024;
+	const size_t chunk_size = 5 * 1024;
 	unsigned char buffer[chunk_size];
 	int charsRead = 0;
 	while ((charsRead = fread(buffer, 1, chunk_size, file)) > 0)
@@ -55,10 +55,9 @@ json nodeToJson(Node* node) {
 	if (node == nullptr)return nullptr;
 
 	json j;
-	j["letter"] = node->letter;
-	j["freq"] = node->freq;
-	j["left"] = nodeToJson(node->left);
-	j["right"] = nodeToJson(node->right);
+	j["c"] = node->letter;
+	j["l"] = nodeToJson(node->left);
+	j["r"] = nodeToJson(node->right);
 
 	return j;
 }
@@ -78,10 +77,10 @@ Node* jsonToNode(const json& j) {
 	if (j.is_null()) return nullptr;
 
 	Node* node = new Node;
-	node->letter = j["letter"].get<char>();
-	node->freq = j["freq"].get<int>();
-	node->left = jsonToNode(j["left"]);
-	node->right = jsonToNode(j["right"]);
+	node->letter = j["c"].get<char>();
+	node->freq = 0;
+	node->left = jsonToNode(j["l"]);
+	node->right = jsonToNode(j["r"]);
 
 	return node;
 }
@@ -123,7 +122,7 @@ void runExecutable(const char* filePath) {
 
 	_chdir(targetDir.c_str());
 
-		std::string base_filename = std::string(filePath).substr(std::string(filePath).find_last_of("/\\") + 1);
+	std::string base_filename = std::string(filePath).substr(std::string(filePath).find_last_of("/\\") + 1);
 
 	system(("\"" + base_filename + "\"").c_str());
 
@@ -133,8 +132,8 @@ void runExecutable(const char* filePath) {
 }
 
 void threadFileGenerator(bool* done, int* state, float* progress, float generatedVal, char* filename) {
-	const char sentence[] = "hello Dr Nour";
-	const size_t chunk_size = 1024 * 1024;
+	const char sentence[] = "hello world and hello dr Nour :D";
+	const size_t chunk_size = 5 * 1024;
 	const long long gb1 = 1024LL * 1024LL * 1024LL * 1LL;
 
 	FILE* file = fopen(filename, "wb");
@@ -162,7 +161,7 @@ void threadFileGenerator(bool* done, int* state, float* progress, float generate
 }
 
 
-const wchar_t* OpenFileDialog(const wchar_t* filter) {
+void OpenFileDialog(const wchar_t* filter, char* editMe) {
 	static wchar_t filename[MAX_PATH];
 
 	OPENFILENAME ofn;
@@ -176,30 +175,45 @@ const wchar_t* OpenFileDialog(const wchar_t* filter) {
 	ofn.Flags = OFN_DONTADDTORECENT | OFN_FILEMUSTEXIST;
 	ofn.lpstrDefExt = wcschr(filter, L'\0') + 1;
 
-	if (GetOpenFileNameW(&ofn)) {
-		return filename;
-	}
-	else {
-		return NULL;
+
+	if (!GetOpenFileNameW(&ofn)) return;
+
+	size_t convertedChars = 0;
+	wcstombs_s(&convertedChars, editMe, wcslen(filename) + 1, filename, _TRUNCATE);
+
+	for (size_t i = 0; editMe[i] != '\0'; i++) {
+		if (editMe[i] == '\\') {
+			editMe[i] = '/';
+		}
 	}
 }
 
-const wchar_t* OpenDirectoryDialog() {
+void OpenDirectoryDialog(char* editMe) {
 	static wchar_t path[MAX_PATH];
 
 	BROWSEINFO bi = { 0 };
 	bi.lpszTitle = L"Select Directory";
 	LPITEMIDLIST pidl = SHBrowseForFolderW(&bi);
 
-	if (pidl != 0) {
-		SHGetPathFromIDListW(pidl, path);
+	if (!pidl) return;
 
-		IMalloc* imalloc = 0;
-		if (SUCCEEDED(SHGetMalloc(&imalloc))) {
-			imalloc->Free(pidl);
-			imalloc->Release();
-		}
-		return path;
+
+	SHGetPathFromIDListW(pidl, path);
+
+	IMalloc* imalloc = 0;
+	if (SUCCEEDED(SHGetMalloc(&imalloc))) {
+		imalloc->Free(pidl);
+		imalloc->Release();
 	}
-	return NULL;
+
+	if (path != NULL) {
+		size_t convertedChars = 0;
+		wcstombs_s(&convertedChars, editMe, wcslen(path) + 1, path, _TRUNCATE);
+
+		for (size_t i = 0; editMe[i] != '\0'; i++) {
+			if (editMe[i] == '\\') {
+				editMe[i] = '/';
+			}
+		}
+	}
 }

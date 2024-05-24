@@ -5,11 +5,12 @@
 #include "utils.h"
 #include <thread>
 #include <future>
-#include "filedialogs.h"
 #define RAYGUI_IMPLEMENTATION
 #include "raygui.h"
 
-void panelViewer(bool* popupActive, int* state, bool* showGames, bool* showServer, char* generatedFileName, const char** filterTextPatterns, float* generatedVal, bool* orderInputActive, Rectangle gamePanel, float winWidth, Texture2D animVsWitherImg, Texture2D geoSmashImg, Texture2D riskOfImg) {
+void panelViewer(bool* popupActive, int* state, bool* showGames, bool* showServer, char* generatedFileName, float* generatedVal, bool* orderInputActive, Rectangle gamePanel, float winWidth, Texture2D animVsWitherImg, Texture2D geoSmashImg, Texture2D riskOfImg) {
+	if (*showGames && *showServer) *showGames = *showServer = false;
+
 	if (*showGames) {
 		GuiPanel(gamePanel, "Play something while waiting");
 
@@ -25,9 +26,7 @@ void panelViewer(bool* popupActive, int* state, bool* showGames, bool* showServe
 			runExecutable(".\\games\\RiskOfGettingTrailblaze\\Risk of getting Railed.exe");
 		DrawTextureRec(riskOfImg, Rectangle{ 0, 0, 200, 200 }, Vector2{ winWidth - 395, 200 }, WHITE);
 	}
-	GuiToggle(Rectangle{ winWidth - 40, 0, 40, 40 }, *showGames ? "#128#" : "#152#", showGames);
-
-	if (*showServer) {
+	else if (*showServer) {
 		*orderInputActive = false;
 		GuiPanel(gamePanel, "Tools");
 
@@ -35,22 +34,15 @@ void panelViewer(bool* popupActive, int* state, bool* showGames, bool* showServe
 		GuiLabel(Rectangle{ winWidth - 375, 80, winWidth, 100 }, "#217# Path: ");
 		if (GuiTextBox(Rectangle{ winWidth - 230, 115, 150, 40 }, generatedFileName, sizeof(generatedFileName), false)
 			|| GuiButton(Rectangle{ winWidth - 230 + 150, 115, 40, 40 }, "#5#")) {
-			const char* selectedTextFile = selectFileDialog("Select a file", NULL, 1, filterTextPatterns, "Text Files");
 
-			if (selectedTextFile != NULL) {
-				strncpy(generatedFileName, selectedTextFile, strlen(selectedTextFile));
-				generatedFileName[strlen(selectedTextFile)] = '\0';
-				for (int i = 0; generatedFileName[i] != '\0'; i++)
-					if (generatedFileName[i] == '\\')
-						generatedFileName[i] = '/';
-			}
+			OpenFileDialog(L"Text Files\0*.txt\0\0", generatedFileName);
 		}
 
 		char label[50];
 		sprintf(label, "#218# Size in GB: %.2f", *generatedVal);
 		GuiLabel(Rectangle{ winWidth - 375, 130, winWidth, 100 }, label);
 
-		GuiSliderBar(Rectangle{ winWidth - 375, 200, winWidth, 20 }, "", NULL, generatedVal, 0.0f, 100.0f);
+		GuiSliderBar(Rectangle{ winWidth - 375, 200, 350, 20 }, "", NULL, generatedVal, 0.0f, 100.0f);
 
 		if (GuiButton(Rectangle{ winWidth - 350, 250, 300, 40 }, "Fill")) {
 			bool done = false;
@@ -69,10 +61,10 @@ void panelViewer(bool* popupActive, int* state, bool* showGames, bool* showServe
 
 			*popupActive = true;
 		}
-
-
 	}
-	GuiToggle(Rectangle{ winWidth - 80, 0, 40, 40 }, *showServer ? "#128#" : "#198#", showServer);
+
+	GuiToggle(Rectangle{ winWidth - 40, 0, 40, 40 }, *showGames ? "#128#" : "#152#", showGames);
+	GuiToggle(Rectangle{ winWidth - 80, 0, 40, 40 }, *showServer ? "#128#" : "#140#", showServer);
 }
 
 
@@ -110,11 +102,6 @@ int WinMain() {
 	bool orderInputActive = false;
 	// input end
 
-	const char* filterTreePatterns[1] = { "*.json" };
-	const char* filterBinPatterns[1] = { "*.bin" };
-	const char* filterTextPatterns[1] = { "*.txt" };
-	const char* selectedTextFile = nullptr;
-
 	SetTargetFPS(60);
 	GuiLoadStyle("style_terminal.rgs");
 	GuiSetStyle(DEFAULT, TEXT_SIZE, fontSize);
@@ -133,33 +120,10 @@ int WinMain() {
 		GuiLabel(Rectangle{ 20, 60, winWidth, 100 }, compressMode ? "#18# File to Compress" : "#200# File to Decompress");
 		if (GuiTextBox(Rectangle{ 50, 160, winWidth * 3 / 4, 40 }, textFilePath, sizeof(textFilePath), false)
 			|| GuiButton(Rectangle{ (winWidth * 3 / 4) + 50, 160, 40, 40 }, "#5#")) {
-			if (compressMode) {
-				selectedTextFile = selectFileDialog("Select a file", NULL, 1, filterTextPatterns, "Text Files");
-
-				if (selectedTextFile != NULL) {
-					strncpy(textFilePath, selectedTextFile, strlen(selectedTextFile));
-					textFilePath[strlen(selectedTextFile)] = '\0';
-
-					for (int i = 0; textFilePath[i] != '\0'; i++) {
-						if (textFilePath[i] == '\\') {
-							textFilePath[i] = '/';
-						}
-					}
-				}
-			}
-			else {
-				selectedTextFile = selectFileDialog("Select a file", NULL, 1, filterBinPatterns, "Text Files");
-				if (selectedTextFile != NULL) {
-					strncpy(textFilePath, selectedTextFile, strlen(selectedTextFile));
-					textFilePath[strlen(selectedTextFile)] = '\0';
-
-					for (int i = 0; textFilePath[i] != '\0'; i++) {
-						if (textFilePath[i] == '\\') {
-							textFilePath[i] = '/';
-						}
-					}
-				}
-			}
+			if (compressMode)
+				OpenFileDialog(L"Text Files\0*.txt\0\0", textFilePath);
+			else
+				OpenFileDialog(L"Binary Files\0*.bin\0\0", textFilePath);
 		}
 
 		if (compressMode) {
@@ -179,36 +143,19 @@ int WinMain() {
 			GuiLabel(Rectangle{ 20, 230, winWidth, 100 }, "#138# Tree Path");
 			if (GuiTextBox(Rectangle{ 50, 330, winWidth * 3 / 4, 40 }, treeFilePath, sizeof(treeFilePath), false)
 				|| GuiButton(Rectangle{ (winWidth * 3 / 4) + 50, 330, 40, 40 }, "#5#")) {
-				selectedTextFile = selectFileDialog("Select a file", NULL, 1, filterTreePatterns, "Text Files");
-				if (selectedTextFile != NULL) {
-					strncpy(treeFilePath, selectedTextFile, strlen(selectedTextFile));
-					treeFilePath[strlen(selectedTextFile)] = '\0';
 
-					for (int i = 0; treeFilePath[i] != '\0'; i++) {
-						if (treeFilePath[i] == '\\') {
-							treeFilePath[i] = '/';
-						}
-					}
-				}
+				OpenFileDialog(L"JSON Files\0*.json\0\0", treeFilePath);
 			}
 		}
 
 		GuiLabel(Rectangle{ 20, 400, winWidth, 100 }, "#217# Output Directory");
 		if (GuiTextBox(Rectangle{ 50, 500, winWidth * 3 / 4, 40 }, dirPath, sizeof(dirPath), false)
 			|| GuiButton(Rectangle{ (winWidth * 3 / 4) + 50, 500, 40, 40 }, "#5#")) {
-			const char* selectedPath = selectFolderDialog("Select a folder", NULL);
-			if (selectedPath != NULL) {
-				strncpy(dirPath, selectedPath, strlen(selectedPath));
-				dirPath[strlen(selectedPath)] = '\0';
 
-
-				for (int i = 0; dirPath[i] != '\0'; i++)
-					if (dirPath[i] == '\\')
-						dirPath[i] = '/';
-			}
+			OpenDirectoryDialog(dirPath);
 		}
 
-		panelViewer(&popupActive, &state, &showGames, &showServer, generatedFilePath, filterTextPatterns, &generatedFileValue, &orderInputActive, gamePanel, winWidth, animVsWitherImg, geoSmashImg, riskOfImg);
+		panelViewer(&popupActive, &state, &showGames, &showServer, generatedFilePath, &generatedFileValue, &orderInputActive, gamePanel, winWidth, animVsWitherImg, geoSmashImg, riskOfImg);
 
 		if (GuiButton(Rectangle{ winWidth / 2 - 150, winHeight - 60, 300, 40 }, "Start")) {
 			std::thread workThread;
@@ -224,11 +171,10 @@ int WinMain() {
 				BeginDrawing();
 				ClearBackground(GetColor(GuiGetStyle(DEFAULT, BACKGROUND_COLOR)));
 				GuiProgressBar(Rectangle{ winWidth / 2 - 200, winHeight / 2 - 20, 400, 40 }, NULL, NULL, &progress, 0, 1);
-				panelViewer(&popupActive, &state, &showGames, &showServer, generatedFilePath, filterTextPatterns, &generatedFileValue, &orderInputActive, gamePanel, winWidth, animVsWitherImg, geoSmashImg, riskOfImg);
+				panelViewer(&popupActive, &state, &showGames, &showServer, generatedFilePath, &generatedFileValue, &orderInputActive, gamePanel, winWidth, animVsWitherImg, geoSmashImg, riskOfImg);
 				EndDrawing();
 			}
 
-			selectedTextFile = nullptr;
 			strcpy(textFilePath, "\0");
 			strcpy(treeFilePath, "\0");
 			popupActive = true;

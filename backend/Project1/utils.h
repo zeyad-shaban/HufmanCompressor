@@ -11,3 +11,5 @@ void writeTreeArrToJsonFile(Node* treeArr[], int treeSize, const std::string& fi
 Node** readTreeArrFromJsonFile(const std::string& filename, int* size);
 void runExecutable(const char* filePath);
 void threadFileGenerator(bool* done, int* state, float* progress, float generatedVal, char* filename);
+void OpenFileDialog(const wchar_t* filter, char* editMe);
+void OpenDirectoryDialog(char* editMe);

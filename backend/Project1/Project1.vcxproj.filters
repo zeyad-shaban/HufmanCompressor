@@ -63,12 +63,6 @@
     <ClCompile Include="StartDecmopressing.cpp">
       <Filter>Source Files\MainLogic</Filter>
     </ClCompile>
-    <ClCompile Include="RayMainFrame.cpp">
-      <Filter>Source Files\RayFrames</Filter>
-    </ClCompile>
-    <ClCompile Include="GamesFrame.cpp">
-      <Filter>Source Files\RayFrames</Filter>
-    </ClCompile>
     <ClCompile Include="filedialogs.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -237,12 +231,6 @@
       <Filter>Header Files\BackendServer</Filter>
     </ClInclude>
     <ClInclude Include="serverJsonMaker.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="RayMainFrame.h">
-      <Filter>Header Files\RayFrames</Filter>
-    </ClInclude>
-    <ClInclude Include="filedialogs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
