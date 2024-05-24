@@ -27,7 +27,7 @@ void StartDecompressing(std::string compressedFilePath, std::string treePath, st
 
 		std::string tmpOut = dirPath + "/" + (i == 0 ? file_without_extension + "_decompressed.txt" : TMP_KEY + std::to_string(tmpTurn));
 
-		if (!compressor->decompressing(treeArr[i], tmpIn, tmpOut)) {
+		if (!compressor->decompressing(treeArr[i], tmpIn, tmpOut, progress)) {
 			*state = 1;
 			*done = true;
 			return;

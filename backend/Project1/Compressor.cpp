@@ -116,38 +116,34 @@ long long Compressor::compressing(Node* root, std::string filePath, std::string 
 
     return inFileSize.QuadPart;
 }
-bool Compressor::decompressing(Node* root, std::string compressedFilePath, std::string outputFilePath, int prevSize) {
+bool Compressor::decompressing(Node* root, std::string compressedFilePath, std::string outputFilePath, float* progress) {
     HANDLE compressedFile = CreateFileA(compressedFilePath.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
     if (compressedFile == INVALID_HANDLE_VALUE) {
         std::cout << "Failed to open compressed file\n";
         return false;
     }
 
-    HANDLE compressedFileMap = CreateFileMappingA(compressedFile, NULL, PAGE_READONLY, 0, 0, NULL);
+    LARGE_INTEGER compressedFileSize;
+    if (!GetFileSizeEx(compressedFile, &compressedFileSize)) {
+        std::cout << "Failed to get file size\n";
+        CloseHandle(compressedFile);
+        return false;
+    }
+
+    HANDLE compressedFileMap = CreateFileMappingA(compressedFile, NULL, PAGE_READONLY, compressedFileSize.HighPart, compressedFileSize.LowPart, NULL);
     if (!compressedFileMap) {
         std::cout << "Failed to create file mapping for compressed file\n";
         CloseHandle(compressedFile);
         return false;
     }
 
-    char* compressedData = (char*)MapViewOfFile(compressedFileMap, FILE_MAP_READ, 0, 0, 0);
+    char* compressedData = (char*)MapViewOfFile(compressedFileMap, FILE_MAP_READ, 0, 0, compressedFileSize.QuadPart);
     if (!compressedData) {
         std::cout << "Failed to map view of compressed file\n";
         CloseHandle(compressedFileMap);
         CloseHandle(compressedFile);
         return false;
     }
-
-    LARGE_INTEGER compressedFileSize;
-    if (!GetFileSizeEx(compressedFile, &compressedFileSize)) {
-        std::cout << "Failed to get file size\n";
-        UnmapViewOfFile(compressedData);
-        CloseHandle(compressedFileMap);
-        CloseHandle(compressedFile);
-        return false;
-    }
-
-    LONGLONG allocatedFileSize = compressedFileSize.QuadPart;
 
     HANDLE outFile = CreateFileA(outputFilePath.c_str(), GENERIC_READ | GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
     if (outFile == INVALID_HANDLE_VALUE) {
@@ -158,7 +154,8 @@ bool Compressor::decompressing(Node* root, std::string compressedFilePath, std::
         return false;
     }
 
-    HANDLE outFileMap = CreateFileMappingA(outFile, NULL, PAGE_READWRITE, 0, allocatedFileSize, NULL);
+    LONGLONG allocatedFileSize = 1024 * 1024 * 1024;  // Start with 1GB
+    HANDLE outFileMap = CreateFileMappingA(outFile, NULL, PAGE_READWRITE, (DWORD)(allocatedFileSize >> 32), (DWORD)allocatedFileSize, NULL);
     if (!outFileMap) {
         std::cout << "Failed to create file mapping for output file\n";
         CloseHandle(outFile);
@@ -180,15 +177,17 @@ bool Compressor::decompressing(Node* root, std::string compressedFilePath, std::
     }
 
     LONGLONG compressedIndex = 0;
-    unsigned long long outIndex = -1;
+    LONGLONG outIndex = -1;
 
     time_t start, end;
     time(&start);
 
     Node* nodeIt = root;
     bool rootOnly = (!nodeIt->left && !nodeIt->right);
-
+    double compressedSize = (double)compressedFileSize.QuadPart;
     for (compressedIndex = 0; compressedIndex < compressedFileSize.QuadPart - 2; ++compressedIndex) {
+        *progress = (float)(compressedIndex / compressedSize);
+
         for (int j = 7; j >= 0; --j) {
             if (!rootOnly) nodeIt = (compressedData[compressedIndex] >> j) & 1 ? nodeIt->right : nodeIt->left;
 
@@ -198,7 +197,7 @@ bool Compressor::decompressing(Node* root, std::string compressedFilePath, std::
                     CloseHandle(outFileMap);
 
                     allocatedFileSize *= 2;
-                    outFileMap = CreateFileMappingA(outFile, NULL, PAGE_READWRITE, 0, allocatedFileSize, NULL);
+                    outFileMap = CreateFileMappingA(outFile, NULL, PAGE_READWRITE, (DWORD)(allocatedFileSize >> 32), (DWORD)allocatedFileSize, NULL);
                     if (!outFileMap) {
                         std::cout << "Failed to create file mapping for expanded output file\n";
                         UnmapViewOfFile(compressedData);
@@ -244,7 +243,9 @@ bool Compressor::decompressing(Node* root, std::string compressedFilePath, std::
     UnmapViewOfFile(outData);
     CloseHandle(outFileMap);
 
-    SetFilePointer(outFile, outIndex + 1, NULL, FILE_BEGIN);
+    LARGE_INTEGER outIndexPlusOne;
+    outIndexPlusOne.QuadPart = outIndex + 1;
+    SetFilePointerEx(outFile, outIndexPlusOne, NULL, FILE_BEGIN);
     SetEndOfFile(outFile);
     CloseHandle(outFile);
 
