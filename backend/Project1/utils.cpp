@@ -1,7 +1,9 @@
 #include <iostream>
 #include <nlohmann/json.hpp>
 #include "utils.h"
-#include "Windows.h"
+#include <windows.h>
+#include <commdlg.h>
+#include <shlobj.h>
 #include "direct.h"
 #include <fstream>
 
@@ -157,4 +159,47 @@ void threadFileGenerator(bool* done, int* state, float* progress, float generate
 	*state = 0;
 	*done = true;
 	return;
+}
+
+
+const wchar_t* OpenFileDialog(const wchar_t* filter) {
+	static wchar_t filename[MAX_PATH];
+
+	OPENFILENAME ofn;
+	ZeroMemory(&filename, sizeof(filename));
+	ZeroMemory(&ofn, sizeof(ofn));
+	ofn.lStructSize = sizeof(ofn);
+	ofn.hwndOwner = NULL;
+	ofn.lpstrFilter = filter;
+	ofn.lpstrFile = filename;
+	ofn.nMaxFile = MAX_PATH;
+	ofn.Flags = OFN_DONTADDTORECENT | OFN_FILEMUSTEXIST;
+	ofn.lpstrDefExt = wcschr(filter, L'\0') + 1;
+
+	if (GetOpenFileNameW(&ofn)) {
+		return filename;
+	}
+	else {
+		return NULL;
+	}
+}
+
+const wchar_t* OpenDirectoryDialog() {
+	static wchar_t path[MAX_PATH];
+
+	BROWSEINFO bi = { 0 };
+	bi.lpszTitle = L"Select Directory";
+	LPITEMIDLIST pidl = SHBrowseForFolderW(&bi);
+
+	if (pidl != 0) {
+		SHGetPathFromIDListW(pidl, path);
+
+		IMalloc* imalloc = 0;
+		if (SUCCEEDED(SHGetMalloc(&imalloc))) {
+			imalloc->Free(pidl);
+			imalloc->Release();
+		}
+		return path;
+	}
+	return NULL;
 }
