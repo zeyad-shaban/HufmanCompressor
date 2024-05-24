@@ -9,37 +9,6 @@
 #define RAYGUI_IMPLEMENTATION
 #include "raygui.h"
 
-
-void threadFileGenerator(bool* done, int* state, float* progress, float generatedVal, char* filename) {
-	const char sentence[] = "hello Dr Nour";
-	const size_t chunk_size = 1024 * 1024;
-	const long long gb1 = 1024LL * 1024LL * 1024LL * 1LL;
-
-	FILE* file = fopen(filename, "wb");
-
-	if (!file) {
-		*state = 1;
-		*done = true;
-		return;
-	}
-
-	long long written_bytes = 0;
-	double dblTot = gb1 * generatedVal;
-
-	while (file && written_bytes < dblTot) {
-		*progress = written_bytes / dblTot;
-		size_t write_size = strlen(sentence) < chunk_size ? strlen(sentence) : chunk_size;
-		fwrite(sentence, 1, write_size, file);
-		written_bytes += write_size;
-	}
-
-	fclose(file);
-	*state = 0;
-	*done = true;
-	return;
-}
-
-
 void panelViewer(bool* popupActive, int* state, bool* showGames, bool* showServer, char* generatedFileName, const char** filterTextPatterns, float* generatedVal, bool* orderInputActive, Rectangle gamePanel, float winWidth, Texture2D animVsWitherImg, Texture2D geoSmashImg, Texture2D riskOfImg) {
 	if (*showGames) {
 		GuiPanel(gamePanel, "Play something while waiting");

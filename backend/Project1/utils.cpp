@@ -30,10 +30,10 @@ bool genFreqTable(std::string filePath, int* freqTable) {
 	FILE* file; bool fileErr = fopen_s(&file, filePath.c_str(), "rb");
 	if (fileErr) return false;
 
-
-	unsigned char buffer[1000000];
+	const size_t chunk_size = 1024 * 1024;
+	unsigned char buffer[chunk_size];
 	int charsRead = 0;
-	while ((charsRead = fread(buffer, 1, 1000000, file)) > 0)
+	while ((charsRead = fread(buffer, 1, chunk_size, file)) > 0)
 		for (int i = 0; i < charsRead; i++)
 			freqTable[buffer[i]]++;
 
@@ -128,4 +128,33 @@ void runExecutable(const char* filePath) {
 	_chdir(currentDirectory);
 
 	delete[] wpath;
+}
+
+void threadFileGenerator(bool* done, int* state, float* progress, float generatedVal, char* filename) {
+	const char sentence[] = "hello Dr Nour";
+	const size_t chunk_size = 1024 * 1024;
+	const long long gb1 = 1024LL * 1024LL * 1024LL * 1LL;
+
+	FILE* file = fopen(filename, "wb");
+
+	if (!file) {
+		*state = 1;
+		*done = true;
+		return;
+	}
+
+	long long written_bytes = 0;
+	double dblTot = gb1 * generatedVal;
+
+	while (file && written_bytes < dblTot) {
+		*progress = written_bytes / dblTot;
+		size_t write_size = strlen(sentence) < chunk_size ? strlen(sentence) : chunk_size;
+		fwrite(sentence, 1, write_size, file);
+		written_bytes += write_size;
+	}
+
+	fclose(file);
+	*state = 0;
+	*done = true;
+	return;
 }
